@@ -1091,6 +1091,25 @@
         tooltip_edit_card: "Sửa card",
         tooltip_delete_card: "Xóa card",
 
+        // Card Contextual Hints (AC-19)
+        card_hint_btn: "Hint",
+        card_hint_header: "Gợi ý & Cơ chế",
+        card_hint_purpose_label: "Tác dụng",
+        card_hint_how_label: "Cách hoạt động",
+        tooltip_card_hint: "Xem giải thích tác dụng và cách hoạt động của thẻ",
+        card_hint_purpose_delete: "Rà soát & loại bỏ tàn nhẫn nội dung kém hiệu quả (CTR < 2.0%) theo Bước 2 Musk ('Delete Any Part You Can') hoặc tái chế thành định dạng ngắn.",
+        card_hint_how_delete: "Bấm 'Gợi ý Cull' để AI cố vấn phân tích; bấm thùng rác để xóa hẳn (+1 Tasks Deleted); hoặc tối ưu kịch bản rồi kéo sang IDEAS/DEEP WORK.",
+        card_hint_purpose_ideas: "Vườn ươm ý tưởng bóc tách từ Nguyên lý gốc (Bước 1 Musk: Question Every Requirement), ngăn chặn sao chép thụ động và phỏng đoán cảm tính.",
+        card_hint_how_ideas: "Bắt buộc điền First Principle khi tạo card. Chọn ý tưởng tiềm năng nhất kéo sang SINGLE FOCUS (nếu trống) hoặc DEEP WORK để sản xuất.",
+        card_hint_purpose_single: "Tiêu điểm hành động tối thượng với luật cưỡng chế WIP = 1 (Bước 3 Musk). Triệt tiêu đa nhiệm, dồn 100% năng lượng hoàn thành 1 video duy nhất.",
+        card_hint_how_single: "Chỉ chứa duy nhất 1 card. Kéo card vào đây để kích hoạt phiên tập trung; chạy timer Tầng 1; hoàn thành kéo sang DONE hoặc BLOCKED nếu gặp sự cố.",
+        card_hint_purpose_deep: "Phân xưởng chế tác nội dung chuyên sâu giới hạn WIP = 3. Duy trì nhịp độ sản xuất (kịch bản, dựng, quay) ổn định mà không bị quá tải não bộ.",
+        card_hint_how_deep: "Giới hạn tối đa 3 cards đồng thời (chặn nhận thêm nếu đầy). Bấm để sửa/cập nhật tiến độ; khi Single Focus trống, kéo 1 card từ đây sang thực thi.",
+        card_hint_purpose_blocked: "Khu vực cô lập và minh bạch hóa các điểm nghẽn (thiếu tư liệu, chờ duyệt, lỗi kỹ thuật) nhằm giải phóng rào cản theo Bước 4 Musk (Accelerate Cycle Time).",
+        card_hint_how_blocked: "Khi kéo vào, bắt buộc nhập Owner (người chịu trách nhiệm) và ETA (hạn gỡ bỏ). Sau khi điểm nghẽn giải quyết, kéo trở lại DEEP WORK hoặc SINGLE FOCUS.",
+        card_hint_purpose_done: "Kho lưu trữ thành phẩm và tri thức thực chứng. Mọi nội dung xuất bản phải để lại bài học dữ liệu để tích lũy lợi thế kép (Compounding Knowledge).",
+        card_hint_how_done: "Khi kéo vào, bắt buộc đúc kết Bài học (Learned Insight). Card sẽ hiển thị huy hiệu xanh lưu trữ bài học. Dùng Export JSON để sao lưu định kỳ.",
+
         // Tầng 3 AI Copilot
         ai_copilot_title: "Tầng 3: Musk AI Copilot",
         ai_status_no_key: "First Principles Heuristic Active (Chưa có API Key)",
@@ -1300,6 +1319,25 @@
         unknown_val: "Unknown",
         tooltip_edit_card: "Edit card",
         tooltip_delete_card: "Delete card",
+
+        // Card Contextual Hints (AC-19)
+        card_hint_btn: "Hint",
+        card_hint_header: "Guidance & Mechanics",
+        card_hint_purpose_label: "Purpose",
+        card_hint_how_label: "How it works",
+        tooltip_card_hint: "View card purpose and how it works",
+        card_hint_purpose_delete: "Ruthlessly identify and cull ineffective content (CTR < 2.0%) per Step 2 of Musk's algorithm ('Delete Any Part You Can') or repurpose into short assets.",
+        card_hint_how_delete: "Click 'Suggest Cull' for AI advice; click trash icon to delete permanently (+1 Tasks Deleted); or optimize and drag to IDEAS/DEEP WORK.",
+        card_hint_purpose_ideas: "Content incubation nursery grounded in First Principles (Step 1 Musk: Question Every Requirement), preventing passive copycatting and guesswork.",
+        card_hint_how_ideas: "Mandatory First Principle field when creating card. Drag highest-leverage idea to SINGLE FOCUS (if empty) or DEEP WORK to start production.",
+        card_hint_purpose_single: "Supreme execution focus enforcing strict WIP = 1 limit (Step 3 Musk). Eliminates multitasking, channeling 100% energy into completing a single video.",
+        card_hint_how_single: "Strictly accepts at most 1 card. Drag card here to activate prime focus; run Level 1 timer; once finished drag to DONE or BLOCKED if impeded.",
+        card_hint_purpose_deep: "Intensive fabrication workshop capped at WIP = 3 limit. Keeps the production pipeline (scripting, filming, B-roll) flowing without cognitive overload.",
+        card_hint_how_deep: "Strict maximum of 3 concurrent cards (blocks extras). Click to edit/update metrics; when Single Focus clears, pull 1 card from here to execute.",
+        card_hint_purpose_blocked: "Isolation zone making blockers transparent (missing assets, pending signoff, tech issues) to accelerate cycle time per Step 4 of Musk's algorithm.",
+        card_hint_how_blocked: "When moving here, Owner and ETA deadline are required. Once the bottleneck is cleared, drag card back to DEEP WORK or SINGLE FOCUS.",
+        card_hint_purpose_done: "Archive of completed productions and empirical insights. Every published video must yield data-backed learnings for compounding channel growth.",
+        card_hint_how_done: "Mandatory Learned Insight required upon moving here. Displays green badge with key takeaway. Use Export JSON for persistent archival.",
 
         // Tầng 3 AI Copilot
         ai_copilot_title: "Level 3: Musk AI Copilot",
@@ -2211,9 +2249,42 @@
         </div>
       `;
 
+      // Contextual Card Hint (AC-19)
+      const colKey = card.column || 'ideas';
+      const purposeText = t('card_hint_purpose_' + colKey);
+      const howText = t('card_hint_how_' + colKey);
+      const hintBoxHTML = `
+        <div id="card-hint-${escapeHTML(card.id)}" class="card-hint-box hidden mt-2 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all">
+          <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+            <span class="flex items-center space-x-1">
+              <span>ℹ️</span>
+              <span class="card-hint-header-text">${t('card_hint_header')}</span>
+            </span>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">${escapeHTML(card.column)}</span>
+              <button type="button" data-action="close-hint" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded" title="Đóng hint">✕</button>
+            </div>
+          </div>
+          <div class="card-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+            <b class="text-white light:text-zinc-900">${t('card_hint_purpose_label')}:</b>
+            <span class="card-hint-purpose-text">${escapeHTML(purposeText)}</span>
+          </div>
+          <div class="card-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+            <b class="text-white light:text-zinc-900">${t('card_hint_how_label')}:</b>
+            <span class="card-hint-how-text">${escapeHTML(howText)}</span>
+          </div>
+        </div>
+      `;
+
       el.innerHTML = `
         <div class="flex items-center justify-between mb-1.5">
-          ${platformBadge}
+          <div class="flex items-center space-x-1.5">
+            ${platformBadge}
+            <button type="button" data-action="toggle-hint" data-card-id="${escapeHTML(card.id)}" class="card-hint-btn flex items-center space-x-1 px-2 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="${t('tooltip_card_hint')}">
+              <span>ℹ️</span>
+              <span class="card-hint-btn-text">${t('card_hint_btn')}</span>
+            </button>
+          </div>
           <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button type="button" data-action="edit" data-card-id="${escapeHTML(card.id)}" title="${t('tooltip_edit_card')}" class="p-1 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white light:hover:text-zinc-900">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2237,6 +2308,7 @@
           <span class="italic line-clamp-2">${escapeHTML(card.first_principle || t('first_principle_unset'))}</span>
         </div>
 
+        ${hintBoxHTML}
         ${lowCTRBadge}
         ${blockedInfo}
         ${learnedInfo}
@@ -2245,6 +2317,38 @@
 
       // Safe Event Delegation for card actions
       el.addEventListener('click', function(e) {
+        const hintBtn = e.target.closest('[data-action="toggle-hint"]');
+        if (hintBtn) {
+          e.stopPropagation();
+          const hintBox = el.querySelector('.card-hint-box');
+          if (hintBox) {
+            const isHidden = hintBox.classList.contains('hidden');
+            if (isHidden) {
+              hintBox.classList.remove('hidden');
+              hintBtn.classList.add('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+            } else {
+              hintBox.classList.add('hidden');
+              hintBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+            }
+          }
+          return;
+        }
+
+        const closeHintBtn = e.target.closest('[data-action="close-hint"]');
+        if (closeHintBtn) {
+          e.stopPropagation();
+          const hintBox = el.querySelector('.card-hint-box');
+          const hintBtn = el.querySelector('[data-action="toggle-hint"]');
+          if (hintBox) hintBox.classList.add('hidden');
+          if (hintBtn) hintBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+          return;
+        }
+
+        const hintBoxClick = e.target.closest('.card-hint-box');
+        if (hintBoxClick) {
+          e.stopPropagation();
+          return;
+        }
         const cullBtn = e.target.closest('[data-action="cull"]');
         if (cullBtn) {
           e.stopPropagation();
@@ -2664,9 +2768,13 @@
       statusEl.className = "text-[10px] text-amber-400 font-bold";
 
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1200);
         const response = await fetch(`https://graph.facebook.com/v19.0/${pageId}?fields=id,name&access_token=${token}`, {
-          method: 'GET'
+          method: 'GET',
+          signal: controller.signal
         }).catch(() => null);
+        clearTimeout(timeoutId);
 
         if (response && response.ok) {
           const data = await response.json();

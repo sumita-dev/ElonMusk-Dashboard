@@ -171,6 +171,12 @@ Gồm 6 cột với các quy tắc kiểm tra nghiêm ngặt:
    * Khi kéo card vào cột này, một Modal bắt buộc sẽ bật lên yêu cầu điền: **`Owner`** (Ai đang chặn?) và **`ETA`** (Khi nào gỡ bỏ?). Không thể đóng modal nếu chưa nhập.
 6. **`DONE + LEARNED`:**
    * Khi kéo card vào cột này, Modal bắt buộc bật lên yêu cầu nhập: **`Learned`** (Bài học thực chứng rút ra là gì?). Card chỉ được tính là hoàn thành khi đã có bài học.
+7. **Gợi Ý Ngữ Cảnh & Hướng Dẫn Hoạt Động (Contextual Card Hints & How-It-Works Guidance — AC-19):**
+   * Mỗi thẻ Kanban tại Tầng 2 tích hợp nút gợi ý Apple-style (capsule pill `ℹ️ Hint`).
+   * Khi xem/bấm mở Hint, hiển thị trực quan 2 phần thông tin cốt lõi:
+     - **Tác dụng (Purpose / Function):** Định vị vai trò của thẻ trong cột hiện tại (Vườn ươm nguyên lý gốc, WIP=1 chống đa nhiệm, rà soát cắt tỉa, cô lập rào cản, lưu trữ bài học).
+     - **Cách hoạt động (How it works):** Hướng dẫn hành động cụ thể cho Creator theo thuật toán 5 bước của Elon Musk.
+   * Hỗ trợ song ngữ Tiếng Việt & Tiếng Anh (`I18N`) và thiết kế kính mờ chuẩn Apple HIG.
 
 ---
 
@@ -208,6 +214,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-16`** | **Timeline Lịch Làm Việc Thực Tế & Cảnh Báo Block 60m**: Khung giờ làm việc chuẩn 08:30 - 12:20 (sáng) và 13:30 - 16:30 (chiều). Các block 60m kèm khoảng nghỉ 5 phút giữa các ca hiển thị badge tinh tế (Break 5m). Khi đồng hồ Deep Work chạm mốc 60 phút hoặc hoàn tất block 60m, tự động phát âm thanh chuông nhẹ (Web Audio API Synthesizer) và hiển thị Banner/Modal cảnh báo Apple style. | Chờ kiểm thử |
 | **`AC-17`** | **Musk First Principles Handbook (Cẩm Nang 5 Bước Thuật Toán Musk)**: Tích hợp module hướng dẫn sử dụng hệ thống chuẩn Elon Musk trong Settings Modal với 5 bước trực quan (Question, Delete, Simplify & Single Focus, Accelerate, Automate) kèm mẹo thực chiến cho Creator, hỗ trợ song ngữ Tiếng Việt và Tiếng Anh. | Chờ kiểm thử |
 | **`AC-18`** | **Meta Fanpage Integration (Đặt Sân Nhanh)**: Tự động nạp thông tin Fanpage "Đặt Sân Nhanh" (Page ID: `1234257116429910`, Token mã hóa / che hiển thị an toàn `EAALZAoxk...CS3wt`), có nút bật/tắt hiển thị token, huy hiệu xanh kết nối và nút kiểm tra kết nối Meta Graph API hiển thị phản hồi tức thì. | Chờ kiểm thử |
+| **`AC-19`** | **Contextual Card Hints & How-It-Works Guidance**: Mỗi thẻ Kanban ở Tầng 2 đều có phần gợi ý (Hint / Info) giải thích chi tiết tác dụng (Purpose) và cơ chế hoạt động (How it works) tương ứng với từng giai đoạn/cột mà thẻ đang đứng (DELETE, IDEAS, SINGLE FOCUS, DEEP WORK, BLOCKED, DONE). Hỗ trợ cả 2 ngôn ngữ (VI/EN) và thiết kế chuẩn Apple HIG (nút icon ℹ️ / hint pill tinh tế, có thể toggle hoặc hiển thị popover/tooltip rõ nét). | Chờ kiểm thử |
 
 ---
 

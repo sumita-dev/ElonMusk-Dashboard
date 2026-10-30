@@ -950,7 +950,11 @@ async function runQATestSuite() {
 
     // Test Fanpage Connection button
     await page.locator('#btnTestFanpage').click();
-    await page.waitForTimeout(500);
+    await page.waitForFunction(() => {
+      const text = document.getElementById('fbConnectionStatus')?.innerText || '';
+      return !text.includes('Đang kết nối') && text.length > 0;
+    }, { timeout: 3000 }).catch(() => {});
+    await page.waitForTimeout(200);
 
     const connectionStatusText = await page.locator('#fbConnectionStatus').innerText();
     const isConnectionSuccess = connectionStatusText.includes('✅') &&
@@ -972,6 +976,93 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
+    // AC-19: Contextual Card Hints & How-It-Works Guidance (VI & EN)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-19: Contextual Card Hints & How-It-Works Guidance ---');
+
+    // Step 1: Verify presence of Hint buttons and hint containers across all rendered cards in Level 2
+    const totalCards = await page.locator('#kanbanContainer [data-id], .kanban-dropzone > [data-id]').count();
+    const hintButtonsCount = await page.locator('.card-hint-btn').count();
+    const hintBoxesCount = await page.locator('.card-hint-box').count();
+
+    const hasHintsOnAllCards = totalCards > 0 && hintButtonsCount === totalCards && hintBoxesCount === totalCards;
+
+    // Step 2: Test clicking toggle hint button on the first card
+    const firstCard = page.locator('.kanban-dropzone > [data-id]').first();
+    const firstHintBtn = firstCard.locator('.card-hint-btn');
+    const firstHintBox = firstCard.locator('.card-hint-box');
+
+    const initialHidden = await firstHintBox.evaluate(el => el.classList.contains('hidden'));
+    
+    // Click to open hint
+    await firstHintBtn.click();
+    await page.waitForTimeout(200);
+    const openedVisible = await firstHintBox.evaluate(el => !el.classList.contains('hidden'));
+
+    // Step 3: Verify content of Hint in Vietnamese (current language)
+    const viPurposeText = await firstCard.locator('.card-hint-purpose').innerText();
+    const viHowText = await firstCard.locator('.card-hint-how').innerText();
+    const viHeaderTitle = await firstCard.locator('.card-hint-header-text').innerText();
+
+    const isViContentValid = viPurposeText.includes('Tác dụng:') &&
+      viHowText.includes('Cách hoạt động:') &&
+      viHeaderTitle.includes('Gợi ý');
+
+    // Step 4: Test close button inside the hint box
+    const closeBtn = firstCard.locator('[data-action="close-hint"]');
+    if (await closeBtn.count() > 0) {
+      await closeBtn.click();
+      await page.waitForTimeout(200);
+    }
+    const closedAfterClick = await firstHintBox.evaluate(el => el.classList.contains('hidden'));
+
+    // Step 5: Switch to English and verify bilingual hint translation
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    // Open first card hint again in English
+    const enFirstCard = page.locator('.kanban-dropzone > [data-id]').first();
+    const enHintBtn = enFirstCard.locator('.card-hint-btn');
+    const enHintBox = enFirstCard.locator('.card-hint-box');
+
+    await enHintBtn.click();
+    await page.waitForTimeout(200);
+
+    const enPurposeText = await enFirstCard.locator('.card-hint-purpose').innerText();
+    const enHowText = await enFirstCard.locator('.card-hint-how').innerText();
+    const enHeaderTitle = await enFirstCard.locator('.card-hint-header-text').innerText();
+
+    const isEnContentValid = enPurposeText.includes('Purpose:') &&
+      enHowText.includes('How it works:') &&
+      enHeaderTitle.includes('Guidance & Mechanics');
+
+    // Switch back to Vietnamese
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const ac19Passed = hasHintsOnAllCards &&
+      initialHidden &&
+      openedVisible &&
+      closedAfterClick &&
+      isViContentValid &&
+      isEnContentValid;
+
+    recordResult(
+      'AC-19',
+      'Contextual Card Hints & How-It-Works Guidance (Apple-Style Toggle, Column Purpose & How-It-Works, Bilingual VI/EN)',
+      ac19Passed,
+      `Cards: ${totalCards}, HintBtns: ${hintButtonsCount}, Opened: ${openedVisible}, Closed: ${closedAfterClick}, VI Valid: ${isViContentValid}, EN Valid: ${isEnContentValid}`
+    );
+
+    // -------------------------------------------------------------
     // OVERALL SUMMARY
     // -------------------------------------------------------------
     console.log('\n================================================================');
@@ -990,6 +1081,10 @@ async function runQATestSuite() {
     const finalVerdict = failedTests === 0 ? 'PASS' : 'FAIL';
     console.log(`FINAL VERDICT: [${finalVerdict}]`);
     console.log('================================================================');
+
+    if (failedTests > 0) {
+      process.exitCode = 1;
+    }
 
   } catch (err) {
     console.error('Unhandled QA test error:', err);
