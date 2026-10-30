@@ -92,6 +92,9 @@ interface AppSettings {
   apiKey: string;                // Lưu an toàn trong localStorage
   modelName: string;             // Mặc định: 'gemini-1.5-flash' hoặc 'llama-3.3-70b-versatile'
   language: 'vi' | 'en';         // Ngôn ngữ giao diện (Mặc định: 'vi')
+  fbPageId: string;              // ID Fanpage (Mặc định: "1234257116429910")
+  fbPageAccessToken: string;     // Meta Graph API Page Access Token (Mã hóa / Che hiển thị)
+  fbPageName: string;            // Tên Fanpage (Mặc định: "Đặt Sân Nhanh")
 }
 ```
 
@@ -104,8 +107,8 @@ interface AppSettings {
 │                        HEADER: METRICS BAR                             │
 │ [⚡ Deep Work: 3.5h]  [🗑 Tasks Deleted: 4]  [⚙ Settings]  [⤓ Export] [⤒ Import]│
 ├────────────────────────────────────────────────────────────────────────┤
-│ TẦNG 1: TIME-BLOCKING TIMELINE (08:00 - 18:00 | Ultradian 90m Blocks)   │
-│ [08:00 Plan & Hook] [09:30 Script Writing] [11:00 Break] [13:00 Film]...│
+│ TẦNG 1: TIME-BLOCKING TIMELINE (08:30 - 12:20 & 13:30 - 16:30 | 60m)   │
+│ [08:30 Plan & Hook] [09:35 Script Writing] [10:40 Thumbnail] [11:45]...│
 ├──────────────────────────────────┬─────────────────────────────────────┤
 │ TẦNG 2: KANBAN BOARD (6 CỘT)     │ TẦNG 3: AI ASSISTANT (COPILOT)      │
 │ 1. DELETE / REPURPOSE (<2% CTR)  │ ✦ Quick Engines:                    │
@@ -118,20 +121,34 @@ interface AppSettings {
 └──────────────────────────────────┴─────────────────────────────────────┘
 ```
 
-### Tầng 1: Time-Blocking Timeline & Deep Work Tracker
-1. **Khung giờ làm việc:** 08:00 đến 18:00 (10 tiếng = 600 phút).
-2. **Template mặc định 90 phút (Ultradian Rhythm):**
-   * `08:00 - 09:30`: Plan & Hook (Deep Work)
-   * `09:30 - 11:00`: Script Writing (Deep Work)
-   * `11:00 - 12:00`: Thumbnail & Title (Review)
-   * `13:30 - 15:00`: B-Roll Assembly & Assets (Deep Work)
-   * `15:00 - 16:30`: Film & Audio Recording (Deep Work)
-   * `16:30 - 18:00`: Review, Analytics & Repurpose (Shallow)
-3. **Đồng hồ bấm giờ Deep Work tích hợp (Timer):**
-   * Cho phép bấm **Start / Pause** trên block hiện tại.
-   * Khi timer chạy, số phút tự động cộng dồn vào chỉ số `Deep Work Hours` trên Header.
-4. **Bộ đếm Tasks Deleted:**
-   * Tự động tăng +1 mỗi khi người dùng xóa 1 card hoặc kéo card vào cột `DELETE / REPURPOSE`.
+### Tầng 1: Time-Blocking Timeline & Deep Work Tracker (Lịch làm việc thực tế của Sếp)
+1. **Khung giờ làm việc:** 
+   - **Ca Sáng:** 08:30 đến 12:20.
+   - **Ca Chiều:** 13:30 đến 16:30.
+2. **Template các block 60 phút và khoảng nghỉ 5 phút giữa các ca:**
+   - **Ca Sáng (08:30 - 12:20):**
+     * `08:30 - 09:30`: Block 1 - Plan & Pattern Interrupt (60m, Deep Work)
+     * *[09:30 - 09:35: Nghỉ ngắn 5 phút (Break 5m)]*
+     * `09:35 - 10:35`: Block 2 - Deep Script Writing (60m, Deep Work)
+     * *[10:35 - 10:40: Nghỉ ngắn 5 phút (Break 5m)]*
+     * `10:40 - 11:40`: Block 3 - Thumbnail & Title A/B (60m, Review)
+     * *[11:40 - 11:45: Nghỉ ngắn 5 phút (Break 5m)]*
+     * `11:45 - 12:20`: Block 4 - Morning Review & Asset Prep (35m, Shallow)
+     * *[12:20 - 13:30: Nghỉ trưa & Tái tạo năng lượng (Lunch Break)]*
+   - **Ca Chiều (13:30 - 16:30):**
+     * `13:30 - 14:30`: Block 5 - B-Roll Assembly & Production (60m, Deep Work)
+     * *[14:30 - 14:35: Nghỉ ngắn 5 phút (Break 5m)]*
+     * `14:35 - 15:35`: Block 6 - Filming & Voiceover (60m, Deep Work)
+     * *[15:35 - 15:40: Nghỉ ngắn 5 phút (Break 5m)]*
+     * `15:40 - 16:30`: Block 7 - Daily Retrospective, Repurpose & Learnings (50m, Shallow)
+3. **Cảnh báo sau mỗi block 60 phút (Audio Chime & Apple Alert Banner):**
+   - Khi đồng hồ Deep Work Timer chạm mốc 60 phút (hoặc khi người dùng đánh dấu hoàn tất block 60m), hệ thống tự động phát âm thanh chuông nhẹ (Web Audio API Synthesizer Chime độc lập không cần file ngoài).
+   - Hiển thị Banner/Modal cảnh báo phong cách Apple: *"🔔 Đã hoàn thành 60 phút Deep Work! Hãy đứng dậy vận động và nghỉ ngơi 5 phút."*
+4. **Đồng hồ bấm giờ Deep Work tích hợp (Timer):**
+   - Cho phép bấm **Start / Pause** trên block hiện tại.
+   - Khi timer chạy, số phút tự động cộng dồn vào chỉ số `Deep Work Hours` trên Header.
+5. **Bộ đếm Tasks Deleted:**
+   - Tự động tăng +1 mỗi khi người dùng xóa 1 card hoặc kéo card vào cột `DELETE / REPURPOSE`.
 
 ---
 
@@ -174,7 +191,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | Mã AC | Tiêu chí nghiệm thu chi tiết | Trạng thái kiểm thử |
 | :--- | :--- | :--- |
 | **`AC-01`** | File duy nhất `index.html` chạy độc lập trên trình duyệt không cần máy chủ (file:/// hoặc local server). | Chờ kiểm thử |
-| **`AC-02`** | Timeline Tầng 1 hiển thị đủ 10 khung giờ (8AM-6PM), có các block 90 phút và timer bấm giờ tích lũy Deep Work. | Chờ kiểm thử |
+| **`AC-02`** | Timeline Tầng 1 hiển thị các khung giờ làm việc theo ca, các block và timer bấm giờ tích lũy Deep Work. | Chờ kiểm thử |
 | **`AC-03`** | Header hiển thị thời gian thực `Deep Work Hours` và `Tasks Deleted`. | Chờ kiểm thử |
 | **`AC-04`** | Cột `SINGLE FOCUS` tuyệt đối chỉ chứa tối đa 1 card; chặn thả card thứ 2. | Chờ kiểm thử |
 | **`AC-05`** | Cột `DEEP WORK` chỉ chứa tối đa 3 cards; vượt quá 3 cards sẽ bị từ chối kéo vào. | Chờ kiểm thử |
@@ -188,6 +205,9 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-13`** | **Apple-Inspired HIG Design**: Giao diện đạt chuẩn tối giản Apple (SF Pro system font stack, hiệu ứng kính mờ `backdrop-blur`, viền hairline `border-white/[0.08]`, bo góc squircle mềm mại, Segmented Controls và micro-interaction mượt mà). | Chờ kiểm thử |
 | **`AC-14`** | **Bilingual Support (Tiếng Việt & English)**: Hỗ trợ song ngữ Tiếng Việt & Tiếng Anh, chuyển đổi ngôn ngữ trong Settings Modal, cập nhật toàn bộ UI tức thì (Header, Timeline, 6 cột Kanban, Card labels, Modals, AI Quick Actions, Toasts) không cần reload trang và lưu bền vững vào `localStorage`. | Chờ kiểm thử |
 | **`AC-15`** | **Dynamic Google Fonts Typography**: Tích hợp Google Fonts (`Be Vietnam Pro` cho Tiếng Việt và `Inter` cho Tiếng Anh), tự động chuyển đổi font typography theo cài đặt ngôn ngữ tức thì không cần reload trang, duy trì tính thẩm mỹ và độ sắc nét chuẩn Apple HIG. | Chờ kiểm thử |
+| **`AC-16`** | **Timeline Lịch Làm Việc Thực Tế & Cảnh Báo Block 60m**: Khung giờ làm việc chuẩn 08:30 - 12:20 (sáng) và 13:30 - 16:30 (chiều). Các block 60m kèm khoảng nghỉ 5 phút giữa các ca hiển thị badge tinh tế (Break 5m). Khi đồng hồ Deep Work chạm mốc 60 phút hoặc hoàn tất block 60m, tự động phát âm thanh chuông nhẹ (Web Audio API Synthesizer) và hiển thị Banner/Modal cảnh báo Apple style. | Chờ kiểm thử |
+| **`AC-17`** | **Musk First Principles Handbook (Cẩm Nang 5 Bước Thuật Toán Musk)**: Tích hợp module hướng dẫn sử dụng hệ thống chuẩn Elon Musk trong Settings Modal với 5 bước trực quan (Question, Delete, Simplify & Single Focus, Accelerate, Automate) kèm mẹo thực chiến cho Creator, hỗ trợ song ngữ Tiếng Việt và Tiếng Anh. | Chờ kiểm thử |
+| **`AC-18`** | **Meta Fanpage Integration (Đặt Sân Nhanh)**: Tự động nạp thông tin Fanpage "Đặt Sân Nhanh" (Page ID: `1234257116429910`, Token mã hóa / che hiển thị an toàn `EAALZAoxk...CS3wt`), có nút bật/tắt hiển thị token, huy hiệu xanh kết nối và nút kiểm tra kết nối Meta Graph API hiển thị phản hồi tức thì. | Chờ kiểm thử |
 
 ---
 

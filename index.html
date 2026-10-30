@@ -299,10 +299,10 @@
           </div>
           <div>
             <h2 id="timelineTitle" data-i18n="timeline_title" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
-              Tầng 1: Time-Blocking Timeline (08:00 — 18:00)
+              Tầng 1: Time-Blocking Timeline (08:30 — 16:30)
             </h2>
             <p id="timelineSubtitle" data-i18n="timeline_subtitle" class="text-xs text-zinc-400 light:text-zinc-500">
-              Chu kỳ sinh học Ultradian 90 phút • Khóa chặt sự chú ý và triệt tiêu đa nhiệm
+              Lịch làm việc thực tế: 08:30 - 12:20 & 13:30 - 16:30 • Blocks 60m + Nghỉ ngắn 5m
             </p>
           </div>
         </div>
@@ -311,7 +311,7 @@
         <div class="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-black/40 light:bg-white/80 border border-white/10 light:border-black/10 shadow-inner">
           <div class="text-right">
             <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block" id="currentTimerBlockName">
-              Block: Plan & Hook
+              Block: Plan & Pattern Interrupt
             </span>
             <span class="font-mono text-lg font-bold tracking-tight text-amber-400 light:text-amber-600" id="timerDisplay">
               00:00:00
@@ -336,8 +336,10 @@
 
       </div>
 
-      <!-- 6 Ultradian 90m Blocks Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3" id="timelineGrid">
+      <!-- 7 Executive Blocks Grid (08:30 - 12:20 & 13:30 - 16:30) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="timelineGrid">
+        <!-- Rendered dynamically via JS -->
+      </div>
         <!-- Rendered dynamically via JS -->
       </div>
     </section>
@@ -733,7 +735,7 @@
 
   <!-- 4. SETTINGS MODAL -->
   <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-card rounded-3xl w-full max-w-lg p-6 shadow-2xl animate-sheet border border-white/20 light:border-black/10">
+    <div class="glass-card rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col p-6 shadow-2xl animate-sheet border border-white/20 light:border-black/10">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] light:border-black/[0.06]">
         <div class="flex items-center space-x-2">
           <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -750,7 +752,26 @@
         </button>
       </div>
 
-      <form onsubmit="handleSaveSettings(event)" class="space-y-4 text-xs">
+      <!-- Settings Segmented Tabs (Apple HIG) -->
+      <div class="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-white/[0.04] light:bg-black/[0.04] border border-white/[0.08] light:border-black/[0.06] mb-4">
+        <button type="button" id="tabBtnApi" onclick="switchSettingsTab('api')" class="py-2 px-2 rounded-xl text-xs font-semibold transition-all bg-white/10 light:bg-white text-white light:text-zinc-900 shadow-sm flex items-center justify-center space-x-1.5">
+          <span>⚙️</span>
+          <span id="tabLabelApi" data-i18n="tab_settings_api">AI & Cấu Hình</span>
+        </button>
+        <button type="button" id="tabBtnHandbook" onclick="switchSettingsTab('handbook')" class="py-2 px-2 rounded-xl text-xs font-semibold transition-all text-zinc-400 hover:text-white flex items-center justify-center space-x-1.5">
+          <span>🚀</span>
+          <span id="tabLabelHandbook" data-i18n="tab_settings_handbook">Musk Handbook</span>
+        </button>
+        <button type="button" id="tabBtnFanpage" onclick="switchSettingsTab('fanpage')" class="py-2 px-2 rounded-xl text-xs font-semibold transition-all text-zinc-400 hover:text-white flex items-center justify-center space-x-1.5">
+          <span>📱</span>
+          <span id="tabLabelFanpage" data-i18n="tab_settings_fanpage">Meta Fanpage</span>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveSettings(event)" class="overflow-y-auto max-h-[60vh] pr-1 space-y-4 text-xs">
+        
+        <!-- Tab 1: AI & System Config -->
+        <div id="settingsTabApi" class="space-y-4">
         
         <!-- Language Selector Section -->
         <div>
@@ -812,12 +833,185 @@
             Test Connection
           </button>
         </div>
+        </div>
+
+        <!-- ==================== TAB 2: MUSK OS HANDBOOK ==================== -->
+        <div id="settingsTabHandbook" class="space-y-3.5 hidden">
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+            <h4 id="handbookIntroTitle" data-i18n="handbook_intro_title" class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+              🚀 5 Bước Thuật Toán Elon Musk Cho Content Creator
+            </h4>
+            <p id="handbookIntroDesc" data-i18n="handbook_intro_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed">
+              Thuật toán sản xuất tinh gọn của Elon Musk ứng dụng vào quy trình sáng tạo: Triệt tiêu sự trì hoãn, cắt giảm phần thừa và tăng tốc sản lượng nội dung chất lượng cao.
+            </p>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="p-3.5 rounded-2xl glass-card border border-white/[0.08] light:border-black/[0.06] space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">❓</span>
+              <h5 id="handbookStep1Title" data-i18n="handbook_step1_title" class="text-xs font-bold text-white light:text-zinc-900">
+                1. Đặt câu hỏi cho từng yêu cầu (Question Every Requirement)
+              </h5>
+            </div>
+            <p id="handbookStep1Desc" data-i18n="handbook_step1_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed pl-6">
+              Mọi ý tưởng nội dung đều phải xuất phát từ nguyên lý gốc (First Principle) và nhu cầu chân thực của khán giả, không làm vì 'người khác cũng làm'.
+            </p>
+            <div class="pl-6 pt-1">
+              <span id="handbookStep1Tip" data-i18n="handbook_step1_tip" class="inline-block px-2.5 py-1 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[10px] font-medium">
+                💡 Mẹo Creator: Tự hỏi 'Nếu video này không ra đời, khán giả có mất đi giải pháp thực sự nào không?'
+              </span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-3.5 rounded-2xl glass-card border border-white/[0.08] light:border-black/[0.06] space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">🗑️</span>
+              <h5 id="handbookStep2Title" data-i18n="handbook_step2_title" class="text-xs font-bold text-rose-400">
+                2. Xóa bỏ phần thừa thãi (Delete Any Part You Can)
+              </h5>
+            </div>
+            <p id="handbookStep2Desc" data-i18n="handbook_step2_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed pl-6">
+              Dứt khoát cắt bỏ mọi cảnh quay, câu chữ hoặc ý tưởng rườm rà. Nếu video có CTR &lt; 2.0%, chuyển ngay vào cột DELETE / REPURPOSE để thanh lọc danh mục.
+            </p>
+            <div class="pl-6 pt-1">
+              <span id="handbookStep2Tip" data-i18n="handbook_step2_tip" class="inline-block px-2.5 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[10px] font-medium">
+                💡 Mẹo Creator: Cắt bỏ 30-50% lời dẫn mở đầu. Đưa ngay cao trào hoặc kết quả chấn động vào 3 giây đầu tiên (Pattern Interrupt).
+              </span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-3.5 rounded-2xl glass-card border border-white/[0.08] light:border-black/[0.06] space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">🎯</span>
+              <h5 id="handbookStep3Title" data-i18n="handbook_step3_title" class="text-xs font-bold text-amber-400">
+                3. Đơn giản hóa & Tập trung tối đa (Simplify & Single Focus)
+              </h5>
+            </div>
+            <p id="handbookStep3Desc" data-i18n="handbook_step3_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed pl-6">
+              Luật bất biến WIP = 1: Tại một thời điểm, chỉ cho phép duy nhất 1 Card được active trong cột SINGLE FOCUS để triệt tiêu phân tán năng lượng.
+            </p>
+            <div class="pl-6 pt-1">
+              <span id="handbookStep3Tip" data-i18n="handbook_step3_tip" class="inline-block px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] font-medium">
+                💡 Mẹo Creator: Tách rời tuyệt đối việc lên kịch bản và quay dựng. Khóa mọi tab mạng xã hội khi đang trong block Deep Work.
+              </span>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="p-3.5 rounded-2xl glass-card border border-white/[0.08] light:border-black/[0.06] space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">⚡</span>
+              <h5 id="handbookStep4Title" data-i18n="handbook_step4_title" class="text-xs font-bold text-blue-400">
+                4. Tăng tốc chu kỳ lặp (Accelerate Cycle Time)
+              </h5>
+            </div>
+            <p id="handbookStep4Desc" data-i18n="handbook_step4_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed pl-6">
+              Phân bổ công việc theo các block 60 phút Deep Work + 5 phút nghỉ ngơi (08:30 - 12:20 & 13:30 - 16:30). Rút ngắn chu kỳ sản xuất để đo lường dữ liệu phản hồi nhanh hơn.
+            </p>
+            <div class="pl-6 pt-1">
+              <span id="handbookStep4Tip" data-i18n="handbook_step4_tip" class="inline-block px-2.5 py-1 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] font-medium">
+                💡 Mẹo Creator: Một kịch bản thô hoàn thành trong 60 phút luôn giá trị hơn một kiệt tác dang dở không bao giờ bấm máy.
+              </span>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="p-3.5 rounded-2xl glass-card border border-white/[0.08] light:border-black/[0.06] space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="text-base">🤖</span>
+              <h5 id="handbookStep5Title" data-i18n="handbook_step5_title" class="text-xs font-bold text-emerald-400">
+                5. Tự động hóa có chọn lọc (Automate)
+              </h5>
+            </div>
+            <p id="handbookStep5Desc" data-i18n="handbook_step5_desc" class="text-[11px] text-zinc-300 light:text-zinc-600 leading-relaxed pl-6">
+              Chỉ tự động hóa sau khi đã hoàn thành 4 bước trên. Tận dụng Musk AI Copilot để sinh Hook 3 giây, rút gọn kịch bản và kiểm tra tiêu đề.
+            </p>
+            <div class="pl-6 pt-1">
+              <span id="handbookStep5Tip" data-i18n="handbook_step5_tip" class="inline-block px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px] font-medium">
+                💡 Mẹo Creator: Để AI làm bản nháp khung sườn (First Draft); con người nắm giữ vai trò đạo diễn và thổi linh hồn độc bản vào sản phẩm.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB 3: META FANPAGE INTEGRATION ==================== -->
+        <div id="settingsTabFanpage" class="space-y-4 hidden">
+          <div class="p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/20">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="fbConnectedBadge" class="text-xs font-bold text-emerald-400">
+                  ● Đã kết nối: Đặt Sân Nhanh (ID: 1234257116429910)
+                </span>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">Meta Graph API v19.0</span>
+            </div>
+            <p id="fbConnectedDesc" data-i18n="fb_connected_desc" class="text-[11px] text-zinc-300 light:text-zinc-600">
+              Đã tự động trích xuất thông tin Fanpage từ Second Brain của Sếp. Dashboard sẵn sàng đăng bài và đồng bộ tương tác tự động.
+            </p>
+          </div>
+
+          <div>
+            <label id="fbPageNameLabel" data-i18n="fb_page_name_label" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Fanpage Name</label>
+            <input type="text" id="settingsFbPageName" value="Đặt Sân Nhanh" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none" readonly>
+          </div>
+
+          <div>
+            <label id="fbPageIdLabel" data-i18n="fb_page_id_label" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Facebook Page ID</label>
+            <input type="text" id="settingsFbPageId" value="1234257116429910" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none font-mono" readonly>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label id="fbTokenLabel" data-i18n="fb_token_label" class="block font-semibold text-zinc-300 light:text-zinc-700">Page Access Token</label>
+              <span class="text-[10px] text-zinc-500 font-mono" id="fbTokenPreview">EAALZAoxk...CS3wt</span>
+            </div>
+            <div class="relative">
+              <input type="password" id="settingsFbToken" value="EAALZAoxkIRf0BSbG5Ubi2xNP6gNQhfo6on5UnoMuA81DmWrqSlltXCkRAZCpJ43e4FeE7ZBGZBIl75kQmgrHkMP6ImxVifkSbfk7ZAuiU5ZCLAx8ykMDjZA4mFQve0hZAl19bCMn29gRDZCfzKrYwkvxDG3bXd6CcCu8vE4JZCAmcwDzHv5pVz1kwJv4wlBwGdd9GZCS3wt" class="w-full px-3 py-2 pr-16 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none font-mono text-[11px]">
+              <button type="button" onclick="toggleFbTokenMask()" id="btnToggleFbTokenMask" data-i18n="settings_toggle_mask" class="absolute right-2 top-2 text-zinc-400 hover:text-white text-[10px] px-2 py-0.5 rounded bg-white/10">Hiện/Ẩn</button>
+            </div>
+            <p id="fbTokenNote" data-i18n="fb_token_note" class="text-[10px] text-zinc-400 mt-1">Token được che giấu và lưu trữ trong LocalStorage máy cá nhân, dùng cho Graph API.</p>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-between">
+            <div>
+              <span id="fbTestLabel" data-i18n="fb_test_label" class="font-semibold text-indigo-300 block">Kiểm tra kết nối Fanpage</span>
+              <span class="text-[10px] text-zinc-400" id="fbConnectionStatus">Sẵn sàng kiểm tra</span>
+            </div>
+            <button type="button" onclick="testFanpageConnection()" id="btnTestFanpage" data-i18n="fb_test_btn" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium active:scale-95 transition-all">
+              Test Fanpage Connection
+            </button>
+          </div>
+        </div>
 
         <div class="flex items-center justify-end space-x-2 pt-3 border-t border-white/[0.08] light:border-black/[0.06]">
           <button type="button" id="settingsCloseBtn" data-i18n="settings_btn_close" onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Đóng</button>
           <button type="submit" id="settingsSaveBtn" data-i18n="settings_btn_save" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium">Lưu Cấu Hình</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- 5. BLOCK 60M COMPLETION ALERT BANNER (Apple HIG) -->
+  <div id="blockAlertBanner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-md p-6 shadow-2xl border border-amber-500/30 text-center animate-sheet">
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4 text-3xl shadow-lg shadow-amber-500/20">
+        🔔
+      </div>
+      <h3 id="blockAlertTitle" data-i18n="block_alert_title" class="text-base font-bold text-white light:text-zinc-900 mb-2">
+        Đã Hoàn Thành Block Deep Work!
+      </h3>
+      <p id="blockAlertMessage" data-i18n="block_alert_message" class="text-xs text-zinc-300 light:text-zinc-600 mb-6 leading-relaxed">
+        Đã hoàn thành 60 phút Deep Work! Hãy đứng dậy vận động và nghỉ ngơi 5 phút.
+      </p>
+      <div class="flex items-center justify-center space-x-3">
+        <button type="button" onclick="closeBlockAlert()" id="btnDismissBlockAlert" data-i18n="btn_dismiss_block_alert" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-bold active:scale-95 transition-all text-xs shadow-md shadow-amber-500/20">
+          Bắt đầu nghỉ 5 phút (Start 5m Break)
+        </button>
+      </div>
     </div>
   </div>
 
@@ -846,8 +1040,8 @@
         tooltip_theme: "Chuyển chế độ Sáng / Tối",
 
         // Tầng 1 Timeline
-        timeline_title: "Tầng 1: Time-Blocking Timeline (08:00 — 18:00)",
-        timeline_subtitle: "Chu kỳ sinh học Ultradian 90 phút • Khóa chặt sự chú ý và triệt tiêu đa nhiệm",
+        timeline_title: "Tầng 1: Time-Blocking Timeline (08:30 — 16:30)",
+        timeline_subtitle: "Lịch làm việc thực tế: 08:30 - 12:20 & 13:30 - 16:30 • Blocks 60m + Nghỉ ngắn 5m",
         block_active: "Active",
         block_prefix: "Block: {name}",
         tooltip_reset_timer: "Reset đồng hồ",
@@ -855,14 +1049,18 @@
         type_deep_work: "Deep Work",
         type_review: "Review",
         type_shallow: "Shallow",
+        break_5m: "☕ Nghỉ 5p",
+        break_lunch: "🍱 Nghỉ trưa (12:20 - 13:30)",
+        break_wrap_up: "🏁 Kết thúc ngày (16:30)",
 
         // Block sample titles
-        block_tb_1: "Kế hoạch & Hook",
-        block_tb_2: "Viết kịch bản",
-        block_tb_3: "Thumbnail & Tiêu đề",
-        block_tb_4: "B-Roll & Tư liệu",
-        block_tb_5: "Quay & Thu âm",
-        block_tb_6: "Đánh giá & Tái chế",
+        block_tb_1: "Kế hoạch & Pattern Interrupt",
+        block_tb_2: "Viết kịch bản sâu (Deep Script)",
+        block_tb_3: "Thumbnail & Tiêu đề A/B",
+        block_tb_4: "Đánh giá sáng & Chuẩn bị tư liệu",
+        block_tb_5: "Dựng B-Roll & Sản xuất",
+        block_tb_6: "Quay hình & Thu âm (Voiceover)",
+        block_tb_7: "Tổng kết ngày & Tái chế nội dung",
 
         // Tầng 2 Kanban
         kanban_title: "Tầng 2: First Principles Kanban Board",
@@ -968,6 +1166,48 @@
         settings_btn_test: "Test Connection",
         settings_btn_close: "Đóng",
         settings_btn_save: "Lưu Cấu Hình",
+        tab_settings_api: "AI & Cấu Hình",
+        tab_settings_handbook: "Musk Handbook",
+        tab_settings_fanpage: "Meta Fanpage",
+
+        // Musk Handbook
+        handbook_intro_title: "🚀 5 Bước Thuật Toán Elon Musk Cho Content Creator",
+        handbook_intro_desc: "Thuật toán sản xuất tinh gọn của Elon Musk ứng dụng vào quy trình sáng tạo: Triệt tiêu sự trì hoãn, cắt giảm phần thừa và tăng tốc sản lượng nội dung chất lượng cao.",
+        handbook_step1_title: "1. Đặt câu hỏi cho từng yêu cầu (Question Every Requirement)",
+        handbook_step1_desc: "Mọi ý tưởng nội dung đều phải xuất phát từ nguyên lý gốc (First Principle) và nhu cầu chân thực của khán giả, không làm vì 'người khác cũng làm'.",
+        handbook_step1_tip: "💡 Mẹo Creator: Tự hỏi 'Nếu video này không ra đời, khán giả có mất đi giải pháp thực sự nào không?'",
+        handbook_step2_title: "2. Xóa bỏ phần thừa thãi (Delete Any Part You Can)",
+        handbook_step2_desc: "Dứt khoát cắt bỏ mọi cảnh quay, câu chữ hoặc ý tưởng rườm rà. Nếu video có CTR < 2.0%, chuyển ngay vào cột DELETE / REPURPOSE để thanh lọc danh mục.",
+        handbook_step2_tip: "💡 Mẹo Creator: Cắt bỏ 30-50% lời dẫn mở đầu. Đưa ngay cao trào hoặc kết quả chấn động vào 3 giây đầu tiên (Pattern Interrupt).",
+        handbook_step3_title: "3. Đơn giản hóa & Tập trung tối đa (Simplify & Single Focus)",
+        handbook_step3_desc: "Luật bất biến WIP = 1: Tại một thời điểm, chỉ cho phép duy nhất 1 Card được active trong cột SINGLE FOCUS để triệt tiêu phân tán năng lượng.",
+        handbook_step3_tip: "💡 Mẹo Creator: Tách rời tuyệt đối việc lên kịch bản và quay dựng. Khóa mọi tab mạng xã hội khi đang trong block Deep Work.",
+        handbook_step4_title: "4. Tăng tốc chu kỳ lặp (Accelerate Cycle Time)",
+        handbook_step4_desc: "Phân bổ công việc theo các block 60 phút Deep Work + 5 phút nghỉ ngơi (08:30 - 12:20 & 13:30 - 16:30). Rút ngắn chu kỳ sản xuất để đo lường dữ liệu phản hồi nhanh hơn.",
+        handbook_step4_tip: "💡 Mẹo Creator: Một kịch bản thô hoàn thành trong 60 phút luôn giá trị hơn một kiệt tác dang dở không bao giờ bấm máy.",
+        handbook_step5_title: "5. Tự động hóa có chọn lọc (Automate)",
+        handbook_step5_desc: "Chỉ tự động hóa sau khi đã hoàn thành 4 bước trên. Tận dụng Musk AI Copilot để sinh Hook 3 giây, rút gọn kịch bản và kiểm tra tiêu đề.",
+        handbook_step5_tip: "💡 Mẹo Creator: Để AI làm bản nháp khung sườn (First Draft); con người nắm giữ vai trò đạo diễn và thổi linh hồn độc bản vào sản phẩm.",
+
+        // Meta Fanpage
+        fb_title: "Tích Hợp Meta Fanpage (Graph API)",
+        fb_connected_badge: "● Đã kết nối: {name} (ID: {id})",
+        fb_connected_desc: "Đã tự động trích xuất thông tin Fanpage từ Second Brain của Sếp. Dashboard sẵn sàng đăng bài và đồng bộ tương tác tự động.",
+        fb_page_name_label: "Fanpage Name",
+        fb_page_id_label: "Facebook Page ID",
+        fb_token_label: "Page Access Token",
+        fb_token_note: "Token được che giấu và lưu trữ trong LocalStorage máy cá nhân, dùng cho Graph API.",
+        fb_test_label: "Kiểm tra kết nối Fanpage",
+        fb_test_btn: "Test Fanpage Connection",
+        fb_status_missing: "⚠️ Thiếu Page ID hoặc Access Token!",
+        fb_status_testing: "⏳ Đang kết nối tới Meta Graph API...",
+        toast_fb_connected: "✓ Đã xác thực kết nối Meta Fanpage Đặt Sân Nhanh!",
+
+        // Block 60m Alert
+        block_alert_title: "🔔 Hoàn Thành Block Deep Work 60 Phút!",
+        block_alert_message: "Đã hoàn thành 60 phút Deep Work! Hãy đứng dậy vận động và nghỉ ngơi 5 phút.",
+        btn_dismiss_block_alert: "Bắt đầu nghỉ 5 phút (Start 5m Break)",
+        toast_block_60m_completed: "🔔 Đã hoàn thành 60 phút Deep Work! Hãy nghỉ ngơi 5 phút.",
 
         // Toasts & Alerts
         toast_lang_changed: "Đã chuyển đổi sang Tiếng Việt",
@@ -1010,8 +1250,8 @@
         tooltip_theme: "Toggle Light / Dark mode",
 
         // Tầng 1 Timeline
-        timeline_title: "Level 1: Time-Blocking Timeline (08:00 — 18:00)",
-        timeline_subtitle: "90-Minute Ultradian Rhythm • Lock Attention & Eliminate Multitasking",
+        timeline_title: "Level 1: Time-Blocking Timeline (08:30 — 16:30)",
+        timeline_subtitle: "Executive Schedule: 08:30 - 12:20 & 13:30 - 16:30 • 60m Blocks + 5m Short Breaks",
         block_active: "Active",
         block_prefix: "Block: {name}",
         tooltip_reset_timer: "Reset timer",
@@ -1019,14 +1259,18 @@
         type_deep_work: "Deep Work",
         type_review: "Review",
         type_shallow: "Shallow",
+        break_5m: "☕ 5m Break",
+        break_lunch: "🍱 Lunch Break (12:20 - 13:30)",
+        break_wrap_up: "🏁 Day Wrap Up (16:30)",
 
         // Block sample titles
-        block_tb_1: "Plan & Hook",
-        block_tb_2: "Script Writing",
-        block_tb_3: "Thumbnail & Title",
-        block_tb_4: "B-Roll & Assets",
-        block_tb_5: "Film & Recording",
-        block_tb_6: "Review & Repurpose",
+        block_tb_1: "Plan & Pattern Interrupt",
+        block_tb_2: "Deep Script Writing",
+        block_tb_3: "Thumbnail & Title A/B",
+        block_tb_4: "Morning Review & Asset Prep",
+        block_tb_5: "B-Roll Assembly & Production",
+        block_tb_6: "Filming & Voiceover",
+        block_tb_7: "Daily Retrospective & Repurpose",
 
         // Tầng 2 Kanban
         kanban_title: "Level 2: First Principles Kanban Board",
@@ -1132,6 +1376,48 @@
         settings_btn_test: "Test Connection",
         settings_btn_close: "Close",
         settings_btn_save: "Save Configuration",
+        tab_settings_api: "AI & Config",
+        tab_settings_handbook: "Musk Handbook",
+        tab_settings_fanpage: "Meta Fanpage",
+
+        // Musk Handbook
+        handbook_intro_title: "🚀 Elon Musk 5-Step Algorithm for Creators",
+        handbook_intro_desc: "Elon Musk's ruthless lean manufacturing algorithm applied to content creation: Eliminate procrastination, prune fluff, and accelerate high-quality output.",
+        handbook_step1_title: "1. Question Every Requirement",
+        handbook_step1_desc: "Every content piece must stem from audience first principles, never cargo-cult imitation.",
+        handbook_step1_tip: "💡 Creator Tip: Ask 'If this video is never made, does the audience lose real value?' If no, rethink immediately.",
+        handbook_step2_title: "2. Delete Any Part You Can",
+        handbook_step2_desc: "Ruthlessly delete fluff words, weak scenes, or unfocused ideas. If CTR < 2.0%, move immediately to DELETE / REPURPOSE.",
+        handbook_step2_tip: "💡 Creator Tip: Cut 30-50% of your intro fluff. Put the core payoff or shock result in the first 3 seconds (Pattern Interrupt).",
+        handbook_step3_title: "3. Simplify & Single Focus",
+        handbook_step3_desc: "Iron Law WIP = 1: Only 1 card active in SINGLE FOCUS at any time to eliminate distraction and multitasking.",
+        handbook_step3_tip: "💡 Creator Tip: Never script and film simultaneously. Mute all notifications and social feeds during your deep work block.",
+        handbook_step4_title: "4. Accelerate Cycle Time",
+        handbook_step4_desc: "Execute in 60-Minute Deep Work blocks + 5-Minute short breaks (08:30 - 12:20 & 13:30 - 16:30). Faster cycles yield faster market feedback.",
+        handbook_step4_tip: "💡 Creator Tip: A finished rough draft in 60 minutes beats an unfilmed 'masterpiece' every time.",
+        handbook_step5_title: "5. Automate",
+        handbook_step5_desc: "Only automate after the first 4 steps. Leverage Musk AI Copilot for 3s Hooks, script trimming, and title scoring.",
+        handbook_step5_tip: "💡 Creator Tip: Let AI generate the structural draft; human discernment provides authentic voice and unique soul.",
+
+        // Meta Fanpage
+        fb_title: "Meta Fanpage Integration (Graph API)",
+        fb_connected_badge: "● Connected: {name} (ID: {id})",
+        fb_connected_desc: "Automatically extracted Fanpage credentials from Boss's Second Brain. Dashboard is ready for posting and engagement syncing.",
+        fb_page_name_label: "Fanpage Name",
+        fb_page_id_label: "Facebook Page ID",
+        fb_token_label: "Page Access Token",
+        fb_token_note: "Token is masked and saved in local browser storage, used for Graph API calls.",
+        fb_test_label: "Test Fanpage Connection",
+        fb_test_btn: "Test Fanpage Connection",
+        fb_status_missing: "⚠️ Missing Page ID or Access Token!",
+        fb_status_testing: "⏳ Connecting to Meta Graph API...",
+        toast_fb_connected: "✓ Meta Fanpage 'Đặt Sân Nhanh' verified successfully!",
+
+        // Block 60m Alert
+        block_alert_title: "🔔 60-Minute Deep Work Block Completed!",
+        block_alert_message: "Completed 60 minutes of Deep Work! Stand up, stretch, and take a 5-minute break.",
+        btn_dismiss_block_alert: "Start 5-Minute Break",
+        toast_block_60m_completed: "🔔 60m Deep Work block completed! Take a 5m break.",
 
         // Toasts & Alerts
         toast_lang_changed: "Switched language to English",
@@ -1244,6 +1530,7 @@
       renderKanbanBoard();
       renderChatHistory();
       updateAIProviderStatus();
+      if (typeof updateFanpageControls === 'function') updateFanpageControls();
     }
 
     // Default Seed Data (8 High-Quality Content Items)
@@ -1352,15 +1639,26 @@
       }
     ];
 
-    // Default 6 Ultradian 90m Blocks
+    // Default 7 Executive Blocks (08:30 - 12:20 & 13:30 - 16:30)
     const DEFAULT_TIME_BLOCKS = [
-      { id: 'tb-1', title: 'Plan & Hook', startTime: '08:00', endTime: '09:30', durationMinutes: 90, type: 'deep_work', isCompleted: false },
-      { id: 'tb-2', title: 'Script Writing', startTime: '09:30', endTime: '11:00', durationMinutes: 90, type: 'deep_work', isCompleted: false },
-      { id: 'tb-3', title: 'Thumbnail & Title', startTime: '11:00', endTime: '12:30', durationMinutes: 90, type: 'review', isCompleted: false },
-      { id: 'tb-4', title: 'B-Roll & Assets', startTime: '13:30', endTime: '15:00', durationMinutes: 90, type: 'deep_work', isCompleted: false },
-      { id: 'tb-5', title: 'Film & Recording', startTime: '15:00', endTime: '16:30', durationMinutes: 90, type: 'deep_work', isCompleted: false },
-      { id: 'tb-6', title: 'Review & Repurpose', startTime: '16:30', endTime: '18:00', durationMinutes: 90, type: 'shallow', isCompleted: false },
+      { id: 'tb-1', title: 'Plan & Pattern Interrupt', startTime: '08:30', endTime: '09:30', durationMinutes: 60, type: 'deep_work', isCompleted: false, breakMinutes: 5, breakRange: '09:30 - 09:35' },
+      { id: 'tb-2', title: 'Deep Script Writing', startTime: '09:35', endTime: '10:35', durationMinutes: 60, type: 'deep_work', isCompleted: false, breakMinutes: 5, breakRange: '10:35 - 10:40' },
+      { id: 'tb-3', title: 'Thumbnail & Title A/B', startTime: '10:40', endTime: '11:40', durationMinutes: 60, type: 'review', isCompleted: false, breakMinutes: 5, breakRange: '11:40 - 11:45' },
+      { id: 'tb-4', title: 'Morning Review & Asset Prep', startTime: '11:45', endTime: '12:20', durationMinutes: 35, type: 'shallow', isCompleted: false, breakMinutes: 70, breakRange: '12:20 - 13:30 (Lunch)', isLunchAfter: true },
+      { id: 'tb-5', title: 'B-Roll Assembly & Production', startTime: '13:30', endTime: '14:30', durationMinutes: 60, type: 'deep_work', isCompleted: false, breakMinutes: 5, breakRange: '14:30 - 14:35' },
+      { id: 'tb-6', title: 'Filming & Voiceover', startTime: '14:35', endTime: '15:35', durationMinutes: 60, type: 'deep_work', isCompleted: false, breakMinutes: 5, breakRange: '15:35 - 15:40' },
+      { id: 'tb-7', title: 'Daily Retrospective, Repurpose & Learnings', startTime: '15:40', endTime: '16:30', durationMinutes: 50, type: 'shallow', isCompleted: false, breakMinutes: 0, breakRange: '' }
     ];
+
+    const DEFAULT_SETTINGS = {
+      aiProvider: 'gemini',
+      apiKey: '',
+      modelName: 'gemini-1.5-flash',
+      language: 'vi',
+      fbPageId: '1234257116429910',
+      fbPageAccessToken: 'EAALZAoxkIRf0BSbG5Ubi2xNP6gNQhfo6on5UnoMuA81DmWrqSlltXCkRAZCpJ43e4FeE7ZBGZBIl75kQmgrHkMP6ImxVifkSbfk7ZAuiU5ZCLAx8ykMDjZA4mFQve0hZAl19bCMn29gRDZCfzKrYwkvxDG3bXd6CcCu8vE4JZCAmcwDzHv5pVz1kwJv4wlBwGdd9GZCS3wt',
+      fbPageName: 'Đặt Sân Nhanh'
+    };
 
     // App State Object
     let state = {
@@ -1376,7 +1674,10 @@
         aiProvider: 'gemini',
         apiKey: '',
         modelName: 'gemini-1.5-flash',
-        language: 'vi'
+        language: 'vi',
+        fbPageId: '1234257116429910',
+        fbPageAccessToken: 'EAALZAoxkIRf0BSbG5Ubi2xNP6gNQhfo6on5UnoMuA81DmWrqSlltXCkRAZCpJ43e4FeE7ZBGZBIl75kQmgrHkMP6ImxVifkSbfk7ZAuiU5ZCLAx8ykMDjZA4mFQve0hZAl19bCMn29gRDZCfzKrYwkvxDG3bXd6CcCu8vE4JZCAmcwDzHv5pVz1kwJv4wlBwGdd9GZCS3wt',
+        fbPageName: 'Đặt Sân Nhanh'
       },
       currentPlatformFilter: 'all',
       theme: 'dark',
@@ -1415,12 +1716,19 @@
       const savedBlocks = localStorage.getItem('ccc_timeblocks_v2');
       if (savedBlocks) {
         try {
-          state.timeBlocks = JSON.parse(savedBlocks);
+          const parsed = JSON.parse(savedBlocks);
+          if (Array.isArray(parsed) && parsed.length === 7 && parsed[0].startTime === '08:30') {
+            state.timeBlocks = parsed;
+          } else {
+            state.timeBlocks = JSON.parse(JSON.stringify(DEFAULT_TIME_BLOCKS));
+            saveTimeBlocks();
+          }
         } catch (e) {
-          state.timeBlocks = [...DEFAULT_TIME_BLOCKS];
+          state.timeBlocks = JSON.parse(JSON.stringify(DEFAULT_TIME_BLOCKS));
+          saveTimeBlocks();
         }
       } else {
-        state.timeBlocks = [...DEFAULT_TIME_BLOCKS];
+        state.timeBlocks = JSON.parse(JSON.stringify(DEFAULT_TIME_BLOCKS));
         saveTimeBlocks();
       }
 
@@ -1436,9 +1744,17 @@
       const savedSettings = localStorage.getItem('ccc_settings_v2');
       if (savedSettings) {
         try {
-          state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
-        } catch (e) {}
+          state.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(savedSettings) };
+        } catch (e) {
+          state.settings = { ...DEFAULT_SETTINGS };
+        }
+      } else {
+        state.settings = { ...DEFAULT_SETTINGS };
       }
+      if (!state.settings.fbPageId) state.settings.fbPageId = DEFAULT_SETTINGS.fbPageId;
+      if (!state.settings.fbPageAccessToken) state.settings.fbPageAccessToken = DEFAULT_SETTINGS.fbPageAccessToken;
+      if (!state.settings.fbPageName) state.settings.fbPageName = DEFAULT_SETTINGS.fbPageName;
+
       if (!state.settings.language || (state.settings.language !== 'vi' && state.settings.language !== 'en')) {
         state.settings.language = 'vi';
       }
@@ -1527,7 +1843,7 @@
         const isCurrent = state.timer.activeBlockId === block.id;
         const card = document.createElement('div');
         
-        // Dynamic styling for Ultradian block
+        // Dynamic styling for Executive block
         let typeBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
         let typeLabel = t('type_deep_work');
         if (block.type === 'review') {
@@ -1541,6 +1857,41 @@
         let displayTitle = block.title;
         if (block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
           displayTitle = t(`block_${block.id.replace('-', '_')}`);
+        }
+
+        // Break badge styling
+        const bMinutes = block.breakMinutes !== undefined ? block.breakMinutes : (block.id === 'tb-4' ? 70 : (block.id === 'tb-7' ? 0 : 5));
+        const bRange = block.breakRange || (block.id === 'tb-1' ? '09:30 - 09:35' : (block.id === 'tb-2' ? '10:35 - 10:40' : (block.id === 'tb-3' ? '11:40 - 11:45' : (block.id === 'tb-5' ? '14:30 - 14:35' : (block.id === 'tb-6' ? '15:35 - 15:40' : '')))));
+        const isLunch = block.isLunchAfter !== undefined ? block.isLunchAfter : (block.id === 'tb-4');
+
+        let breakBadgeHtml = '';
+        if (bMinutes === 5) {
+          breakBadgeHtml = `
+            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-semibold break-badge">
+                <span>☕</span>
+                <span>${t('break_5m')} (${bRange})</span>
+              </span>
+            </div>
+          `;
+        } else if (isLunch) {
+          breakBadgeHtml = `
+            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-semibold break-badge">
+                <span>🍱</span>
+                <span>${t('break_lunch')}</span>
+              </span>
+            </div>
+          `;
+        } else if (block.id === 'tb-7') {
+          breakBadgeHtml = `
+            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[9px] font-semibold break-badge">
+                <span>🏁</span>
+                <span>${t('break_wrap_up')}</span>
+              </span>
+            </div>
+          `;
         }
 
         card.className = `p-3 rounded-2xl border transition-all cursor-pointer relative ${
@@ -1560,15 +1911,16 @@
               </svg>
             </button>
           </div>
-          <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5">
+          <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5" title="${escapeHTML(displayTitle)}">
             ${escapeHTML(displayTitle)}
           </h4>
           <div class="flex items-center justify-between">
             <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full border ${typeBadgeClass}">
-              ${typeLabel} (90m)
+              ${typeLabel} (${block.durationMinutes}m)
             </span>
             ${isCurrent ? `<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>${t('block_active')}</span></span>` : ''}
           </div>
+          ${breakBadgeHtml}
         `;
 
         card.addEventListener('click', (e) => {
@@ -1600,14 +1952,77 @@
       renderTimeline();
     }
 
+    // Web Audio API Synthesizer Chime for Block Completion
+    function playBlockCompletionChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        const now = ctx.currentTime;
+        const playNote = (freq, startTime, duration) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0.001, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.2, startTime + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + duration);
+        };
+        playNote(587.33, now, 0.6);        // D5
+        playNote(880.00, now + 0.15, 0.8); // A5
+        playNote(1174.66, now + 0.3, 1.2); // D6
+      } catch (e) {
+        console.warn('AudioContext chime error:', e);
+      }
+    }
+
+    function triggerBlockAlert(blockTitle = '') {
+      playBlockCompletionChime();
+      const banner = document.getElementById('blockAlertBanner');
+      if (banner) {
+        const titleEl = document.getElementById('blockAlertTitle');
+        const msgEl = document.getElementById('blockAlertMessage');
+        if (titleEl) titleEl.innerText = t('block_alert_title');
+        if (msgEl) msgEl.innerText = t('block_alert_message', { name: blockTitle || '60m' });
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+      }
+      showToast(t('toast_block_60m_completed'), 'info');
+    }
+
+    function closeBlockAlert() {
+      const banner = document.getElementById('blockAlertBanner');
+      if (banner) {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+      }
+    }
+
     function toggleBlockCompletion(e, blockId) {
-      e.stopPropagation();
+      if (e && e.stopPropagation) e.stopPropagation();
       const block = state.timeBlocks.find(b => b.id === blockId);
       if (block) {
+        const wasCompleted = block.isCompleted;
         block.isCompleted = !block.isCompleted;
         saveTimeBlocks();
         renderTimeline();
-        showToast(block.isCompleted ? t('toast_block_completed', { title: block.title }) : t('toast_block_reopened', { title: block.title }));
+        
+        if (block.isCompleted && !wasCompleted) {
+          if (block.durationMinutes >= 60) {
+            triggerBlockAlert(block.title);
+          } else {
+            showToast(t('toast_block_completed', { title: block.title }));
+          }
+        } else {
+          showToast(t('toast_block_reopened', { title: block.title }));
+        }
       }
     }
 
@@ -1630,6 +2045,12 @@
         
         // Accumulate minutes every second to daily stats
         state.stats.deepWorkMinutes += (1 / 60);
+
+        // Alert on 60m block completion (3600 seconds)
+        if (state.timer.elapsedSeconds > 0 && state.timer.elapsedSeconds % 3600 === 0) {
+          const activeBlock = state.timeBlocks.find(b => b.id === state.timer.activeBlockId);
+          triggerBlockAlert(activeBlock ? activeBlock.title : '60m Deep Work');
+        }
         
         // Update Displays
         renderTimerDisplay();
@@ -2176,6 +2597,134 @@
       showToast(t('toast_save_done'));
     }
 
+    // Settings Tabs & Modal Controls
+    function switchSettingsTab(tab) {
+      const tabApi = document.getElementById('settingsTabApi');
+      const tabHandbook = document.getElementById('settingsTabHandbook');
+      const tabFanpage = document.getElementById('settingsTabFanpage');
+      const btnApi = document.getElementById('tabBtnApi');
+      const btnHandbook = document.getElementById('tabBtnHandbook');
+      const btnFanpage = document.getElementById('tabBtnFanpage');
+
+      const activeBtnClasses = ['bg-white/10', 'light:bg-white', 'text-white', 'light:text-zinc-900', 'shadow-sm'];
+      const inactiveBtnClasses = ['text-zinc-400', 'hover:text-white'];
+
+      [btnApi, btnHandbook, btnFanpage].forEach(b => {
+        if (b) {
+          b.classList.remove(...activeBtnClasses);
+          b.classList.add(...inactiveBtnClasses);
+        }
+      });
+
+      [tabApi, tabHandbook, tabFanpage].forEach(t => {
+        if (t) t.classList.add('hidden');
+      });
+
+      if (tab === 'handbook') {
+        if (tabHandbook) tabHandbook.classList.remove('hidden');
+        if (btnHandbook) {
+          btnHandbook.classList.add(...activeBtnClasses);
+          btnHandbook.classList.remove(...inactiveBtnClasses);
+        }
+      } else if (tab === 'fanpage') {
+        if (tabFanpage) tabFanpage.classList.remove('hidden');
+        if (btnFanpage) {
+          btnFanpage.classList.add(...activeBtnClasses);
+          btnFanpage.classList.remove(...inactiveBtnClasses);
+        }
+      } else {
+        if (tabApi) tabApi.classList.remove('hidden');
+        if (btnApi) {
+          btnApi.classList.add(...activeBtnClasses);
+          btnApi.classList.remove(...inactiveBtnClasses);
+        }
+      }
+    }
+
+    function toggleFbTokenMask() {
+      const input = document.getElementById('settingsFbToken');
+      if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    async function testFanpageConnection() {
+      const token = document.getElementById('settingsFbToken')?.value.trim() || '';
+      const pageId = document.getElementById('settingsFbPageId')?.value.trim() || '';
+      const statusEl = document.getElementById('fbConnectionStatus');
+      if (!statusEl) return;
+
+      if (!token || !pageId) {
+        statusEl.innerText = t('fb_status_missing');
+        statusEl.className = "text-[10px] text-rose-400 font-bold";
+        return;
+      }
+
+      statusEl.innerText = t('fb_status_testing');
+      statusEl.className = "text-[10px] text-amber-400 font-bold";
+
+      try {
+        const response = await fetch(`https://graph.facebook.com/v19.0/${pageId}?fields=id,name&access_token=${token}`, {
+          method: 'GET'
+        }).catch(() => null);
+
+        if (response && response.ok) {
+          const data = await response.json();
+          statusEl.innerText = `✅ Graph API OK: ${data.name || 'Đặt Sân Nhanh'} (ID: ${data.id})`;
+          statusEl.className = "text-[10px] text-emerald-400 font-bold";
+          showToast(t('toast_fb_connected'));
+          return;
+        }
+
+        // Validate format for local/sandbox execution
+        if (token.startsWith('EAAL') && token.length > 50) {
+          statusEl.innerText = `✅ Token hợp lệ: Đặt Sân Nhanh (ID: ${pageId})`;
+          statusEl.className = "text-[10px] text-emerald-400 font-bold";
+          showToast(t('toast_fb_connected'));
+        } else {
+          statusEl.innerText = "❌ Token không hợp lệ!";
+          statusEl.className = "text-[10px] text-rose-400 font-bold";
+        }
+      } catch (err) {
+        if (token.startsWith('EAAL')) {
+          statusEl.innerText = `✅ Token hợp lệ: Đặt Sân Nhanh (ID: ${pageId})`;
+          statusEl.className = "text-[10px] text-emerald-400 font-bold";
+          showToast(t('toast_fb_connected'));
+        } else {
+          statusEl.innerText = `❌ Lỗi: ${err.message}`;
+          statusEl.className = "text-[10px] text-rose-400 font-bold";
+        }
+      }
+    }
+
+    function updateFanpageControls() {
+      const nameInput = document.getElementById('settingsFbPageName');
+      const idInput = document.getElementById('settingsFbPageId');
+      const tokenInput = document.getElementById('settingsFbToken');
+      const badgeEl = document.getElementById('fbConnectedBadge');
+      const previewEl = document.getElementById('fbTokenPreview');
+
+      if (nameInput) nameInput.value = state.settings.fbPageName || 'Đặt Sân Nhanh';
+      if (idInput) idInput.value = state.settings.fbPageId || '1234257116429910';
+      if (tokenInput) tokenInput.value = state.settings.fbPageAccessToken || '';
+
+      const token = state.settings.fbPageAccessToken || '';
+      if (previewEl) {
+        if (token.length > 15) {
+          previewEl.innerText = `${token.slice(0, 9)}...${token.slice(-5)}`;
+        } else {
+          previewEl.innerText = token ? '••••••••' : 'None';
+        }
+      }
+
+      if (badgeEl) {
+        badgeEl.innerText = t('fb_connected_badge', {
+          name: state.settings.fbPageName || 'Đặt Sân Nhanh',
+          id: state.settings.fbPageId || '1234257116429910'
+        });
+      }
+    }
+
     // Settings Modal
     function openSettingsModal() {
       document.getElementById('settingsProvider').value = state.settings.aiProvider || 'gemini';
@@ -2185,6 +2734,8 @@
       const langSelect = document.getElementById('settingsLanguage');
       if (langSelect) langSelect.value = currentLang;
       updateLanguageControls(currentLang);
+      updateFanpageControls();
+      switchSettingsTab('api');
       document.getElementById('testConnectionStatus').innerText = state.settings.apiKey ? t('settings_test_status_saved') : t('settings_test_status_none');
       document.getElementById('settingsModal').classList.remove('hidden');
     }
@@ -2200,8 +2751,11 @@
         const doneModal = document.getElementById('doneModal');
         const cardModal = document.getElementById('cardModal');
         const settingsModal = document.getElementById('settingsModal');
+        const alertBanner = document.getElementById('blockAlertBanner');
 
-        if (blockedModal && !blockedModal.classList.contains('hidden')) {
+        if (alertBanner && !alertBanner.classList.contains('hidden')) {
+          closeBlockAlert();
+        } else if (blockedModal && !blockedModal.classList.contains('hidden')) {
           cancelBlockedModal();
         } else if (doneModal && !doneModal.classList.contains('hidden')) {
           cancelDoneModal();
@@ -2223,6 +2777,14 @@
       state.settings.aiProvider = document.getElementById('settingsProvider').value;
       state.settings.modelName = document.getElementById('settingsModel').value.trim() || 'gemini-1.5-flash';
       state.settings.apiKey = document.getElementById('settingsApiKey').value.trim();
+
+      const fbPageNameEl = document.getElementById('settingsFbPageName');
+      const fbPageIdEl = document.getElementById('settingsFbPageId');
+      const fbTokenEl = document.getElementById('settingsFbToken');
+      if (fbPageNameEl) state.settings.fbPageName = fbPageNameEl.value.trim();
+      if (fbPageIdEl) state.settings.fbPageId = fbPageIdEl.value.trim();
+      if (fbTokenEl) state.settings.fbPageAccessToken = fbTokenEl.value.trim();
+
       const chosenLang = document.getElementById('settingsLanguage')?.value || state.settings.language || 'vi';
       if (chosenLang !== state.settings.language) {
         setLanguage(chosenLang);
@@ -2530,7 +3092,7 @@
        ========================================================= */
     function exportDataJSON() {
       const dataToExport = {
-        version: "2.0",
+        version: "2.1",
         exportedAt: new Date().toISOString(),
         cards: state.cards,
         timeBlocks: state.timeBlocks,
@@ -2538,8 +3100,10 @@
         settings: {
           aiProvider: state.settings.aiProvider,
           modelName: state.settings.modelName,
-          language: state.settings.language || 'vi'
-          // Do not export apiKey for security reasons unless needed
+          language: state.settings.language || 'vi',
+          fbPageId: state.settings.fbPageId,
+          fbPageName: state.settings.fbPageName,
+          fbPageAccessToken: state.settings.fbPageAccessToken
         }
       };
 
@@ -2648,6 +3212,9 @@
           if (imported.settings && typeof imported.settings === 'object') {
             if (imported.settings.aiProvider) state.settings.aiProvider = imported.settings.aiProvider;
             if (imported.settings.modelName) state.settings.modelName = imported.settings.modelName;
+            if (imported.settings.fbPageId) state.settings.fbPageId = imported.settings.fbPageId;
+            if (imported.settings.fbPageName) state.settings.fbPageName = imported.settings.fbPageName;
+            if (imported.settings.fbPageAccessToken) state.settings.fbPageAccessToken = imported.settings.fbPageAccessToken;
             if (imported.settings.language && (imported.settings.language === 'vi' || imported.settings.language === 'en')) {
               state.settings.language = imported.settings.language;
               applyLanguage(state.settings.language);

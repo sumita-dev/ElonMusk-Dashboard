@@ -55,7 +55,7 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
-    // AC-02 & AC-03: Time-blocking 6 blocks 90m (08:00 - 18:00); Timer Start/Pause/Reset
+    // AC-02 & AC-03: Time-blocking 7 blocks (08:30 - 16:30); Timer Start/Pause/Reset
     // -------------------------------------------------------------
     console.log('\n--- Testing AC-02 & AC-03: Timeline & Deep Work Timer ---');
     const timeBlocksCount = await page.locator('#timelineGrid > div').count();
@@ -66,20 +66,22 @@ async function runQATestSuite() {
         startTime: b.startTime,
         endTime: b.endTime,
         durationMinutes: b.durationMinutes,
-        type: b.type
+        type: b.type,
+        breakMinutes: b.breakMinutes,
+        breakRange: b.breakRange,
+        isLunchAfter: b.isLunchAfter
       }));
     });
 
-    const is6Blocks90m = timelineData.length === 6 &&
-      timelineData.every(b => b.durationMinutes === 90) &&
-      timelineData[0].startTime === '08:00' &&
-      timelineData[5].endTime === '18:00';
+    const is7BlocksSchedule = timelineData.length === 7 &&
+      timelineData[0].startTime === '08:30' &&
+      timelineData[6].endTime === '16:30';
 
     recordResult(
       'AC-02',
-      'Timeline 6 Ultradian 90m Blocks (08:00 - 18:00)',
-      is6Blocks90m && timeBlocksCount === 6,
-      `Blocks Count: ${timeBlocksCount}, Span: ${timelineData[0]?.startTime} to ${timelineData[5]?.endTime}`
+      'Timeline 7 Executive Blocks (08:30 - 12:20 & 13:30 - 16:30)',
+      is7BlocksSchedule && timeBlocksCount === 7,
+      `Blocks Count: ${timeBlocksCount}, Span: ${timelineData[0]?.startTime} to ${timelineData[6]?.endTime}`
     );
 
     // Test Timer Start, Pause, Reset and Header Sync
@@ -424,11 +426,11 @@ async function runQATestSuite() {
     const exportedRaw = fs.readFileSync(downloadPath, 'utf8');
     const exportedJSON = JSON.parse(exportedRaw);
 
-    const isExportValid = exportedJSON.version === '2.0' &&
+    const isExportValid = (exportedJSON.version === '2.0' || exportedJSON.version === '2.1') &&
       Array.isArray(exportedJSON.cards) &&
       exportedJSON.cards.length > 0 &&
       Array.isArray(exportedJSON.timeBlocks) &&
-      exportedJSON.timeBlocks.length === 6 &&
+      exportedJSON.timeBlocks.length === 7 &&
       typeof exportedJSON.stats === 'object';
 
     recordResult(
@@ -761,6 +763,212 @@ async function runQATestSuite() {
       'Dynamic Google Fonts Typography (Be Vietnam Pro for VI, Inter for EN, Realtime Switch without Reload)',
       ac15Passed,
       `Head Links: Google=${fontLinks.hasPreconnectGoogle}, Gstatic=${fontLinks.hasPreconnectGstatic}, CSS=${fontLinks.hasFontStylesheet}; VI Font: "${viFontState.bodyFont.slice(0, 35)}...", EN Font: "${enFontState.bodyFont.slice(0, 35)}..."`
+    );
+
+    // -------------------------------------------------------------
+    // AC-16: Timeline Lịch Làm Việc Thực Tế & Cảnh Báo Block 60m
+    // (08:30 - 12:20 & 13:30 - 16:30, 60m blocks + 5m breaks, chime + banner alert)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-16: Real-World Executive Schedule & 60m Alerts ---');
+    
+    // 1. Check morning & afternoon blocks structure
+    const blocksEvaluation = await page.evaluate(() => {
+      const b = state.timeBlocks;
+      const morningValid = b[0].startTime === '08:30' && b[0].endTime === '09:30' && b[0].durationMinutes === 60 &&
+                           b[1].startTime === '09:35' && b[1].endTime === '10:35' && b[1].durationMinutes === 60 &&
+                           b[2].startTime === '10:40' && b[2].endTime === '11:40' && b[2].durationMinutes === 60 &&
+                           b[3].startTime === '11:45' && b[3].endTime === '12:20' && b[3].durationMinutes === 35;
+      const afternoonValid = b[4].startTime === '13:30' && b[4].endTime === '14:30' && b[4].durationMinutes === 60 &&
+                             b[5].startTime === '14:35' && b[5].endTime === '15:35' && b[5].durationMinutes === 60 &&
+                             b[6].startTime === '15:40' && b[6].endTime === '16:30' && b[6].durationMinutes === 50;
+      return { morningValid, afternoonValid, total: b.length };
+    });
+
+    // 2. Check break badges in DOM
+    const breakBadgesCount = await page.locator('.break-badge').count();
+
+    // 3. Check Web Audio Chime and 60m alert banner
+    const alertBannerInitialHidden = await page.evaluate(() => {
+      const banner = document.getElementById('blockAlertBanner');
+      return banner && banner.classList.contains('hidden');
+    });
+
+    // Trigger block completion alert
+    await page.evaluate(() => {
+      triggerBlockAlert('Test Deep Script 60m Block');
+    });
+    await page.waitForTimeout(300);
+
+    const alertBannerVisible = await page.evaluate(() => {
+      const banner = document.getElementById('blockAlertBanner');
+      const title = document.getElementById('blockAlertTitle')?.innerText || '';
+      const msg = document.getElementById('blockAlertMessage')?.innerText || '';
+      return !banner.classList.contains('hidden') && msg.includes('60') && msg.includes('5');
+    });
+
+    // Dismiss alert banner
+    await page.locator('#btnDismissBlockAlert').click();
+    await page.waitForTimeout(300);
+
+    const alertBannerDismissed = await page.evaluate(() => {
+      const banner = document.getElementById('blockAlertBanner');
+      return banner && banner.classList.contains('hidden');
+    });
+
+    const ac16Passed = blocksEvaluation.morningValid &&
+      blocksEvaluation.afternoonValid &&
+      blocksEvaluation.total === 7 &&
+      breakBadgesCount >= 5 &&
+      alertBannerInitialHidden &&
+      alertBannerVisible &&
+      alertBannerDismissed;
+
+    recordResult(
+      'AC-16',
+      'Timeline Executive Working Hours (08:30-12:20 & 13:30-16:30, 60m Blocks, 5m Breaks & Web Audio/Banner Alert)',
+      ac16Passed,
+      `Morning: ${blocksEvaluation.morningValid}, Afternoon: ${blocksEvaluation.afternoonValid}, Breaks Badges: ${breakBadgesCount}, Alert Banner Functional: ${alertBannerVisible && alertBannerDismissed}`
+    );
+
+    // -------------------------------------------------------------
+    // AC-17: Musk First Principles Handbook (5-Step Algorithm) in Settings Modal (Bilingual VI/EN)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-17: Musk First Principles Handbook in Settings ---');
+    
+    // Open Settings Modal
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+
+    // Click Handbook tab
+    await page.locator('#tabBtnHandbook').click();
+    await page.waitForTimeout(300);
+
+    const isHandbookTabActive = await page.evaluate(() => {
+      const tab = document.getElementById('settingsTabHandbook');
+      return tab && !tab.classList.contains('hidden');
+    });
+
+    // Verify 5 steps and Creator tips in Vietnamese
+    const viHandbookState = await page.evaluate(() => {
+      return {
+        step1: document.getElementById('handbookStep1Title')?.innerText || '',
+        step2: document.getElementById('handbookStep2Title')?.innerText || '',
+        step3: document.getElementById('handbookStep3Title')?.innerText || '',
+        step4: document.getElementById('handbookStep4Title')?.innerText || '',
+        step5: document.getElementById('handbookStep5Title')?.innerText || '',
+        step1Tip: document.getElementById('handbookStep1Tip')?.innerText || '',
+        step2Tip: document.getElementById('handbookStep2Tip')?.innerText || ''
+      };
+    });
+
+    const isViHandbookValid = viHandbookState.step1.includes('Đặt câu hỏi') &&
+      viHandbookState.step2.includes('Xóa bỏ') &&
+      viHandbookState.step3.includes('Đơn giản hóa') &&
+      viHandbookState.step4.includes('Tăng tốc') &&
+      viHandbookState.step5.includes('Tự động hóa') &&
+      viHandbookState.step1Tip.includes('Mẹo Creator');
+
+    // Switch to English and check English translation
+    await page.locator('#tabBtnApi').click();
+    await page.waitForTimeout(200);
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+    await page.locator('#tabBtnHandbook').click();
+    await page.waitForTimeout(200);
+
+    const enHandbookState = await page.evaluate(() => {
+      return {
+        step1: document.getElementById('handbookStep1Title')?.innerText || '',
+        step2: document.getElementById('handbookStep2Title')?.innerText || '',
+        step3: document.getElementById('handbookStep3Title')?.innerText || '',
+        step4: document.getElementById('handbookStep4Title')?.innerText || '',
+        step5: document.getElementById('handbookStep5Title')?.innerText || '',
+        step1Tip: document.getElementById('handbookStep1Tip')?.innerText || ''
+      };
+    });
+
+    const isEnHandbookValid = enHandbookState.step1.includes('Question Every Requirement') &&
+      enHandbookState.step2.includes('Delete Any Part') &&
+      enHandbookState.step3.includes('Simplify & Single Focus') &&
+      enHandbookState.step4.includes('Accelerate Cycle Time') &&
+      enHandbookState.step5.includes('Automate') &&
+      enHandbookState.step1Tip.includes('Creator Tip');
+
+    // Switch back to Vietnamese
+    await page.locator('#tabBtnApi').click();
+    await page.waitForTimeout(200);
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+
+    const ac17Passed = isHandbookTabActive && isViHandbookValid && isEnHandbookValid;
+
+    recordResult(
+      'AC-17',
+      'Musk First Principles Handbook (5-Step Algorithm with Creator Tips & Bilingual VI/EN)',
+      ac17Passed,
+      `Tab Active: ${isHandbookTabActive}, VI Verified: ${isViHandbookValid}, EN Verified: ${isEnHandbookValid}`
+    );
+
+    // -------------------------------------------------------------
+    // AC-18: Meta Fanpage Integration (Auto-load Đặt Sân Nhanh, Masked Token, Graph API Test)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-18: Meta Fanpage Integration ---');
+    
+    // Switch to Fanpage tab
+    await page.locator('#tabBtnFanpage').click();
+    await page.waitForTimeout(300);
+
+    const fanpageState = await page.evaluate(() => {
+      const tab = document.getElementById('settingsTabFanpage');
+      const isVisible = tab && !tab.classList.contains('hidden');
+      const pageName = document.getElementById('settingsFbPageName')?.value || '';
+      const pageId = document.getElementById('settingsFbPageId')?.value || '';
+      const token = document.getElementById('settingsFbToken')?.value || '';
+      const tokenPreview = document.getElementById('fbTokenPreview')?.innerText || '';
+      const badge = document.getElementById('fbConnectedBadge')?.innerText || '';
+      const tokenInputType = document.getElementById('settingsFbToken')?.type || '';
+      return { isVisible, pageName, pageId, token, tokenPreview, badge, tokenInputType };
+    });
+
+    const isAutoLoadedValid = fanpageState.isVisible &&
+      fanpageState.pageName === 'Đặt Sân Nhanh' &&
+      fanpageState.pageId === '1234257116429910' &&
+      fanpageState.token.startsWith('EAALZAoxk') &&
+      fanpageState.token.endsWith('CS3wt') &&
+      fanpageState.tokenPreview.includes('EAALZAoxk') &&
+      fanpageState.tokenPreview.includes('CS3wt') &&
+      fanpageState.badge.includes('Đặt Sân Nhanh') &&
+      fanpageState.badge.includes('1234257116429910') &&
+      fanpageState.tokenInputType === 'password';
+
+    // Test token visibility toggle
+    await page.locator('#btnToggleFbTokenMask').click();
+    await page.waitForTimeout(200);
+    const tokenTypeAfterToggle = await page.evaluate(() => document.getElementById('settingsFbToken')?.type);
+    await page.locator('#btnToggleFbTokenMask').click(); // toggle back
+    await page.waitForTimeout(200);
+
+    // Test Fanpage Connection button
+    await page.locator('#btnTestFanpage').click();
+    await page.waitForTimeout(500);
+
+    const connectionStatusText = await page.locator('#fbConnectionStatus').innerText();
+    const isConnectionSuccess = connectionStatusText.includes('✅') &&
+      (connectionStatusText.includes('Token hợp lệ') || connectionStatusText.includes('Graph API OK'));
+
+    // Close Settings Modal
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const ac18Passed = isAutoLoadedValid &&
+      tokenTypeAfterToggle === 'text' &&
+      isConnectionSuccess;
+
+    recordResult(
+      'AC-18',
+      'Meta Fanpage Integration (Auto-load Đặt Sân Nhanh, ID 1234257116429910, Masked Token & Test Connection)',
+      ac18Passed,
+      `Auto-loaded: ${isAutoLoadedValid}, Mask Toggle: ${tokenTypeAfterToggle === 'text'}, Connection Status: "${connectionStatusText}"`
     );
 
     // -------------------------------------------------------------
