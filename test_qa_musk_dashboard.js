@@ -584,6 +584,100 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
+    // AC-14: Song ngữ Việt - Anh (Bilingual VI/EN) với Language Selector trong Cài đặt
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-14: Bilingual VI/EN Support & Settings Language Selector ---');
+    // Open Settings Modal
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+
+    const settingsVisible = await page.locator('#settingsModal').isVisible();
+    const langViBtnVisible = await page.locator('#langBtnVi').isVisible();
+    const langEnBtnVisible = await page.locator('#langBtnEn').isVisible();
+
+    // 1. Switch to English
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+
+    // Verify DOM updates to English immediately
+    const enState = await page.evaluate(() => {
+      const htmlLang = document.documentElement.lang;
+      const addCardText = document.getElementById('headerAddCardText')?.innerText;
+      const timelineTitle = document.getElementById('timelineTitle')?.innerText;
+      const kanbanTitle = document.getElementById('kanbanTitle')?.innerText;
+      const colIdeasDesc = document.getElementById('col-ideas-desc')?.innerText;
+      const copilotTitle = document.getElementById('copilotTitle')?.innerText;
+      const inputPlaceholder = document.getElementById('aiPromptInput')?.getAttribute('placeholder');
+      const closeBtnText = document.getElementById('settingsCloseBtn')?.innerText;
+      const savedSettings = JSON.parse(localStorage.getItem('ccc_settings_v2') || '{}');
+      return {
+        htmlLang,
+        addCardText,
+        timelineTitle,
+        kanbanTitle,
+        colIdeasDesc,
+        copilotTitle,
+        inputPlaceholder,
+        closeBtnText,
+        persistedLang: savedSettings.language
+      };
+    });
+
+    const enValid = enState.htmlLang === 'en' &&
+      enState.addCardText === 'Add Card' &&
+      enState.timelineTitle.toLowerCase().includes('level 1') &&
+      enState.kanbanTitle.toLowerCase().includes('level 2') &&
+      enState.colIdeasDesc.includes('First Principle Required') &&
+      enState.copilotTitle.toLowerCase().includes('musk ai copilot') &&
+      enState.closeBtnText === 'Close' &&
+      enState.persistedLang === 'en';
+
+    // 2. Switch back to Vietnamese
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+
+    // Verify DOM updates back to Vietnamese
+    const viState = await page.evaluate(() => {
+      const htmlLang = document.documentElement.lang;
+      const addCardText = document.getElementById('headerAddCardText')?.innerText;
+      const timelineTitle = document.getElementById('timelineTitle')?.innerText;
+      const kanbanTitle = document.getElementById('kanbanTitle')?.innerText;
+      const colIdeasDesc = document.getElementById('col-ideas-desc')?.innerText;
+      const closeBtnText = document.getElementById('settingsCloseBtn')?.innerText;
+      const savedSettings = JSON.parse(localStorage.getItem('ccc_settings_v2') || '{}');
+      return {
+        htmlLang,
+        addCardText,
+        timelineTitle,
+        kanbanTitle,
+        colIdeasDesc,
+        closeBtnText,
+        persistedLang: savedSettings.language
+      };
+    });
+
+    const viValid = viState.htmlLang === 'vi' &&
+      viState.addCardText === 'Thêm Card' &&
+      viState.timelineTitle.toLowerCase().includes('tầng 1') &&
+      viState.kanbanTitle.toLowerCase().includes('tầng 2') &&
+      viState.colIdeasDesc.includes('Bắt buộc First Principle') &&
+      viState.closeBtnText === 'Đóng' &&
+      viState.persistedLang === 'vi';
+
+    // Close Settings Modal
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const ac14Passed = settingsVisible && langViBtnVisible && langEnBtnVisible && enValid && viValid;
+
+    recordResult(
+      'AC-14',
+      'Bilingual VI/EN Support (Language Selector in Settings Modal, Instant UI Translation, LocalStorage Persistence)',
+      ac14Passed,
+      `EN: [Lang: ${enState.htmlLang}, AddCard: "${enState.addCardText}", CloseBtn: "${enState.closeBtnText}"], VI: [Lang: ${viState.htmlLang}, AddCard: "${viState.addCardText}", CloseBtn: "${viState.closeBtnText}"]`
+    );
+
+    // -------------------------------------------------------------
     // OVERALL SUMMARY
     // -------------------------------------------------------------
     console.log('\n================================================================');

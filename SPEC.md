@@ -90,6 +90,7 @@ interface AppSettings {
   aiProvider: 'gemini' | 'groq' | 'openrouter';
   apiKey: string;                // Lưu an toàn trong localStorage
   modelName: string;             // Mặc định: 'gemini-1.5-flash' hoặc 'llama-3.3-70b-versatile'
+  language: 'vi' | 'en';         // Ngôn ngữ giao diện (Mặc định: 'vi')
 }
 ```
 
@@ -184,6 +185,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-11`** | Tính năng **Export JSON** xuất toàn bộ cards, time-blocks và settings về máy tính. | Chờ kiểm thử |
 | **`AC-12`** | Tính năng **Import JSON** cho phép chọn file từ máy tính và khôi phục 100% dữ liệu mà không làm lỗi ứng dụng. | Chờ kiểm thử |
 | **`AC-13`** | **Apple-Inspired HIG Design**: Giao diện đạt chuẩn tối giản Apple (SF Pro system font stack, hiệu ứng kính mờ `backdrop-blur`, viền hairline `border-white/[0.08]`, bo góc squircle mềm mại, Segmented Controls và micro-interaction mượt mà). | Chờ kiểm thử |
+| **`AC-14`** | **Bilingual Support (Tiếng Việt & English)**: Hỗ trợ song ngữ Tiếng Việt & Tiếng Anh, chuyển đổi ngôn ngữ trong Settings Modal, cập nhật toàn bộ UI tức thì (Header, Timeline, 6 cột Kanban, Card labels, Modals, AI Quick Actions, Toasts) không cần reload trang và lưu bền vững vào `localStorage`. | Chờ kiểm thử |
 
 ---
 

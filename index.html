@@ -194,8 +194,8 @@
               v2.0 OS
             </span>
           </div>
-          <p class="text-xs text-zinc-400 light:text-zinc-500 font-medium">
-            First Principles OS • YouTube + Social Media Accelerator
+          <p id="headerSubtitle" data-i18n="header_subtitle" class="text-xs text-zinc-400 light:text-zinc-500 font-medium">
+            First Principles OS • Tăng tốc YouTube & Mạng xã hội
           </p>
         </div>
       </div>
@@ -226,22 +226,22 @@
       <!-- Action Tools: Export, Import, Settings, Theme, New Card -->
       <div class="flex items-center space-x-2">
         <!-- New Card Button -->
-        <button onclick="openCardModal()" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-apple-blue hover:bg-blue-600 text-white text-xs font-medium shadow-md shadow-apple-blue/25 hover:shadow-apple-blue/40 active:scale-95 transition-all">
+        <button id="headerAddCardBtn" onclick="openCardModal()" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-apple-blue hover:bg-blue-600 text-white text-xs font-medium shadow-md shadow-apple-blue/25 hover:shadow-apple-blue/40 active:scale-95 transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
-          <span>Thêm Card</span>
+          <span id="headerAddCardText" data-i18n="btn_add_card">Thêm Card</span>
         </button>
 
         <!-- Export JSON -->
-        <button onclick="exportDataJSON()" title="Export dữ liệu sao lưu ra JSON" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+        <button id="btnExportJSON" onclick="exportDataJSON()" title="Export dữ liệu sao lưu ra JSON" data-i18n-title="tooltip_export" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
         </button>
 
         <!-- Import JSON -->
-        <label title="Import dữ liệu từ file JSON" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all cursor-pointer">
+        <label id="btnImportJSON" title="Import dữ liệu từ file JSON" data-i18n-title="tooltip_import" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all cursor-pointer">
           <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importDataJSON(event)">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
@@ -249,7 +249,7 @@
         </label>
 
         <!-- Settings Modal Trigger -->
-        <button onclick="openSettingsModal()" title="Cài đặt API Key & AI Provider" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+        <button id="btnSettings" onclick="openSettingsModal()" title="Cài đặt API Key & AI Provider" data-i18n-title="tooltip_settings" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -257,7 +257,7 @@
         </button>
 
         <!-- Theme Toggle (Apple Light / Dark) -->
-        <button onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+        <button id="btnThemeToggle" onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối" data-i18n-title="tooltip_theme" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
           <!-- Moon Icon (Dark Mode active) -->
           <svg id="moonIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
@@ -284,10 +284,10 @@
             01
           </div>
           <div>
-            <h2 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+            <h2 id="timelineTitle" data-i18n="timeline_title" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
               Tầng 1: Time-Blocking Timeline (08:00 — 18:00)
             </h2>
-            <p class="text-xs text-zinc-400 light:text-zinc-500">
+            <p id="timelineSubtitle" data-i18n="timeline_subtitle" class="text-xs text-zinc-400 light:text-zinc-500">
               Chu kỳ sinh học Ultradian 90 phút • Khóa chặt sự chú ý và triệt tiêu đa nhiệm
             </p>
           </div>
@@ -312,7 +312,7 @@
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
               </svg>
             </button>
-            <button onclick="resetTimer()" title="Reset đồng hồ" class="p-2 rounded-xl glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-600 active:scale-95 transition-all">
+            <button id="btnResetTimer" onclick="resetTimer()" title="Reset đồng hồ" data-i18n-title="tooltip_reset_timer" class="p-2 rounded-xl glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-600 active:scale-95 transition-all">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
               </svg>
@@ -341,18 +341,18 @@
               02
             </div>
             <div>
-              <h2 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+              <h2 id="kanbanTitle" data-i18n="kanban_title" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
                 Tầng 2: First Principles Kanban Board
               </h2>
-              <p class="text-xs text-zinc-400 light:text-zinc-500">
-                Single Focus WIP = 1 • Deep Work WIP = 3 • CTR < 2% Ruthless Cull
+              <p id="kanbanSubtitle" data-i18n="kanban_subtitle" class="text-xs text-zinc-400 light:text-zinc-500">
+                Single Focus WIP = 1 • Deep Work WIP = 3 • CTR &lt; 2% Ruthless Cull
               </p>
             </div>
           </div>
 
           <!-- Platform Segmented Control (Apple iOS Style) -->
           <div class="flex items-center p-1 rounded-full bg-white/[0.04] light:bg-black/[0.05] border border-white/[0.08] light:border-black/[0.05] text-xs">
-            <button onclick="setPlatformFilter('all')" data-platform="all" class="platform-filter-btn px-3 py-1 rounded-full text-white light:text-zinc-900 bg-white/10 light:bg-white shadow-sm font-medium transition-all">Tất cả</button>
+            <button onclick="setPlatformFilter('all')" data-platform="all" id="filterAllBtn" data-i18n="filter_all" class="platform-filter-btn px-3 py-1 rounded-full text-white light:text-zinc-900 bg-white/10 light:bg-white shadow-sm font-medium transition-all">Tất cả</button>
             <button onclick="setPlatformFilter('youtube')" data-platform="youtube" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">YouTube</button>
             <button onclick="setPlatformFilter('facebook')" data-platform="facebook" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">Facebook</button>
             <button onclick="setPlatformFilter('tiktok')" data-platform="tiktok" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">TikTok</button>
@@ -368,11 +368,11 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-rose-400">DELETE / REPURPOSE</span>
+                <span id="col-delete-title" data-i18n="col_delete_title" class="text-xs font-bold uppercase tracking-wider text-rose-400">DELETE / REPURPOSE</span>
               </div>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400" id="count-delete">0</span>
             </div>
-            <p class="text-[10px] text-zinc-500 mb-2">CTR &lt; 2.0% • Xóa hoặc Tái chế</p>
+            <p id="col-delete-desc" data-i18n="col_delete_desc" class="text-[10px] text-zinc-500 mb-2">CTR &lt; 2.0% • Xóa hoặc Tái chế</p>
             <div id="col-delete" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -381,11 +381,11 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-purple-400">IDEAS</span>
+                <span id="col-ideas-title" data-i18n="col_ideas_title" class="text-xs font-bold uppercase tracking-wider text-purple-400">IDEAS</span>
               </div>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400" id="count-ideas">0</span>
             </div>
-            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc First Principle</p>
+            <p id="col-ideas-desc" data-i18n="col_ideas_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc First Principle</p>
             <div id="col-ideas" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -394,13 +394,13 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-amber-500 pulse-glow"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">SINGLE FOCUS</span>
+                <span id="col-single-title" data-i18n="col_single_title" class="text-xs font-bold uppercase tracking-wider text-amber-400">SINGLE FOCUS</span>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" id="badge-single">
                 <span id="count-single">0</span>/1 MAX
               </span>
             </div>
-            <p class="text-[10px] text-amber-400/80 mb-2 font-medium">Chỉ 1 card duy nhất active!</p>
+            <p id="col-single-desc" data-i18n="col_single_desc" class="text-[10px] text-amber-400/80 mb-2 font-medium">Chỉ 1 card duy nhất active!</p>
             <div id="col-single" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -409,13 +409,13 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-apple-blue"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-apple-blue">DEEP WORK</span>
+                <span id="col-deep-title" data-i18n="col_deep_title" class="text-xs font-bold uppercase tracking-wider text-apple-blue">DEEP WORK</span>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20" id="badge-deep">
                 <span id="count-deep">0</span>/3 MAX
               </span>
             </div>
-            <p class="text-[10px] text-zinc-500 mb-2">Đang chế tác • Tối đa 3 cards</p>
+            <p id="col-deep-desc" data-i18n="col_deep_desc" class="text-[10px] text-zinc-500 mb-2">Đang chế tác • Tối đa 3 cards</p>
             <div id="col-deep" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -424,11 +424,11 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-orange-400">BLOCKED</span>
+                <span id="col-blocked-title" data-i18n="col_blocked_title" class="text-xs font-bold uppercase tracking-wider text-orange-400">BLOCKED</span>
               </div>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400" id="count-blocked">0</span>
             </div>
-            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc Owner + ETA giải phóng</p>
+            <p id="col-blocked-desc" data-i18n="col_blocked_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc Owner + ETA giải phóng</p>
             <div id="col-blocked" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -437,11 +437,11 @@
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-apple-green"></span>
-                <span class="text-xs font-bold uppercase tracking-wider text-apple-green">DONE + LEARNED</span>
+                <span id="col-done-title" data-i18n="col_done_title" class="text-xs font-bold uppercase tracking-wider text-apple-green">DONE + LEARNED</span>
               </div>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green" id="count-done">0</span>
             </div>
-            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc đúc kết bài học</p>
+            <p id="col-done-desc" data-i18n="col_done_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc đúc kết bài học</p>
             <div id="col-done" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -458,13 +458,13 @@
               ✦
             </div>
             <div>
-              <h2 class="text-xs font-bold uppercase tracking-wider text-white light:text-zinc-900">
+              <h2 id="copilotTitle" data-i18n="ai_copilot_title" class="text-xs font-bold uppercase tracking-wider text-white light:text-zinc-900">
                 Tầng 3: Musk AI Copilot
               </h2>
               <span id="aiProviderStatus" class="text-[10px] text-indigo-400 font-medium">First Principles Heuristic Active</span>
             </div>
           </div>
-          <button onclick="clearChatHistory()" title="Xóa lịch sử chat" class="p-1.5 rounded-lg hover:bg-white/10 light:hover:bg-black/5 text-zinc-400 text-xs">
+          <button id="btnClearChat" onclick="clearChatHistory()" title="Xóa lịch sử chat" data-i18n-title="tooltip_clear_chat" class="p-1.5 rounded-lg hover:bg-white/10 light:hover:bg-black/5 text-zinc-400 text-xs">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
@@ -473,68 +473,66 @@
 
         <!-- 5 Quick Action Engines -->
         <div class="space-y-1.5 mb-3">
-          <span class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 light:text-zinc-500 block">
+          <span id="quickEnginesTitle" data-i18n="quick_engines_title" class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 light:text-zinc-500 block">
             5 Quick Engines (Musk Algorithm)
           </span>
           <div class="grid grid-cols-1 gap-1.5">
             <button onclick="triggerQuickAction('hook')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
               <span class="flex items-center space-x-2">
                 <span class="text-amber-400">⚡</span>
-                <span>Hook Generator (3s Pattern Interrupt)</span>
+                <span id="quickEngineHookText" data-i18n="engine_hook">Hook Generator (3s Pattern Interrupt)</span>
               </span>
-              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400" data-i18n="engine_run">Run →</span>
             </button>
 
             <button onclick="triggerQuickAction('breakdown')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
               <span class="flex items-center space-x-2">
                 <span class="text-apple-blue">✂️</span>
-                <span>Script Breakdown (Cut 30-50% Fluff)</span>
+                <span id="quickEngineBreakdownText" data-i18n="engine_breakdown">Script Breakdown (Cut 30-50% Fluff)</span>
               </span>
-              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400" data-i18n="engine_run">Run →</span>
             </button>
 
             <button onclick="triggerQuickAction('delete_advisor')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
               <span class="flex items-center space-x-2">
                 <span class="text-rose-400">🗑</span>
-                <span>Deletion Advisor (Ruthless Cull)</span>
+                <span id="quickEngineDeleteText" data-i18n="engine_delete">Deletion Advisor (Ruthless Cull)</span>
               </span>
-              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400" data-i18n="engine_run">Run →</span>
             </button>
 
             <button onclick="triggerQuickAction('repurpose')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
               <span class="flex items-center space-x-2">
                 <span class="text-emerald-400">🔄</span>
-                <span>Repurpose Engine (1 Long → 5 Shorts/Posts)</span>
+                <span id="quickEngineRepurposeText" data-i18n="engine_repurpose">Repurpose Engine (1 Long → 5 Shorts/Posts)</span>
               </span>
-              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400" data-i18n="engine_run">Run →</span>
             </button>
 
             <button onclick="triggerQuickAction('tester')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
               <span class="flex items-center space-x-2">
                 <span class="text-purple-400">🎯</span>
-                <span>Thumbnail & Title Tester (CTR Score)</span>
+                <span id="quickEngineTesterText" data-i18n="engine_tester">Thumbnail & Title Tester (CTR Score)</span>
               </span>
-              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400" data-i18n="engine_run">Run →</span>
             </button>
           </div>
         </div>
 
         <!-- Chat History Stream -->
         <div id="aiChatStream" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs mb-3 scroll-smooth">
-          <!-- Welcome message -->
-          <div class="p-3 rounded-2xl bg-white/[0.03] light:bg-black/[0.03] border border-white/[0.06] light:border-black/[0.05] text-zinc-300 light:text-zinc-700">
-            <div class="flex items-center space-x-1.5 text-indigo-400 font-semibold mb-1">
-              <span>✦ First Principles Copilot</span>
-            </div>
-            <p class="leading-relaxed">
-              Chào bạn! Tôi vận hành trên thuật toán 5 bước của Elon Musk. Tôi sẵn sàng mổ xẻ kịch bản, gọt giũa 40% câu chữ thừa, tạo Hook 3s hoặc phân tích lý do nên xóa bỏ các video kém hiệu quả.
-            </p>
-          </div>
+          <!-- Welcome message rendered dynamically via JS -->
         </div>
 
         <!-- Chat Prompt Input -->
         <form onsubmit="handleSendChat(event)" class="relative">
-          <input type="text" id="aiPromptInput" placeholder="Hỏi Copilot hoặc dán ý tưởng/kịch bản..." class="w-full px-4 py-2.5 pr-10 rounded-2xl bg-white/[0.06] light:bg-black/[0.04] border border-white/[0.1] light:border-black/[0.08] text-xs text-white light:text-zinc-900 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-all">
+          <input type="text" id="aiPromptInput" data-i18n-placeholder="ai_input_placeholder" placeholder="Hỏi Copilot hoặc dán ý tưởng/kịch bản..." class="w-full px-4 py-2.5 pr-10 rounded-2xl bg-white/[0.06] light:bg-black/[0.04] border border-white/[0.1] light:border-black/[0.08] text-xs text-white light:text-zinc-900 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-all">
+          <button type="submit" class="absolute right-2 top-2 p-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </form>
           <button type="submit" class="absolute right-2 top-2 p-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -569,14 +567,16 @@
         
         <!-- Title -->
         <div>
-          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Tiêu đề nội dung / video <span class="text-rose-500">*</span></label>
-          <input type="text" id="cardFormTitle" required placeholder="VD: Bóc trần thuật toán đề xuất của TikTok..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+          <label id="cardFormTitleLabel" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">
+            <span data-i18n="label_content_title">Tiêu đề nội dung / video</span> <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="cardFormTitle" required data-i18n-placeholder="placeholder_card_title" placeholder="VD: Bóc trần thuật toán đề xuất của TikTok..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
         </div>
 
         <!-- Platform & Target Column Grid -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Nền tảng</label>
+            <label id="cardFormPlatformLabel" data-i18n="label_platform" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Nền tảng</label>
             <select id="cardFormPlatform" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
               <option value="youtube">YouTube</option>
               <option value="facebook">Facebook</option>
@@ -586,7 +586,7 @@
           </div>
 
           <div>
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Cột trạng thái</label>
+            <label id="cardFormColumnLabel" data-i18n="label_column_status" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Cột trạng thái</label>
             <select id="cardFormColumn" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
               <option value="ideas">IDEAS</option>
               <option value="single">SINGLE FOCUS (WIP = 1)</option>
@@ -601,32 +601,32 @@
         <!-- First Principle (MANDATORY ENFORCEMENT) -->
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="font-semibold text-amber-400">
-              Nguyên lý gốc (First Principle) <span class="text-rose-500">* BẮT BUỘC</span>
+            <label id="cardFormFirstPrincipleLabel" class="font-semibold text-amber-400">
+              <span data-i18n="label_first_principle">Nguyên lý gốc (First Principle)</span> <span class="text-rose-500" data-i18n="badge_mandatory">* BẮT BUỘC</span>
             </label>
-            <span class="text-[10px] text-zinc-400">Không chấp nhận phỏng đoán</span>
+            <span id="cardFormFirstPrincipleHint" data-i18n="hint_first_principle" class="text-[10px] text-zinc-400">Không chấp nhận phỏng đoán</span>
           </div>
-          <textarea id="cardFormFirstPrinciple" required rows="2" placeholder="Tại sao nội dung này lại hiệu quả từ bản chất tâm lý học, vật lý hoặc toán học?..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-amber-500"></textarea>
+          <textarea id="cardFormFirstPrinciple" required rows="2" data-i18n-placeholder="placeholder_first_principle" placeholder="Tại sao nội dung này lại hiệu quả từ bản chất tâm lý học, vật lý hoặc toán học?..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-amber-500"></textarea>
         </div>
 
         <!-- Goal -->
         <div>
-          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Mục tiêu định lượng (Goal)</label>
-          <input type="text" id="cardFormGoal" placeholder="VD: 100k views, 500 email leads trong 7 ngày" class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+          <label id="cardFormGoalLabel" data-i18n="label_goal" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Mục tiêu định lượng (Goal)</label>
+          <input type="text" id="cardFormGoal" data-i18n-placeholder="placeholder_goal" placeholder="VD: 100k views, 500 email leads trong 7 ngày" class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
         </div>
 
         <!-- Metrics Grid (CTR, Views, Retention) -->
         <div class="grid grid-cols-3 gap-2.5">
           <div>
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">CTR (%)</label>
+            <label id="cardFormCtrLabel" data-i18n="label_ctr" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">CTR (%)</label>
             <input type="number" step="0.1" id="cardFormCTR" placeholder="VD: 4.5" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
           </div>
           <div>
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Lượt xem</label>
+            <label id="cardFormViewsLabel" data-i18n="label_views" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Lượt xem</label>
             <input type="number" id="cardFormViews" placeholder="VD: 15000" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
           </div>
           <div>
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Retention (%)</label>
+            <label id="cardFormRetentionLabel" data-i18n="label_retention" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Retention (%)</label>
             <input type="number" step="0.1" id="cardFormRetention" placeholder="VD: 45.0" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
           </div>
         </div>
@@ -634,23 +634,23 @@
         <!-- Dynamic Fields for Blocked / Done -->
         <div id="cardFormBlockedFields" class="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20">
           <div>
-            <label class="block font-semibold text-orange-400 mb-1">Owner (Người chịu trách nhiệm)</label>
+            <label id="cardFormOwnerLabel" data-i18n="label_owner" class="block font-semibold text-orange-400 mb-1">Owner (Người chịu trách nhiệm)</label>
             <input type="text" id="cardFormOwner" placeholder="VD: Nguyễn Văn A (Editor)" class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-orange-500/30 text-white focus:outline-none">
           </div>
           <div>
-            <label class="block font-semibold text-orange-400 mb-1">ETA Giải phóng</label>
+            <label id="cardFormEtaLabel" data-i18n="label_eta" class="block font-semibold text-orange-400 mb-1">ETA Giải phóng</label>
             <input type="text" id="cardFormETA" placeholder="VD: 2026-11-02 18:00" class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-orange-500/30 text-white focus:outline-none">
           </div>
         </div>
 
         <div id="cardFormDoneFields" class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-          <label class="block font-semibold text-emerald-400 mb-1">Bài học đúc kết (Learned Insight)</label>
-          <textarea id="cardFormLearned" rows="2" placeholder="Bài học thực chứng rút ra từ kết quả thực tế của nội dung này là gì?..." class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-emerald-500/30 text-white focus:outline-none"></textarea>
+          <label id="cardFormLearnedLabel" data-i18n="label_learned" class="block font-semibold text-emerald-400 mb-1">Bài học đúc kết (Learned Insight)</label>
+          <textarea id="cardFormLearned" rows="2" data-i18n-placeholder="placeholder_learned" placeholder="Bài học thực chứng rút ra từ kết quả thực tế của nội dung này là gì?..." class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-emerald-500/30 text-white focus:outline-none"></textarea>
         </div>
 
         <div class="flex items-center justify-end space-x-2 pt-3 border-t border-white/[0.08] light:border-black/[0.06]">
-          <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700 hover:bg-white/10">Hủy</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium shadow-md">Lưu Thay Đổi</button>
+          <button type="button" id="cardModalCancelBtn" data-i18n="btn_cancel" onclick="closeCardModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700 hover:bg-white/10">Hủy</button>
+          <button type="submit" id="cardModalSubmitBtn" data-i18n="btn_save_changes" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium shadow-md">Lưu Thay Đổi</button>
         </div>
 
       </form>
@@ -664,23 +664,27 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
         </svg>
-        <h3 class="text-sm font-bold uppercase tracking-wider">Cảnh báo: Bắt buộc thông tin Chặn</h3>
+        <h3 id="blockedModalTitle" data-i18n="blocked_modal_title" class="text-sm font-bold uppercase tracking-wider">Cảnh báo: Bắt buộc thông tin Chặn</h3>
       </div>
-      <p class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
+      <p id="blockedModalDesc" data-i18n="blocked_modal_desc" class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
         Theo quy tắc First Principles, một card chỉ được đưa vào cột <b>BLOCKED</b> khi xác định rõ ai đang làm tắc nghẽn và hạn chót gỡ bỏ.
       </p>
       <form onsubmit="handleSaveBlockedModal(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-semibold text-orange-300 mb-1">Owner (Ai đang chặn?) <span class="text-rose-500">*</span></label>
+          <label id="blockedModalOwnerLabel" class="block font-semibold text-orange-300 mb-1">
+            <span data-i18n="label_blocked_owner">Owner (Ai đang chặn?)</span> <span class="text-rose-500">*</span>
+          </label>
           <input type="text" id="blockedModalOwner" required placeholder="VD: Editor Duy, Khách hàng duyệt kịch bản..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-orange-500/30 text-white light:text-zinc-900 focus:outline-none">
         </div>
         <div>
-          <label class="block font-semibold text-orange-300 mb-1">ETA (Hạn chót giải phóng?) <span class="text-rose-500">*</span></label>
+          <label id="blockedModalEtaLabel" class="block font-semibold text-orange-300 mb-1">
+            <span data-i18n="label_blocked_eta">ETA (Hạn chót giải phóng?)</span> <span class="text-rose-500">*</span>
+          </label>
           <input type="text" id="blockedModalETA" required placeholder="VD: Hôm nay 17:00 hoặc 2026-11-01" class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-orange-500/30 text-white light:text-zinc-900 focus:outline-none">
         </div>
         <div class="flex items-center justify-end space-x-2 pt-3">
-          <button type="button" onclick="cancelBlockedModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-black font-bold">Xác Nhận Blocked</button>
+          <button type="button" id="blockedModalCancelBtn" data-i18n="btn_cancel_revert" onclick="cancelBlockedModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
+          <button type="submit" id="blockedModalSubmitBtn" data-i18n="btn_confirm_blocked" class="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-black font-bold">Xác Nhận Blocked</button>
         </div>
       </form>
     </div>
@@ -693,19 +697,21 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <h3 class="text-sm font-bold uppercase tracking-wider">Đúc Kết Bài Học (Learned Insight)</h3>
+        <h3 id="doneModalTitle" data-i18n="done_modal_title" class="text-sm font-bold uppercase tracking-wider">Đúc Kết Bài Học (Learned Insight)</h3>
       </div>
-      <p class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
+      <p id="doneModalDesc" data-i18n="done_modal_desc" class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
         Không có công việc nào kết thúc mà không để lại dữ liệu. Bạn đã học được điều gì sau khi xuất bản nội dung này?
       </p>
       <form onsubmit="handleSaveDoneModal(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-semibold text-emerald-300 mb-1">Bài học thực chứng rút ra <span class="text-rose-500">*</span></label>
-          <textarea id="doneModalLearned" required rows="3" placeholder="VD: Mở đầu bằng câu hỏi ngược đời tăng 35% retention trong 15s đầu; thumbnail dùng màu vàng chanh outperform màu xanh..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-emerald-500/30 text-white light:text-zinc-900 focus:outline-none"></textarea>
+          <label id="doneModalLearnedLabel" class="block font-semibold text-emerald-300 mb-1">
+            <span data-i18n="label_done_learned">Bài học thực chứng rút ra</span> <span class="text-rose-500">*</span>
+          </label>
+          <textarea id="doneModalLearned" required rows="3" data-i18n-placeholder="placeholder_learned" placeholder="VD: Mở đầu bằng câu hỏi ngược đời tăng 35% retention trong 15s đầu; thumbnail dùng màu vàng chanh outperform màu xanh..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-emerald-500/30 text-white light:text-zinc-900 focus:outline-none"></textarea>
         </div>
         <div class="flex items-center justify-end space-x-2 pt-3">
-          <button type="button" onclick="cancelDoneModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-bold">Lưu Bài Học & Hoàn Tất</button>
+          <button type="button" id="doneModalCancelBtn" data-i18n="btn_cancel_revert" onclick="cancelDoneModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
+          <button type="submit" id="doneModalSubmitBtn" data-i18n="btn_save_done" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-bold">Lưu Bài Học & Hoàn Tất</button>
         </div>
       </form>
     </div>
@@ -719,7 +725,7 @@
           <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
           </svg>
-          <h3 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+          <h3 id="settingsModalTitle" data-i18n="settings_modal_title" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
             Cấu Hình Hệ Thống & Gemini AI REST API
           </h3>
         </div>
@@ -731,46 +737,71 @@
       </div>
 
       <form onsubmit="handleSaveSettings(event)" class="space-y-4 text-xs">
+        
+        <!-- Language Selector Section -->
         <div>
-          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">AI Provider</label>
-          <select id="settingsProvider" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none">
-            <option value="gemini">Google Gemini REST API (Khuyên dùng)</option>
-            <option value="groq">Groq REST API</option>
-            <option value="openrouter">OpenRouter API</option>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700" id="settingsLangLabel" data-i18n="settings_language_label">
+              Ngôn ngữ / Language
+            </label>
+            <span class="text-[10px] text-zinc-500 font-mono">VI / EN</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-white/[0.04] light:bg-black/[0.04] border border-white/[0.08] light:border-black/[0.06]">
+            <button type="button" id="langBtnVi" onclick="setLanguage('vi')" class="flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all">
+              <span>🇻🇳</span>
+              <span>Tiếng Việt</span>
+            </button>
+            <button type="button" id="langBtnEn" onclick="setLanguage('en')" class="flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all">
+              <span>🇬🇧</span>
+              <span>English</span>
+            </button>
+          </div>
+          <select id="settingsLanguage" onchange="setLanguage(this.value)" class="hidden">
+            <option value="vi">Tiếng Việt</option>
+            <option value="en">English</option>
           </select>
         </div>
 
         <div>
-          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Model Name</label>
+          <label id="settingsProviderLabel" data-i18n="settings_ai_provider" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">AI Provider</label>
+          <select id="settingsProvider" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none">
+            <option value="gemini" id="optGemini" data-i18n="settings_gemini_recommended">Google Gemini REST API (Khuyên dùng)</option>
+            <option value="groq" id="optGroq" data-i18n="settings_groq">Groq REST API</option>
+            <option value="openrouter" id="optOpenRouter" data-i18n="settings_openrouter">OpenRouter API</option>
+          </select>
+        </div>
+
+        <div>
+          <label id="settingsModelLabel" data-i18n="settings_model_name" class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Model Name</label>
           <input type="text" id="settingsModel" value="gemini-1.5-flash" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none">
-          <span class="text-[10px] text-zinc-500 mt-1 block">Khuyên dùng: <code>gemini-1.5-flash</code> hoặc <code>gemini-2.0-flash</code></span>
+          <span id="settingsModelHint" data-i18n="settings_model_hint" class="text-[10px] text-zinc-500 mt-1 block">Khuyên dùng: <code>gemini-1.5-flash</code> hoặc <code>gemini-2.0-flash</code></span>
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="block font-semibold text-zinc-300 light:text-zinc-700">Google Gemini API Key</label>
-            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-400 hover:underline text-[10px]">Lấy API Key miễn phí →</a>
+            <label id="settingsApiKeyLabel" data-i18n="settings_api_key_label" class="block font-semibold text-zinc-300 light:text-zinc-700">Google Gemini API Key</label>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" id="settingsGetApiKeyLink" data-i18n="settings_get_free_key" class="text-indigo-400 hover:underline text-[10px]">Lấy API Key miễn phí →</a>
           </div>
           <div class="relative">
             <input type="password" id="settingsApiKey" placeholder="AIzaSy..." class="w-full px-3 py-2 pr-16 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none font-mono">
-            <button type="button" onclick="toggleApiKeyMask()" class="absolute right-2 top-2 text-zinc-400 hover:text-white text-[10px] px-2 py-0.5 rounded bg-white/10">Hiện/Ẩn</button>
+            <button type="button" onclick="toggleApiKeyMask()" id="settingsToggleMaskBtn" data-i18n="settings_toggle_mask" class="absolute right-2 top-2 text-zinc-400 hover:text-white text-[10px] px-2 py-0.5 rounded bg-white/10">Hiện/Ẩn</button>
           </div>
-          <p class="text-[10px] text-zinc-400 mt-1">Lưu an toàn trong LocalStorage máy cá nhân của bạn, không bao giờ gửi qua server trung gian.</p>
+          <p id="settingsApiKeyNote" data-i18n="settings_api_key_note" class="text-[10px] text-zinc-400 mt-1">Lưu an toàn trong LocalStorage máy cá nhân của bạn, không bao giờ gửi qua server trung gian.</p>
         </div>
 
         <div class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-between">
           <div>
-            <span class="font-semibold text-indigo-300 block">Kiểm tra kết nối (Test Ping)</span>
+            <span id="settingsTestPingLabel" data-i18n="settings_test_ping_label" class="font-semibold text-indigo-300 block">Kiểm tra kết nối (Test Ping)</span>
             <span class="text-[10px] text-zinc-400" id="testConnectionStatus">Chưa kiểm tra</span>
           </div>
-          <button type="button" onclick="testGeminiConnection()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium active:scale-95 transition-all">
+          <button type="button" onclick="testGeminiConnection()" id="settingsTestBtn" data-i18n="settings_btn_test" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium active:scale-95 transition-all">
             Test Connection
           </button>
         </div>
 
         <div class="flex items-center justify-end space-x-2 pt-3 border-t border-white/[0.08] light:border-black/[0.06]">
-          <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Đóng</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium">Lưu Cấu Hình</button>
+          <button type="button" id="settingsCloseBtn" data-i18n="settings_btn_close" onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Đóng</button>
+          <button type="submit" id="settingsSaveBtn" data-i18n="settings_btn_save" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium">Lưu Cấu Hình</button>
         </div>
       </form>
     </div>
@@ -784,6 +815,415 @@
     /* =========================================================
        CREATOR COMMAND CENTER (CCC) — STATE MACHINE & DATA STORE
        ========================================================= */
+
+    /* =========================================================
+       BILINGUAL I18N SYSTEM (Tiếng Việt & English)
+       ========================================================= */
+    const I18N = {
+      vi: {
+        // Header
+        header_subtitle: "First Principles OS • Tăng tốc YouTube & Mạng xã hội",
+        header_deepwork: "⚡ Deep Work: {hours}h",
+        header_tasks_deleted: "🗑 Tasks Deleted: {count}",
+        btn_add_card: "Thêm Card",
+        tooltip_export: "Export dữ liệu sao lưu ra JSON",
+        tooltip_import: "Import dữ liệu từ file JSON",
+        tooltip_settings: "Cài đặt API Key & AI Provider",
+        tooltip_theme: "Chuyển chế độ Sáng / Tối",
+
+        // Tầng 1 Timeline
+        timeline_title: "Tầng 1: Time-Blocking Timeline (08:00 — 18:00)",
+        timeline_subtitle: "Chu kỳ sinh học Ultradian 90 phút • Khóa chặt sự chú ý và triệt tiêu đa nhiệm",
+        block_active: "Active",
+        block_prefix: "Block: {name}",
+        tooltip_reset_timer: "Reset đồng hồ",
+        tooltip_toggle_block: "Đánh dấu hoàn tất",
+        type_deep_work: "Deep Work",
+        type_review: "Review",
+        type_shallow: "Shallow",
+
+        // Block sample titles
+        block_tb_1: "Kế hoạch & Hook",
+        block_tb_2: "Viết kịch bản",
+        block_tb_3: "Thumbnail & Tiêu đề",
+        block_tb_4: "B-Roll & Tư liệu",
+        block_tb_5: "Quay & Thu âm",
+        block_tb_6: "Đánh giá & Tái chế",
+
+        // Tầng 2 Kanban
+        kanban_title: "Tầng 2: First Principles Kanban Board",
+        kanban_subtitle: "Single Focus WIP = 1 • Deep Work WIP = 3 • CTR &lt; 2% Ruthless Cull",
+        filter_all: "Tất cả",
+        col_delete_title: "DELETE / REPURPOSE",
+        col_delete_desc: "CTR &lt; 2.0% • Xóa hoặc Tái chế",
+        col_ideas_title: "IDEAS",
+        col_ideas_desc: "Bắt buộc First Principle",
+        col_single_title: "SINGLE FOCUS",
+        col_single_desc: "Chỉ 1 card duy nhất active!",
+        col_deep_title: "DEEP WORK",
+        col_deep_desc: "Đang chế tác • Tối đa 3 cards",
+        col_blocked_title: "BLOCKED",
+        col_blocked_desc: "Bắt buộc Owner + ETA giải phóng",
+        col_done_title: "DONE + LEARNED",
+        col_done_desc: "Bắt buộc đúc kết bài học",
+
+        // Card Details
+        first_principle_label: "First Principle:",
+        first_principle_unset: "Chưa thiết lập",
+        low_ctr_warning: "⚠️ CTR LOW: {ctr}%",
+        btn_suggest_cull: "Gợi ý Cull →",
+        blocked_by: "⚠️ Chặn bởi:",
+        eta_label: "⏳ ETA:",
+        learned_label: "💡 Bài học:",
+        unknown_val: "Chưa rõ",
+        tooltip_edit_card: "Sửa card",
+        tooltip_delete_card: "Xóa card",
+
+        // Tầng 3 AI Copilot
+        ai_copilot_title: "Tầng 3: Musk AI Copilot",
+        ai_status_no_key: "First Principles Heuristic Active (Chưa có API Key)",
+        ai_status_connected: "● Gemini API Connected ({model})",
+        tooltip_clear_chat: "Xóa lịch sử chat",
+        quick_engines_title: "5 Quick Engines (Musk Algorithm)",
+        engine_hook: "Hook Generator (3s Pattern Interrupt)",
+        engine_breakdown: "Script Breakdown (Cut 30-50% Fluff)",
+        engine_delete: "Deletion Advisor (Ruthless Cull)",
+        engine_repurpose: "Repurpose Engine (1 Long → 5 Shorts/Posts)",
+        engine_tester: "Thumbnail & Title Tester (CTR Score)",
+        engine_run: "Run →",
+        ai_welcome_title: "✦ First Principles Copilot",
+        ai_welcome_text: "Chào bạn! Tôi vận hành trên thuật toán 5 bước của Elon Musk. Tôi sẵn sàng mổ xẻ kịch bản, gọt giũa 40% câu chữ thừa, tạo Hook 3s hoặc phân tích lý do nên xóa bỏ các video kém hiệu quả.",
+        ai_input_placeholder: "Hỏi Copilot hoặc dán ý tưởng/kịch bản...",
+        chat_role_user: "Bạn",
+        chat_role_copilot: "✦ Copilot",
+
+        // Modals
+        card_modal_add_title: "Thêm Nội Dung Mới (First Principles Card)",
+        card_modal_edit_title: "Chỉnh Sửa First Principles Card",
+        label_content_title: "Tiêu đề nội dung / video",
+        placeholder_card_title: "VD: Bóc trần thuật toán đề xuất của TikTok...",
+        label_platform: "Nền tảng",
+        label_column_status: "Cột trạng thái",
+        label_first_principle: "Nguyên lý gốc (First Principle)",
+        badge_mandatory: "* BẮT BUỘC",
+        hint_first_principle: "Không chấp nhận phỏng đoán",
+        placeholder_first_principle: "Tại sao nội dung này lại hiệu quả từ bản chất tâm lý học, vật lý hoặc toán học?...",
+        label_goal: "Mục tiêu định lượng (Goal)",
+        placeholder_goal: "VD: 100k views, 500 email leads trong 7 ngày",
+        label_ctr: "CTR (%)",
+        label_views: "Lượt xem",
+        label_retention: "Retention (%)",
+        label_owner: "Owner (Người chịu trách nhiệm)",
+        label_eta: "ETA Giải phóng",
+        label_learned: "Bài học đúc kết (Learned Insight)",
+        placeholder_learned: "Bài học thực chứng rút ra từ kết quả thực tế của nội dung này là gì?...",
+        btn_cancel: "Hủy",
+        btn_save_changes: "Lưu Thay Đổi",
+
+        // Blocked Modal
+        blocked_modal_title: "Cảnh báo: Bắt buộc thông tin Chặn",
+        blocked_modal_desc: "Theo quy tắc First Principles, một card chỉ được đưa vào cột <b>BLOCKED</b> khi xác định rõ ai đang làm tắc nghẽn và hạn chót gỡ bỏ.",
+        label_blocked_owner: "Owner (Ai đang chặn?)",
+        label_blocked_eta: "ETA (Hạn chót giải phóng?)",
+        btn_cancel_revert: "Hủy & Trả Về",
+        btn_confirm_blocked: "Xác Nhận Blocked",
+
+        // Done Modal
+        done_modal_title: "Đúc Kết Bài Học (Learned Insight)",
+        done_modal_desc: "Không có công việc nào kết thúc mà không để lại dữ liệu. Bạn đã học được điều gì sau khi xuất bản nội dung này?",
+        label_done_learned: "Bài học thực chứng rút ra",
+        btn_save_done: "Lưu Bài Học & Hoàn Tất",
+
+        // Settings Modal
+        settings_modal_title: "Cấu Hình Hệ Thống & Gemini AI REST API",
+        settings_language_label: "Ngôn ngữ / Language",
+        settings_ai_provider: "AI Provider",
+        settings_gemini_recommended: "Google Gemini REST API (Khuyên dùng)",
+        settings_groq: "Groq REST API",
+        settings_openrouter: "OpenRouter API",
+        settings_model_name: "Model Name",
+        settings_model_hint: "Khuyên dùng: <code>gemini-1.5-flash</code> hoặc <code>gemini-2.0-flash</code>",
+        settings_api_key_label: "Google Gemini API Key",
+        settings_get_free_key: "Lấy API Key miễn phí →",
+        settings_toggle_mask: "Hiện/Ẩn",
+        settings_api_key_note: "Lưu an toàn trong LocalStorage máy cá nhân của bạn, không bao giờ gửi qua server trung gian.",
+        settings_test_ping_label: "Kiểm tra kết nối (Test Ping)",
+        settings_test_status_untested: "Chưa kiểm tra",
+        settings_test_status_saved: "Đã lưu API Key",
+        settings_test_status_none: "Chưa có API Key",
+        settings_btn_test: "Test Connection",
+        settings_btn_close: "Đóng",
+        settings_btn_save: "Lưu Cấu Hình",
+
+        // Toasts & Alerts
+        toast_lang_changed: "Đã chuyển đổi sang Tiếng Việt",
+        toast_theme_dark: "Đã chuyển sang chế độ Tối (Dark Mode)",
+        toast_theme_light: "Đã chuyển sang chế độ Sáng (Light Mode)",
+        toast_timer_start: "▶ Bắt đầu phiên Deep Work Timer!",
+        toast_timer_pause: "⏸ Đã tạm dừng Timer",
+        toast_timer_reset: "↺ Đã reset đồng hồ thời gian của block",
+        toast_block_completed: "Đã hoàn tất block: {title}",
+        toast_block_reopened: "Đã mở lại block: {title}",
+        toast_card_saved: "✓ Đã lưu card thành công!",
+        toast_card_deleted: "🗑 Đã xóa card thành công (+1 Tasks Deleted)",
+        toast_confirm_delete_card: "Bạn có chắc chắn muốn xóa vĩnh viễn card này không?",
+        toast_move_delete: "🗑 Card đã được đưa vào DELETE / REPURPOSE (+1 Tasks Deleted)",
+        toast_cancel_blocked: "Đã hủy di chuyển vào Blocked",
+        toast_save_blocked: "✓ Đã chuyển sang BLOCKED với đầy đủ thông tin!",
+        toast_cancel_done: "Đã hủy di chuyển vào Done",
+        toast_save_done: "🎉 Xuất sắc! Đã hoàn tất và lưu trữ bài học thực chứng.",
+        toast_save_settings: "✓ Đã lưu cấu hình AI thành công!",
+        toast_clear_chat: "Đã xóa lịch sử chat của Copilot",
+        toast_export_success: "⤓ Đã xuất file backup JSON thành công!",
+        toast_import_success: "⤒ Khôi phục dữ liệu từ JSON thành công 100%!",
+        toast_wip_single_warning: "⚠️ Luật Single Focus: Chỉ duy nhất 1 card được active tại một thời điểm!",
+        toast_wip_deep_warning: "⚠️ Luật Deep Work: Tối đa 3 cards đồng thời để tránh phân tán nguồn lực!",
+        toast_first_principle_required: "⚠️ Bắt buộc nhập First Principle (Nguyên lý gốc)!",
+        toast_single_limit_reached: "⚠️ Cột Single Focus đã có 1 card. Vui lòng hoàn tất hoặc di chuyển card cũ trước!",
+        toast_deep_limit_reached: "⚠️ Cột Deep Work đã đạt giới hạn 3 cards!",
+        toast_owner_eta_required: "⚠️ Bắt buộc nhập đầy đủ Owner và ETA!",
+        toast_learned_required: "⚠️ Bắt buộc đúc kết bài học để lưu trữ kinh nghiệm!"
+      },
+      en: {
+        // Header
+        header_subtitle: "First Principles OS • YouTube + Social Media Accelerator",
+        header_deepwork: "⚡ Deep Work: {hours}h",
+        header_tasks_deleted: "🗑 Tasks Deleted: {count}",
+        btn_add_card: "Add Card",
+        tooltip_export: "Export backup data to JSON",
+        tooltip_import: "Import data from JSON file",
+        tooltip_settings: "API Key & AI Provider Settings",
+        tooltip_theme: "Toggle Light / Dark mode",
+
+        // Tầng 1 Timeline
+        timeline_title: "Level 1: Time-Blocking Timeline (08:00 — 18:00)",
+        timeline_subtitle: "90-Minute Ultradian Rhythm • Lock Attention & Eliminate Multitasking",
+        block_active: "Active",
+        block_prefix: "Block: {name}",
+        tooltip_reset_timer: "Reset timer",
+        tooltip_toggle_block: "Mark as completed",
+        type_deep_work: "Deep Work",
+        type_review: "Review",
+        type_shallow: "Shallow",
+
+        // Block sample titles
+        block_tb_1: "Plan & Hook",
+        block_tb_2: "Script Writing",
+        block_tb_3: "Thumbnail & Title",
+        block_tb_4: "B-Roll & Assets",
+        block_tb_5: "Film & Recording",
+        block_tb_6: "Review & Repurpose",
+
+        // Tầng 2 Kanban
+        kanban_title: "Level 2: First Principles Kanban Board",
+        kanban_subtitle: "Single Focus WIP = 1 • Deep Work WIP = 3 • CTR &lt; 2% Ruthless Cull",
+        filter_all: "All",
+        col_delete_title: "DELETE / REPURPOSE",
+        col_delete_desc: "CTR &lt; 2.0% • Cull or Repurpose",
+        col_ideas_title: "IDEAS",
+        col_ideas_desc: "First Principle Required",
+        col_single_title: "SINGLE FOCUS",
+        col_single_desc: "Only 1 card active!",
+        col_deep_title: "DEEP WORK",
+        col_deep_desc: "In Progress • Max 3 cards",
+        col_blocked_title: "BLOCKED",
+        col_blocked_desc: "Owner + ETA Required",
+        col_done_title: "DONE + LEARNED",
+        col_done_desc: "Learned Insight Required",
+
+        // Card Details
+        first_principle_label: "First Principle:",
+        first_principle_unset: "Not set",
+        low_ctr_warning: "⚠️ CTR LOW: {ctr}%",
+        btn_suggest_cull: "Suggest Cull →",
+        blocked_by: "⚠️ Blocked by:",
+        eta_label: "⏳ ETA:",
+        learned_label: "💡 Learned Insight:",
+        unknown_val: "Unknown",
+        tooltip_edit_card: "Edit card",
+        tooltip_delete_card: "Delete card",
+
+        // Tầng 3 AI Copilot
+        ai_copilot_title: "Level 3: Musk AI Copilot",
+        ai_status_no_key: "First Principles Heuristic Active (No API Key)",
+        ai_status_connected: "● Gemini API Connected ({model})",
+        tooltip_clear_chat: "Clear chat history",
+        quick_engines_title: "5 Quick Engines (Musk Algorithm)",
+        engine_hook: "Hook Generator (3s Pattern Interrupt)",
+        engine_breakdown: "Script Breakdown (Cut 30-50% Fluff)",
+        engine_delete: "Deletion Advisor (Ruthless Cull)",
+        engine_repurpose: "Repurpose Engine (1 Long → 5 Shorts/Posts)",
+        engine_tester: "Thumbnail & Title Tester (CTR Score)",
+        engine_run: "Run →",
+        ai_welcome_title: "✦ First Principles Copilot",
+        ai_welcome_text: "Hello! I operate on Elon Musk's 5-step algorithm. I am ready to dissect scripts, cut 40% fluff, craft 3s hooks, or analyze why ineffective videos should be ruthlessly culled.",
+        ai_input_placeholder: "Ask Copilot or paste ideas/script...",
+        chat_role_user: "You",
+        chat_role_copilot: "✦ Copilot",
+
+        // Modals
+        card_modal_add_title: "Add New Content (First Principles Card)",
+        card_modal_edit_title: "Edit First Principles Card",
+        label_content_title: "Content / Video Title",
+        placeholder_card_title: "e.g. Deconstructing TikTok's Recommendation Algorithm...",
+        label_platform: "Platform",
+        label_column_status: "Column Status",
+        label_first_principle: "First Principle",
+        badge_mandatory: "* MANDATORY",
+        hint_first_principle: "No guesses accepted",
+        placeholder_first_principle: "Why will this content work based on psychology, physics, or mathematics?...",
+        label_goal: "Quantitative Goal",
+        placeholder_goal: "e.g. 100k views, 500 email leads in 7 days",
+        label_ctr: "CTR (%)",
+        label_views: "Views",
+        label_retention: "Retention (%)",
+        label_owner: "Owner (Responsible Person)",
+        label_eta: "ETA Resolution",
+        label_learned: "Learned Insight",
+        placeholder_learned: "What empirical lesson was learned from the actual results?...",
+        btn_cancel: "Cancel",
+        btn_save_changes: "Save Changes",
+
+        // Blocked Modal
+        blocked_modal_title: "Warning: Blocker Information Required",
+        blocked_modal_desc: "According to First Principles, a card can only move to <b>BLOCKED</b> when who is blocking and the deadline are identified.",
+        label_blocked_owner: "Owner (Who is blocking?)",
+        label_blocked_eta: "ETA (Deadline to resolve?)",
+        btn_cancel_revert: "Cancel & Revert",
+        btn_confirm_blocked: "Confirm Blocked",
+
+        // Done Modal
+        done_modal_title: "Empirical Learned Insight",
+        done_modal_desc: "No task finishes without generating data. What did you learn after publishing this content?",
+        label_done_learned: "Empirical insight learned",
+        btn_save_done: "Save Insight & Complete",
+
+        // Settings Modal
+        settings_modal_title: "System Configuration & Gemini AI REST API",
+        settings_language_label: "Ngôn ngữ / Language",
+        settings_ai_provider: "AI Provider",
+        settings_gemini_recommended: "Google Gemini REST API (Recommended)",
+        settings_groq: "Groq REST API",
+        settings_openrouter: "OpenRouter API",
+        settings_model_name: "Model Name",
+        settings_model_hint: "Recommended: <code>gemini-1.5-flash</code> or <code>gemini-2.0-flash</code>",
+        settings_api_key_label: "Google Gemini API Key",
+        settings_get_free_key: "Get free API Key →",
+        settings_toggle_mask: "Show/Hide",
+        settings_api_key_note: "Stored securely in your local browser LocalStorage, never sent to intermediary servers.",
+        settings_test_ping_label: "Test Connection (Ping)",
+        settings_test_status_untested: "Not tested yet",
+        settings_test_status_saved: "API Key saved",
+        settings_test_status_none: "No API Key",
+        settings_btn_test: "Test Connection",
+        settings_btn_close: "Close",
+        settings_btn_save: "Save Configuration",
+
+        // Toasts & Alerts
+        toast_lang_changed: "Switched language to English",
+        toast_theme_dark: "Switched to Dark Mode",
+        toast_theme_light: "Switched to Light Mode",
+        toast_timer_start: "▶ Deep Work Timer started!",
+        toast_timer_pause: "⏸ Timer paused",
+        toast_timer_reset: "↺ Block timer reset",
+        toast_block_completed: "Completed block: {title}",
+        toast_block_reopened: "Reopened block: {title}",
+        toast_card_saved: "✓ Card saved successfully!",
+        toast_card_deleted: "🗑 Card deleted successfully (+1 Tasks Deleted)",
+        toast_confirm_delete_card: "Are you sure you want to permanently delete this card?",
+        toast_move_delete: "🗑 Card moved to DELETE / REPURPOSE (+1 Tasks Deleted)",
+        toast_cancel_blocked: "Cancelled move to Blocked",
+        toast_save_blocked: "✓ Moved to BLOCKED with complete details!",
+        toast_cancel_done: "Cancelled move to Done",
+        toast_save_done: "🎉 Outstanding! Completed and recorded empirical insight.",
+        toast_save_settings: "✓ AI Configuration saved successfully!",
+        toast_clear_chat: "Cleared Copilot chat history",
+        toast_export_success: "⤓ Exported JSON backup successfully!",
+        toast_import_success: "⤒ Restored data from JSON 100% successfully!",
+        toast_wip_single_warning: "⚠️ Single Focus Rule: Only 1 card active at a time!",
+        toast_wip_deep_warning: "⚠️ Deep Work Rule: Max 3 cards simultaneously to avoid distraction!",
+        toast_first_principle_required: "⚠️ First Principle is required!",
+        toast_single_limit_reached: "⚠️ Single Focus already has 1 card. Please finish or move old card first!",
+        toast_deep_limit_reached: "⚠️ Deep Work column has reached 3 cards limit!",
+        toast_owner_eta_required: "⚠️ Both Owner and ETA are required!",
+        toast_learned_required: "⚠️ Learned insight is required to preserve institutional knowledge!"
+      }
+    };
+
+    function t(key, params = {}) {
+      const lang = (state && state.settings && state.settings.language) || 'vi';
+      const dict = I18N[lang] || I18N.vi;
+      let text = dict[key] !== undefined ? dict[key] : (I18N.vi[key] !== undefined ? I18N.vi[key] : key);
+      for (const [k, v] of Object.entries(params)) {
+        text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
+      }
+      return text;
+    }
+
+    function setLanguage(lang) {
+      if (lang !== 'vi' && lang !== 'en') lang = 'vi';
+      state.settings.language = lang;
+      saveSettings();
+      applyLanguage(lang);
+      showToast(t('toast_lang_changed'));
+    }
+
+    function updateLanguageControls(lang) {
+      const btnVi = document.getElementById('langBtnVi');
+      const btnEn = document.getElementById('langBtnEn');
+      const selectEl = document.getElementById('settingsLanguage');
+      if (selectEl) selectEl.value = lang;
+
+      if (lang === 'en') {
+        if (btnEn) btnEn.className = 'flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all bg-apple-blue text-white shadow-md shadow-apple-blue/20';
+        if (btnVi) btnVi.className = 'flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-medium text-zinc-400 hover:text-white light:hover:text-zinc-900 transition-all';
+      } else {
+        if (btnVi) btnVi.className = 'flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all bg-apple-blue text-white shadow-md shadow-apple-blue/20';
+        if (btnEn) btnEn.className = 'flex items-center justify-center space-x-2 py-2 px-3 rounded-xl text-xs font-medium text-zinc-400 hover:text-white light:hover:text-zinc-900 transition-all';
+      }
+    }
+
+    function applyLanguage(lang) {
+      if (lang !== 'vi' && lang !== 'en') lang = 'vi';
+      document.documentElement.lang = lang;
+
+      // Update static content with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translated = t(key);
+        if (translated !== undefined) {
+          el.innerHTML = translated;
+        }
+      });
+
+      // Update titles with data-i18n-title
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        const translated = t(key);
+        if (translated !== undefined) {
+          el.setAttribute('title', translated);
+        }
+      });
+
+      // Update placeholders with data-i18n-placeholder
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const translated = t(key);
+        if (translated !== undefined) {
+          el.setAttribute('placeholder', translated);
+        }
+      });
+
+      // Sync settings modal controls
+      updateLanguageControls(lang);
+
+      // Re-render dynamic components
+      updateMetricsHeader();
+      renderTimeline();
+      renderKanbanBoard();
+      renderChatHistory();
+      updateAIProviderStatus();
+    }
 
     // Default Seed Data (8 High-Quality Content Items)
     const SEED_CARDS = [
@@ -914,7 +1354,8 @@
       settings: {
         aiProvider: 'gemini',
         apiKey: '',
-        modelName: 'gemini-1.5-flash'
+        modelName: 'gemini-1.5-flash',
+        language: 'vi'
       },
       currentPlatformFilter: 'all',
       theme: 'dark',
@@ -977,6 +1418,9 @@
           state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
         } catch (e) {}
       }
+      if (!state.settings.language || (state.settings.language !== 'vi' && state.settings.language !== 'en')) {
+        state.settings.language = 'vi';
+      }
 
       // Load Chat History
       const savedChat = localStorage.getItem('ccc_chat_v2');
@@ -987,12 +1431,9 @@
         } catch (e) {}
       }
 
-      // Update UI
-      updateMetricsHeader();
-      renderTimeline();
-      renderKanbanBoard();
+      // Update UI & Apply Language
+      applyLanguage(state.settings.language || 'vi');
       initSortableJS();
-      updateAIProviderStatus();
     }
 
     function saveCards() {
@@ -1042,7 +1483,7 @@
 
     function toggleTheme() {
       setTheme(state.theme === 'dark' ? 'light' : 'dark');
-      showToast(`Đã chuyển sang chế độ ${state.theme === 'dark' ? 'Tối (Dark Mode)' : 'Sáng (Light Mode)'}`);
+      showToast(state.theme === 'dark' ? t('toast_theme_dark') : t('toast_theme_light'));
     }
 
     /* =========================================================
@@ -1050,8 +1491,8 @@
        ========================================================= */
     function updateMetricsHeader() {
       const hours = (state.stats.deepWorkMinutes / 60).toFixed(1);
-      document.getElementById('headerDeepWork').innerText = `⚡ Deep Work: ${hours}h`;
-      document.getElementById('headerTasksDeleted').innerText = `🗑 Tasks Deleted: ${state.stats.tasksDeletedCount}`;
+      document.getElementById('headerDeepWork').innerText = t('header_deepwork', { hours });
+      document.getElementById('headerTasksDeleted').innerText = t('header_tasks_deleted', { count: state.stats.tasksDeletedCount });
     }
 
     /* =========================================================
@@ -1067,13 +1508,18 @@
         
         // Dynamic styling for Ultradian block
         let typeBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-        let typeLabel = 'Deep Work';
+        let typeLabel = t('type_deep_work');
         if (block.type === 'review') {
           typeBadgeClass = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-          typeLabel = 'Review';
+          typeLabel = t('type_review');
         } else if (block.type === 'shallow') {
           typeBadgeClass = 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-          typeLabel = 'Shallow';
+          typeLabel = t('type_shallow');
+        }
+
+        let displayTitle = block.title;
+        if (block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
+          displayTitle = t(`block_${block.id.replace('-', '_')}`);
         }
 
         card.className = `p-3 rounded-2xl border transition-all cursor-pointer relative ${
@@ -1087,20 +1533,20 @@
             <span class="font-mono text-[11px] font-bold text-amber-400 light:text-amber-600">
               ${escapeHTML(block.startTime)} - ${escapeHTML(block.endTime)}
             </span>
-            <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="Đánh dấu hoàn tất" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
+            <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="${t('tooltip_toggle_block')}" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
             </button>
           </div>
           <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5">
-            ${escapeHTML(block.title)}
+            ${escapeHTML(displayTitle)}
           </h4>
           <div class="flex items-center justify-between">
             <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full border ${typeBadgeClass}">
               ${typeLabel} (90m)
             </span>
-            ${isCurrent ? '<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>Active</span></span>' : ''}
+            ${isCurrent ? `<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>${t('block_active')}</span></span>` : ''}
           </div>
         `;
 
@@ -1120,7 +1566,11 @@
       // Update timer block label
       const activeBlock = state.timeBlocks.find(b => b.id === state.timer.activeBlockId);
       if (activeBlock) {
-        document.getElementById('currentTimerBlockName').innerText = `Block: ${activeBlock.title}`;
+        let activeTitle = activeBlock.title;
+        if (activeBlock.id && I18N[state.settings.language || 'vi'][`block_${activeBlock.id.replace('-', '_')}`]) {
+          activeTitle = t(`block_${activeBlock.id.replace('-', '_')}`);
+        }
+        document.getElementById('currentTimerBlockName').innerText = t('block_prefix', { name: activeTitle });
       }
     }
 
@@ -1136,7 +1586,7 @@
         block.isCompleted = !block.isCompleted;
         saveTimeBlocks();
         renderTimeline();
-        showToast(`Đã ${block.isCompleted ? 'hoàn tất' : 'mở lại'} block: ${block.title}`);
+        showToast(block.isCompleted ? t('toast_block_completed', { title: block.title }) : t('toast_block_reopened', { title: block.title }));
       }
     }
 
@@ -1171,7 +1621,7 @@
       }, 1000);
 
       renderTimeline();
-      showToast("▶ Bắt đầu phiên Deep Work Timer!");
+      showToast(t('toast_timer_start'));
     }
 
     function pauseTimer() {
@@ -1182,14 +1632,14 @@
       document.getElementById('timerPulse').classList.add('hidden');
       saveStats();
       renderTimeline();
-      showToast("⏸ Đã tạm dừng Timer");
+      showToast(t('toast_timer_pause'));
     }
 
     function resetTimer() {
       pauseTimer();
       state.timer.elapsedSeconds = 0;
       renderTimerDisplay();
-      showToast("↺ Đã reset đồng hồ thời gian của block");
+      showToast(t('toast_timer_reset'));
     }
 
     function renderTimerDisplay() {
@@ -1281,9 +1731,9 @@
         lowCTRBadge = `
           <div class="mt-2 flex items-center justify-between p-1.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-[10px]">
             <span class="font-bold flex items-center space-x-1">
-              <span>⚠️ CTR LOW: ${card.metrics.ctr}%</span>
+              <span>${t('low_ctr_warning', { ctr: card.metrics.ctr })}</span>
             </span>
-            <button type="button" data-action="cull" data-card-id="${escapeHTML(card.id)}" class="text-[9px] font-bold underline hover:text-white">Gợi ý Cull →</button>
+            <button type="button" data-action="cull" data-card-id="${escapeHTML(card.id)}" class="text-[9px] font-bold underline hover:text-white">${t('btn_suggest_cull')}</button>
           </div>
         `;
       }
@@ -1293,8 +1743,8 @@
       if (card.column === 'blocked' && (card.owner || card.eta)) {
         blockedInfo = `
           <div class="mt-2 p-1.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-300 text-[10px]">
-            <div class="font-semibold">⚠️ Chặn bởi: <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.owner || 'Chưa rõ')}</span></div>
-            <div class="font-semibold">⏳ ETA: <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.eta || 'Chưa rõ')}</span></div>
+            <div class="font-semibold">${t('blocked_by')} <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.owner || t('unknown_val'))}</span></div>
+            <div class="font-semibold">${t('eta_label')} <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.eta || t('unknown_val'))}</span></div>
           </div>
         `;
       }
@@ -1304,7 +1754,7 @@
       if (card.column === 'done' && card.learned) {
         learnedInfo = `
           <div class="mt-2 p-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px]">
-            <span class="font-bold block">💡 Bài học:</span>
+            <span class="font-bold block">${t('learned_label')}</span>
             <span class="italic text-zinc-300 light:text-zinc-700 line-clamp-2">${escapeHTML(card.learned)}</span>
           </div>
         `;
@@ -1323,12 +1773,12 @@
         <div class="flex items-center justify-between mb-1.5">
           ${platformBadge}
           <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button type="button" data-action="edit" data-card-id="${escapeHTML(card.id)}" title="Sửa card" class="p-1 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white light:hover:text-zinc-900">
+            <button type="button" data-action="edit" data-card-id="${escapeHTML(card.id)}" title="${t('tooltip_edit_card')}" class="p-1 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white light:hover:text-zinc-900">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
               </svg>
             </button>
-            <button type="button" data-action="delete" data-card-id="${escapeHTML(card.id)}" title="Xóa card" class="p-1 hover:bg-rose-500/20 rounded-lg text-zinc-400 hover:text-rose-400">
+            <button type="button" data-action="delete" data-card-id="${escapeHTML(card.id)}" title="${t('tooltip_delete_card')}" class="p-1 hover:bg-rose-500/20 rounded-lg text-zinc-400 hover:text-rose-400">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
               </svg>
@@ -1341,8 +1791,8 @@
         </h4>
 
         <div class="p-2 rounded-xl bg-white/[0.02] light:bg-black/[0.02] border border-white/[0.04] text-[10px] text-zinc-400 light:text-zinc-600 mb-1">
-          <span class="text-amber-400/90 font-semibold block text-[9px] uppercase tracking-wide">First Principle:</span>
-          <span class="italic line-clamp-2">${escapeHTML(card.first_principle || 'Chưa thiết lập')}</span>
+          <span class="text-amber-400/90 font-semibold block text-[9px] uppercase tracking-wide">${t('first_principle_label')}</span>
+          <span class="italic line-clamp-2">${escapeHTML(card.first_principle || t('first_principle_unset'))}</span>
         </div>
 
         ${lowCTRBadge}
@@ -1407,7 +1857,7 @@
             if (targetCol === 'single' && sourceCol !== 'single') {
               const currentCount = evt.to.children.length;
               if (currentCount >= 1) {
-                showToast("⚠️ Luật Single Focus: Chỉ duy nhất 1 card được active tại một thời điểm!", "warning");
+                showToast(t('toast_wip_single_warning'), "warning");
                 return false; // Reject drop
               }
             }
@@ -1416,7 +1866,7 @@
             if (targetCol === 'deep' && sourceCol !== 'deep') {
               const currentCount = evt.to.children.length;
               if (currentCount >= 3) {
-                showToast("⚠️ Luật Deep Work: Tối đa 3 cards đồng thời để tránh phân tán nguồn lực!", "warning");
+                showToast(t('toast_wip_deep_warning'), "warning");
                 return false; // Reject drop
               }
             }
@@ -1463,7 +1913,7 @@
             if (targetCol === 'delete') {
               state.stats.tasksDeletedCount++;
               saveStats();
-              showToast("🗑 Card đã được đưa vào DELETE / REPURPOSE (+1 Tasks Deleted)");
+              showToast(t('toast_move_delete'));
             }
 
             // Normal move
@@ -1494,7 +1944,7 @@
       if (cardId) {
         const card = state.cards.find(c => c.id === cardId);
         if (card) {
-          document.getElementById('cardModalTitle').innerText = "Chỉnh Sửa First Principles Card";
+          document.getElementById('cardModalTitle').innerText = t('card_modal_edit_title');
           document.getElementById('cardFormId').value = card.id;
           document.getElementById('cardFormTitle').value = card.title;
           document.getElementById('cardFormPlatform').value = card.platform;
@@ -1512,7 +1962,7 @@
           if (card.column === 'done') document.getElementById('cardFormDoneFields').classList.remove('hidden');
         }
       } else {
-        document.getElementById('cardModalTitle').innerText = "Thêm Nội Dung Mới (First Principles Card)";
+        document.getElementById('cardModalTitle').innerText = t('card_modal_add_title');
         document.getElementById('cardFormId').value = '';
       }
 
@@ -1540,7 +1990,7 @@
 
       // Rule Enforcement: First Principle is Mandatory!
       if (!firstPrinciple) {
-        showToast("⚠️ Bắt buộc nhập First Principle (Nguyên lý gốc)!", "error");
+        showToast(t('toast_first_principle_required'), "error");
         return;
       }
 
@@ -1548,7 +1998,7 @@
       if (column === 'single') {
         const existingSingle = state.cards.filter(c => c.column === 'single' && c.id !== id);
         if (existingSingle.length >= 1) {
-          showToast("⚠️ Cột Single Focus đã có 1 card. Vui lòng hoàn tất hoặc di chuyển card cũ trước!", "warning");
+          showToast(t('toast_single_limit_reached'), "warning");
           return;
         }
       }
@@ -1557,7 +2007,7 @@
       if (column === 'deep') {
         const existingDeep = state.cards.filter(c => c.column === 'deep' && c.id !== id);
         if (existingDeep.length >= 3) {
-          showToast("⚠️ Cột Deep Work đã đạt giới hạn 3 cards!", "warning");
+          showToast(t('toast_deep_limit_reached'), "warning");
           return;
         }
       }
@@ -1599,7 +2049,7 @@
       saveCards();
       renderKanbanBoard();
       closeCardModal();
-      showToast("✓ Đã lưu card thành công!");
+      showToast(t('toast_card_saved'));
     }
 
     function editCard(id) {
@@ -1607,13 +2057,13 @@
     }
 
     function deleteCard(id) {
-      if (confirm("Bạn có chắc chắn muốn xóa vĩnh viễn card này không?")) {
+      if (confirm(t('toast_confirm_delete_card'))) {
         state.cards = state.cards.filter(c => c.id !== id);
         state.stats.tasksDeletedCount++;
         saveCards();
         saveStats();
         renderKanbanBoard();
-        showToast("🗑 Đã xóa card thành công (+1 Tasks Deleted)");
+        showToast(t('toast_card_deleted'));
       }
     }
 
@@ -1637,7 +2087,7 @@
       document.getElementById('blockedModal').classList.add('hidden');
       state.pendingMove = null;
       renderKanbanBoard(); // Revert card to original column in UI
-      showToast("Đã hủy di chuyển vào Blocked");
+      showToast(t('toast_cancel_blocked'));
     }
 
     function handleSaveBlockedModal(e) {
@@ -1646,7 +2096,7 @@
       const eta = document.getElementById('blockedModalETA').value.trim();
 
       if (!owner || !eta) {
-        showToast("⚠️ Bắt buộc nhập đầy đủ Owner và ETA!", "error");
+        showToast(t('toast_owner_eta_required'), "error");
         return;
       }
 
@@ -1664,7 +2114,7 @@
       state.pendingMove = null;
       document.getElementById('blockedModal').classList.add('hidden');
       renderKanbanBoard();
-      showToast("✓ Đã chuyển sang BLOCKED với đầy đủ thông tin!");
+      showToast(t('toast_save_blocked'));
     }
 
     // Done Intercept Modal
@@ -1677,7 +2127,7 @@
       document.getElementById('doneModal').classList.add('hidden');
       state.pendingMove = null;
       renderKanbanBoard(); // Revert card
-      showToast("Đã hủy di chuyển vào Done");
+      showToast(t('toast_cancel_done'));
     }
 
     function handleSaveDoneModal(e) {
@@ -1685,7 +2135,7 @@
       const learned = document.getElementById('doneModalLearned').value.trim();
 
       if (!learned) {
-        showToast("⚠️ Bắt buộc đúc kết bài học để lưu trữ kinh nghiệm!", "error");
+        showToast(t('toast_learned_required'), "error");
         return;
       }
 
@@ -1702,7 +2152,7 @@
       state.pendingMove = null;
       document.getElementById('doneModal').classList.add('hidden');
       renderKanbanBoard();
-      showToast("🎉 Xuất sắc! Đã hoàn tất và lưu trữ bài học thực chứng.");
+      showToast(t('toast_save_done'));
     }
 
     // Settings Modal
@@ -1710,7 +2160,11 @@
       document.getElementById('settingsProvider').value = state.settings.aiProvider || 'gemini';
       document.getElementById('settingsModel').value = state.settings.modelName || 'gemini-1.5-flash';
       document.getElementById('settingsApiKey').value = state.settings.apiKey || '';
-      document.getElementById('testConnectionStatus').innerText = state.settings.apiKey ? "Đã lưu API Key" : "Chưa có API Key";
+      const currentLang = state.settings.language || 'vi';
+      const langSelect = document.getElementById('settingsLanguage');
+      if (langSelect) langSelect.value = currentLang;
+      updateLanguageControls(currentLang);
+      document.getElementById('testConnectionStatus').innerText = state.settings.apiKey ? t('settings_test_status_saved') : t('settings_test_status_none');
       document.getElementById('settingsModal').classList.remove('hidden');
     }
 
@@ -1748,18 +2202,23 @@
       state.settings.aiProvider = document.getElementById('settingsProvider').value;
       state.settings.modelName = document.getElementById('settingsModel').value.trim() || 'gemini-1.5-flash';
       state.settings.apiKey = document.getElementById('settingsApiKey').value.trim();
-      saveSettings();
+      const chosenLang = document.getElementById('settingsLanguage')?.value || state.settings.language || 'vi';
+      if (chosenLang !== state.settings.language) {
+        setLanguage(chosenLang);
+      } else {
+        saveSettings();
+      }
       closeSettingsModal();
-      showToast("✓ Đã lưu cấu hình AI thành công!");
+      showToast(t('toast_save_settings'));
     }
 
     function updateAIProviderStatus() {
       const statusEl = document.getElementById('aiProviderStatus');
       if (state.settings.apiKey) {
-        statusEl.innerText = `● Gemini API Connected (${state.settings.modelName})`;
+        statusEl.innerText = t('ai_status_connected', { model: state.settings.modelName || 'gemini-1.5-flash' });
         statusEl.className = 'text-[10px] text-emerald-400 font-semibold';
       } else {
-        statusEl.innerText = '○ First Principles Heuristic Active (No API Key)';
+        statusEl.innerText = t('ai_status_no_key');
         statusEl.className = 'text-[10px] text-zinc-400 font-medium';
       }
     }
@@ -1997,10 +2456,10 @@
       let html = `
         <div class="p-3 rounded-2xl bg-white/[0.03] light:bg-black/[0.03] border border-white/[0.06] light:border-black/[0.05] text-zinc-300 light:text-zinc-700">
           <div class="flex items-center space-x-1.5 text-indigo-400 font-semibold mb-1">
-            <span>✦ First Principles Copilot</span>
+            <span>${t('ai_welcome_title')}</span>
           </div>
           <p class="leading-relaxed">
-            Chào bạn! Tôi vận hành trên thuật toán 5 bước của Elon Musk. Tôi sẵn sàng mổ xẻ kịch bản, gọt giũa 40% câu chữ thừa, tạo Hook 3s hoặc phân tích lý do nên xóa bỏ các video kém hiệu quả.
+            ${t('ai_welcome_text')}
           </p>
         </div>
       `;
@@ -2014,7 +2473,7 @@
               : 'bg-white/[0.04] light:bg-black/[0.03] border border-white/[0.08] light:border-black/[0.05] text-zinc-200 light:text-zinc-800 mr-4'
           }">
             <div class="text-[10px] font-bold uppercase tracking-wider mb-1 ${isUser ? 'text-apple-blue' : 'text-indigo-400'}">
-              ${isUser ? 'Bạn' : '✦ Copilot'}
+              ${isUser ? t('chat_role_user') : t('chat_role_copilot')}
             </div>
             <div class="whitespace-pre-wrap leading-relaxed">${formatMarkdownText(item.text)}</div>
           </div>
@@ -2029,7 +2488,7 @@
       state.chatHistory = [];
       saveChatHistory();
       renderChatHistory();
-      showToast("Đã xóa lịch sử chat của Copilot");
+      showToast(t('toast_clear_chat'));
     }
 
     function formatMarkdownText(text) {
@@ -2057,7 +2516,8 @@
         stats: state.stats,
         settings: {
           aiProvider: state.settings.aiProvider,
-          modelName: state.settings.modelName
+          modelName: state.settings.modelName,
+          language: state.settings.language || 'vi'
           // Do not export apiKey for security reasons unless needed
         }
       };
@@ -2073,7 +2533,7 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      showToast("⤓ Đã xuất file backup JSON thành công!");
+      showToast(t('toast_export_success'));
     }
 
     const VALID_KANBAN_COLUMNS = ['delete', 'ideas', 'single', 'deep', 'blocked', 'done'];
@@ -2164,6 +2624,15 @@
               tasksDeletedCount: Number(imported.stats.tasksDeletedCount) || 0
             };
           }
+          if (imported.settings && typeof imported.settings === 'object') {
+            if (imported.settings.aiProvider) state.settings.aiProvider = imported.settings.aiProvider;
+            if (imported.settings.modelName) state.settings.modelName = imported.settings.modelName;
+            if (imported.settings.language && (imported.settings.language === 'vi' || imported.settings.language === 'en')) {
+              state.settings.language = imported.settings.language;
+              applyLanguage(state.settings.language);
+            }
+            saveSettings();
+          }
 
           saveCards();
           saveTimeBlocks();
@@ -2174,7 +2643,7 @@
           renderKanbanBoard();
           initSortableJS();
 
-          showToast("⤒ Khôi phục dữ liệu từ JSON thành công 100%!");
+          showToast(t('toast_import_success'));
         } catch (err) {
           showToast(`❌ Lỗi khi đọc file: ${err.message}`, "error");
         }
