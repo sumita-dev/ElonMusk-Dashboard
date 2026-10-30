@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Command Center — First Principles OS</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      plugins: [
+        function({ addVariant }) {
+          addVariant('light', '.light &');
+        }
+      ],
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"SF Pro"', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['"SF Mono"', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+          },
+          colors: {
+            apple: {
+              gray: {
+                50: '#FBFBFD',
+                100: '#F5F5F7',
+                200: '#E8E8ED',
+                300: '#D2D2D7',
+                400: '#86868B',
+                500: '#6E6E73',
+                600: '#424245',
+                700: '#333336',
+                800: '#1D1D1F',
+                900: '#151516',
+                950: '#090A0F',
+              },
+              blue: '#0071E3',
+              purple: '#AF52DE',
+              pink: '#FF2D55',
+              green: '#34C759',
+              orange: '#FF9500',
+              yellow: '#FFCC00',
+              red: '#FF3B30',
+              teal: '#5AC8FA'
+            }
+          },
+          boxShadow: {
+            'apple-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'apple-card': '0 4px 20px -2px rgba(0, 0, 0, 0.25)',
+            'apple-card-light': '0 4px 24px -2px rgba(0, 0, 0, 0.06)',
+            'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
+            'inner-glow-light': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.8)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- SortableJS CDN for Fluid Drag & Drop -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+  <style>
+    /* Apple SF Pro Text & Scrollbar Aesthetics */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom Apple Thin Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(140, 140, 145, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(140, 140, 145, 0.5);
+    }
+
+    /* Light Mode Contrast & Deep Apple Graphite Typography */
+    .light {
+      color-scheme: light;
+    }
+    .light body {
+      background-color: #F5F5F7 !important;
+      color: #1D1D1F !important;
+    }
+    .light h1, .light h2, .light h3, .light h4, .light h5, .light h6 {
+      color: #1D1D1F;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-header {
+      background: rgba(9, 10, 15, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .light .glass-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .light .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .glass-column {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .light .glass-column {
+      background: rgba(240, 240, 245, 0.75);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .light input, .light textarea, .light select {
+      background-color: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.12);
+      color: #1D1D1F;
+    }
+    .light input::placeholder, .light textarea::placeholder {
+      color: #86868B;
+    }
+
+    /* Sortable Ghost & Dragging Styles */
+    .sortable-ghost {
+      opacity: 0.35;
+      transform: scale(0.97);
+      border: 2px dashed #0071E3 !important;
+    }
+    .sortable-chosen {
+      cursor: grabbing;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Animations */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.96); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-sheet {
+      animation: slideUpFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+
+<body class="bg-[#090A0F] text-slate-100 min-h-screen selection:bg-apple-blue selection:text-white transition-colors duration-300 font-sans">
+
+  <!-- ==================== HEADER: METRICS & COMMAND BAR ==================== -->
+  <header class="sticky top-0 z-40 glass-header border-b border-white/[0.08] light:border-black/[0.06] transition-colors">
+    <div class="max-w-[1780px] mx-auto px-4 lg:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Title Section -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-apple-blue via-indigo-600 to-apple-purple flex items-center justify-center shadow-lg shadow-apple-blue/20 ring-1 ring-white/20">
+          <!-- Atom / First Principle SVG Icon -->
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base lg:text-lg font-bold tracking-tight text-white light:text-zinc-900 leading-tight">
+              CREATOR COMMAND CENTER
+            </h1>
+            <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded-full bg-apple-blue/20 text-apple-blue border border-apple-blue/30">
+              v2.0 OS
+            </span>
+          </div>
+          <p class="text-xs text-zinc-400 light:text-zinc-500 font-medium">
+            First Principles OS • YouTube + Social Media Accelerator
+          </p>
+        </div>
+      </div>
+
+      <!-- Realtime Metrics Pills (Apple Capsule Design) -->
+      <div class="flex items-center space-x-2.5">
+        <!-- Deep Work Realtime Badge -->
+        <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-card bg-amber-500/10 border-amber-500/30 text-amber-300 light:text-amber-700 light:bg-amber-100/70 light:border-amber-300">
+          <span class="relative flex h-2 w-2">
+            <span id="timerPulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 hidden"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+          </span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span class="text-xs font-semibold tracking-wide" id="headerDeepWork">⚡ Deep Work: 0.0h</span>
+        </div>
+
+        <!-- Tasks Deleted Counter (First Principles Ruthless Cull) -->
+        <div class="flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-card bg-rose-500/10 border-rose-500/30 text-rose-300 light:text-rose-700 light:bg-rose-100/70 light:border-rose-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          <span class="text-xs font-semibold tracking-wide" id="headerTasksDeleted">🗑 Tasks Deleted: 0</span>
+        </div>
+      </div>
+
+      <!-- Action Tools: Export, Import, Settings, Theme, New Card -->
+      <div class="flex items-center space-x-2">
+        <!-- New Card Button -->
+        <button onclick="openCardModal()" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-apple-blue hover:bg-blue-600 text-white text-xs font-medium shadow-md shadow-apple-blue/25 hover:shadow-apple-blue/40 active:scale-95 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Thêm Card</span>
+        </button>
+
+        <!-- Export JSON -->
+        <button onclick="exportDataJSON()" title="Export dữ liệu sao lưu ra JSON" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+        </button>
+
+        <!-- Import JSON -->
+        <label title="Import dữ liệu từ file JSON" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all cursor-pointer">
+          <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importDataJSON(event)">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+        </label>
+
+        <!-- Settings Modal Trigger -->
+        <button onclick="openSettingsModal()" title="Cài đặt API Key & AI Provider" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </button>
+
+        <!-- Theme Toggle (Apple Light / Dark) -->
+        <button onclick="toggleTheme()" title="Chuyển chế độ Sáng / Tối" class="p-2 rounded-full glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-700 active:scale-95 transition-all">
+          <!-- Moon Icon (Dark Mode active) -->
+          <svg id="moonIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+          <!-- Sun Icon (Light Mode active) -->
+          <svg id="sunIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN WORKSPACE CONTAINER ==================== -->
+  <main class="max-w-[1780px] mx-auto px-4 lg:px-6 py-5 space-y-6">
+
+    <!-- ==================== TẦNG 1: TIME-BLOCKING TIMELINE ==================== -->
+    <section class="glass-card rounded-3xl p-5 shadow-apple-card transition-all">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-3 border-b border-white/[0.06] light:border-black/[0.06]">
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">
+            01
+          </div>
+          <div>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+              Tầng 1: Time-Blocking Timeline (08:00 — 18:00)
+            </h2>
+            <p class="text-xs text-zinc-400 light:text-zinc-500">
+              Chu kỳ sinh học Ultradian 90 phút • Khóa chặt sự chú ý và triệt tiêu đa nhiệm
+            </p>
+          </div>
+        </div>
+
+        <!-- Integrated Deep Work Timer Box -->
+        <div class="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-black/40 light:bg-white/80 border border-white/10 light:border-black/10 shadow-inner">
+          <div class="text-right">
+            <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block" id="currentTimerBlockName">
+              Block: Plan & Hook
+            </span>
+            <span class="font-mono text-lg font-bold tracking-tight text-amber-400 light:text-amber-600" id="timerDisplay">
+              00:00:00
+            </span>
+          </div>
+          <div class="flex items-center space-x-1.5 pl-2 border-l border-white/10 light:border-black/10">
+            <button id="timerToggleBtn" onclick="toggleTimer()" class="p-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-bold active:scale-95 transition-all shadow-md shadow-amber-500/20">
+              <svg id="timerPlayIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+              </svg>
+              <svg id="timerPauseIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <button onclick="resetTimer()" title="Reset đồng hồ" class="p-2 rounded-xl glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-600 active:scale-95 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 6 Ultradian 90m Blocks Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3" id="timelineGrid">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- ==================== SPLIT CONTAINER: TẦNG 2 & TẦNG 3 ==================== -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+
+      <!-- ==================== TẦNG 2: KANBAN BOARD (6 CỘT) ==================== -->
+      <section class="xl:col-span-8 2xl:col-span-9 space-y-4">
+        
+        <!-- Filter & Header Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 px-1">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-xl bg-apple-blue/20 text-apple-blue flex items-center justify-center font-bold text-xs">
+              02
+            </div>
+            <div>
+              <h2 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+                Tầng 2: First Principles Kanban Board
+              </h2>
+              <p class="text-xs text-zinc-400 light:text-zinc-500">
+                Single Focus WIP = 1 • Deep Work WIP = 3 • CTR < 2% Ruthless Cull
+              </p>
+            </div>
+          </div>
+
+          <!-- Platform Segmented Control (Apple iOS Style) -->
+          <div class="flex items-center p-1 rounded-full bg-white/[0.04] light:bg-black/[0.05] border border-white/[0.08] light:border-black/[0.05] text-xs">
+            <button onclick="setPlatformFilter('all')" data-platform="all" class="platform-filter-btn px-3 py-1 rounded-full text-white light:text-zinc-900 bg-white/10 light:bg-white shadow-sm font-medium transition-all">Tất cả</button>
+            <button onclick="setPlatformFilter('youtube')" data-platform="youtube" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">YouTube</button>
+            <button onclick="setPlatformFilter('facebook')" data-platform="facebook" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">Facebook</button>
+            <button onclick="setPlatformFilter('tiktok')" data-platform="tiktok" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">TikTok</button>
+            <button onclick="setPlatformFilter('x')" data-platform="x" class="platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all">X</button>
+          </div>
+        </div>
+
+        <!-- 6 Kanban Columns Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-3.5 items-start">
+
+          <!-- 1. DELETE / REPURPOSE -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-rose-500" data-col="delete">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-400">DELETE / REPURPOSE</span>
+              </div>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400" id="count-delete">0</span>
+            </div>
+            <p class="text-[10px] text-zinc-500 mb-2">CTR &lt; 2.0% • Xóa hoặc Tái chế</p>
+            <div id="col-delete" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+          <!-- 2. IDEAS -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-purple-500" data-col="ideas">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-purple-400">IDEAS</span>
+              </div>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400" id="count-ideas">0</span>
+            </div>
+            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc First Principle</p>
+            <div id="col-ideas" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+          <!-- 3. SINGLE FOCUS (WIP = 1) -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-amber-500 bg-amber-500/[0.03] light:bg-amber-500/[0.05]" data-col="single">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-500 pulse-glow"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-400">SINGLE FOCUS</span>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" id="badge-single">
+                <span id="count-single">0</span>/1 MAX
+              </span>
+            </div>
+            <p class="text-[10px] text-amber-400/80 mb-2 font-medium">Chỉ 1 card duy nhất active!</p>
+            <div id="col-single" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+          <!-- 4. DEEP WORK (WIP = 3) -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-blue" data-col="deep">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-apple-blue"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-apple-blue">DEEP WORK</span>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20" id="badge-deep">
+                <span id="count-deep">0</span>/3 MAX
+              </span>
+            </div>
+            <p class="text-[10px] text-zinc-500 mb-2">Đang chế tác • Tối đa 3 cards</p>
+            <div id="col-deep" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+          <!-- 5. BLOCKED -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-orange-500" data-col="blocked">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-orange-400">BLOCKED</span>
+              </div>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400" id="count-blocked">0</span>
+            </div>
+            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc Owner + ETA giải phóng</p>
+            <div id="col-blocked" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+          <!-- 6. DONE + LEARNED -->
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-green" data-col="done">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
+              <div class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-apple-green"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-apple-green">DONE + LEARNED</span>
+              </div>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green" id="count-done">0</span>
+            </div>
+            <p class="text-[10px] text-zinc-500 mb-2">Bắt buộc đúc kết bài học</p>
+            <div id="col-done" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== TẦNG 3: AI ASSISTANT (FIRST PRINCIPLES COPILOT) ==================== -->
+      <section class="xl:col-span-4 2xl:col-span-3 glass-card rounded-3xl p-5 shadow-apple-card flex flex-col h-[740px] sticky top-20">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.08] light:border-black/[0.06]">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-md">
+              ✦
+            </div>
+            <div>
+              <h2 class="text-xs font-bold uppercase tracking-wider text-white light:text-zinc-900">
+                Tầng 3: Musk AI Copilot
+              </h2>
+              <span id="aiProviderStatus" class="text-[10px] text-indigo-400 font-medium">First Principles Heuristic Active</span>
+            </div>
+          </div>
+          <button onclick="clearChatHistory()" title="Xóa lịch sử chat" class="p-1.5 rounded-lg hover:bg-white/10 light:hover:bg-black/5 text-zinc-400 text-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 5 Quick Action Engines -->
+        <div class="space-y-1.5 mb-3">
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 light:text-zinc-500 block">
+            5 Quick Engines (Musk Algorithm)
+          </span>
+          <div class="grid grid-cols-1 gap-1.5">
+            <button onclick="triggerQuickAction('hook')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
+              <span class="flex items-center space-x-2">
+                <span class="text-amber-400">⚡</span>
+                <span>Hook Generator (3s Pattern Interrupt)</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+            </button>
+
+            <button onclick="triggerQuickAction('breakdown')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
+              <span class="flex items-center space-x-2">
+                <span class="text-apple-blue">✂️</span>
+                <span>Script Breakdown (Cut 30-50% Fluff)</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+            </button>
+
+            <button onclick="triggerQuickAction('delete_advisor')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
+              <span class="flex items-center space-x-2">
+                <span class="text-rose-400">🗑</span>
+                <span>Deletion Advisor (Ruthless Cull)</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+            </button>
+
+            <button onclick="triggerQuickAction('repurpose')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
+              <span class="flex items-center space-x-2">
+                <span class="text-emerald-400">🔄</span>
+                <span>Repurpose Engine (1 Long → 5 Shorts/Posts)</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+            </button>
+
+            <button onclick="triggerQuickAction('tester')" class="text-left px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] light:bg-black/[0.03] light:hover:bg-black/[0.06] border border-white/[0.06] light:border-black/[0.05] text-xs font-medium text-zinc-200 light:text-zinc-800 active:scale-[0.99] transition-all flex items-center justify-between group">
+              <span class="flex items-center space-x-2">
+                <span class="text-purple-400">🎯</span>
+                <span>Thumbnail & Title Tester (CTR Score)</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 group-hover:text-indigo-400">Run →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat History Stream -->
+        <div id="aiChatStream" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs mb-3 scroll-smooth">
+          <!-- Welcome message -->
+          <div class="p-3 rounded-2xl bg-white/[0.03] light:bg-black/[0.03] border border-white/[0.06] light:border-black/[0.05] text-zinc-300 light:text-zinc-700">
+            <div class="flex items-center space-x-1.5 text-indigo-400 font-semibold mb-1">
+              <span>✦ First Principles Copilot</span>
+            </div>
+            <p class="leading-relaxed">
+              Chào bạn! Tôi vận hành trên thuật toán 5 bước của Elon Musk. Tôi sẵn sàng mổ xẻ kịch bản, gọt giũa 40% câu chữ thừa, tạo Hook 3s hoặc phân tích lý do nên xóa bỏ các video kém hiệu quả.
+            </p>
+          </div>
+        </div>
+
+        <!-- Chat Prompt Input -->
+        <form onsubmit="handleSendChat(event)" class="relative">
+          <input type="text" id="aiPromptInput" placeholder="Hỏi Copilot hoặc dán ý tưởng/kịch bản..." class="w-full px-4 py-2.5 pr-10 rounded-2xl bg-white/[0.06] light:bg-black/[0.04] border border-white/[0.1] light:border-black/[0.08] text-xs text-white light:text-zinc-900 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 transition-all">
+          <button type="submit" class="absolute right-2 top-2 p-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODALS & POPUPS ==================== -->
+
+  <!-- 1. CARD ADD / EDIT MODAL -->
+  <div id="cardModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-xl p-6 shadow-2xl animate-sheet border border-white/20 light:border-black/10">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] light:border-black/[0.06]">
+        <h3 id="cardModalTitle" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+          Thêm Nội Dung Mới (First Principles Card)
+        </h3>
+        <button onclick="closeCardModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <form id="cardForm" onsubmit="handleSaveCard(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="cardFormId">
+        
+        <!-- Title -->
+        <div>
+          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Tiêu đề nội dung / video <span class="text-rose-500">*</span></label>
+          <input type="text" id="cardFormTitle" required placeholder="VD: Bóc trần thuật toán đề xuất của TikTok..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+        </div>
+
+        <!-- Platform & Target Column Grid -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Nền tảng</label>
+            <select id="cardFormPlatform" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+              <option value="youtube">YouTube</option>
+              <option value="facebook">Facebook</option>
+              <option value="tiktok">TikTok</option>
+              <option value="x">X (Twitter)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Cột trạng thái</label>
+            <select id="cardFormColumn" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+              <option value="ideas">IDEAS</option>
+              <option value="single">SINGLE FOCUS (WIP = 1)</option>
+              <option value="deep">DEEP WORK (WIP = 3)</option>
+              <option value="blocked">BLOCKED</option>
+              <option value="done">DONE + LEARNED</option>
+              <option value="delete">DELETE / REPURPOSE</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- First Principle (MANDATORY ENFORCEMENT) -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-semibold text-amber-400">
+              Nguyên lý gốc (First Principle) <span class="text-rose-500">* BẮT BUỘC</span>
+            </label>
+            <span class="text-[10px] text-zinc-400">Không chấp nhận phỏng đoán</span>
+          </div>
+          <textarea id="cardFormFirstPrinciple" required rows="2" placeholder="Tại sao nội dung này lại hiệu quả từ bản chất tâm lý học, vật lý hoặc toán học?..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-amber-500"></textarea>
+        </div>
+
+        <!-- Goal -->
+        <div>
+          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Mục tiêu định lượng (Goal)</label>
+          <input type="text" id="cardFormGoal" placeholder="VD: 100k views, 500 email leads trong 7 ngày" class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+        </div>
+
+        <!-- Metrics Grid (CTR, Views, Retention) -->
+        <div class="grid grid-cols-3 gap-2.5">
+          <div>
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">CTR (%)</label>
+            <input type="number" step="0.1" id="cardFormCTR" placeholder="VD: 4.5" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Lượt xem</label>
+            <input type="number" id="cardFormViews" placeholder="VD: 15000" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Retention (%)</label>
+            <input type="number" step="0.1" id="cardFormRetention" placeholder="VD: 45.0" class="w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none focus:border-apple-blue">
+          </div>
+        </div>
+
+        <!-- Dynamic Fields for Blocked / Done -->
+        <div id="cardFormBlockedFields" class="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20">
+          <div>
+            <label class="block font-semibold text-orange-400 mb-1">Owner (Người chịu trách nhiệm)</label>
+            <input type="text" id="cardFormOwner" placeholder="VD: Nguyễn Văn A (Editor)" class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-orange-500/30 text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-orange-400 mb-1">ETA Giải phóng</label>
+            <input type="text" id="cardFormETA" placeholder="VD: 2026-11-02 18:00" class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-orange-500/30 text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div id="cardFormDoneFields" class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+          <label class="block font-semibold text-emerald-400 mb-1">Bài học đúc kết (Learned Insight)</label>
+          <textarea id="cardFormLearned" rows="2" placeholder="Bài học thực chứng rút ra từ kết quả thực tế của nội dung này là gì?..." class="w-full px-3 py-1.5 rounded-xl bg-black/30 border border-emerald-500/30 text-white focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-3 border-t border-white/[0.08] light:border-black/[0.06]">
+          <button type="button" onclick="closeCardModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700 hover:bg-white/10">Hủy</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium shadow-md">Lưu Thay Đổi</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. BLOCKED INTERCEPT MODAL -->
+  <div id="blockedModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-md p-6 shadow-2xl animate-sheet border border-orange-500/30">
+      <div class="flex items-center space-x-2 pb-3 mb-3 border-b border-orange-500/20 text-orange-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <h3 class="text-sm font-bold uppercase tracking-wider">Cảnh báo: Bắt buộc thông tin Chặn</h3>
+      </div>
+      <p class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
+        Theo quy tắc First Principles, một card chỉ được đưa vào cột <b>BLOCKED</b> khi xác định rõ ai đang làm tắc nghẽn và hạn chót gỡ bỏ.
+      </p>
+      <form onsubmit="handleSaveBlockedModal(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-orange-300 mb-1">Owner (Ai đang chặn?) <span class="text-rose-500">*</span></label>
+          <input type="text" id="blockedModalOwner" required placeholder="VD: Editor Duy, Khách hàng duyệt kịch bản..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-orange-500/30 text-white light:text-zinc-900 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-semibold text-orange-300 mb-1">ETA (Hạn chót giải phóng?) <span class="text-rose-500">*</span></label>
+          <input type="text" id="blockedModalETA" required placeholder="VD: Hôm nay 17:00 hoặc 2026-11-01" class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-orange-500/30 text-white light:text-zinc-900 focus:outline-none">
+        </div>
+        <div class="flex items-center justify-end space-x-2 pt-3">
+          <button type="button" onclick="cancelBlockedModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-black font-bold">Xác Nhận Blocked</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. DONE INTERCEPT MODAL -->
+  <div id="doneModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-md p-6 shadow-2xl animate-sheet border border-emerald-500/30">
+      <div class="flex items-center space-x-2 pb-3 mb-3 border-b border-emerald-500/20 text-emerald-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h3 class="text-sm font-bold uppercase tracking-wider">Đúc Kết Bài Học (Learned Insight)</h3>
+      </div>
+      <p class="text-xs text-zinc-300 light:text-zinc-700 mb-4 leading-relaxed">
+        Không có công việc nào kết thúc mà không để lại dữ liệu. Bạn đã học được điều gì sau khi xuất bản nội dung này?
+      </p>
+      <form onsubmit="handleSaveDoneModal(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-emerald-300 mb-1">Bài học thực chứng rút ra <span class="text-rose-500">*</span></label>
+          <textarea id="doneModalLearned" required rows="3" placeholder="VD: Mở đầu bằng câu hỏi ngược đời tăng 35% retention trong 15s đầu; thumbnail dùng màu vàng chanh outperform màu xanh..." class="w-full px-3.5 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-emerald-500/30 text-white light:text-zinc-900 focus:outline-none"></textarea>
+        </div>
+        <div class="flex items-center justify-end space-x-2 pt-3">
+          <button type="button" onclick="cancelDoneModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Hủy & Trả Về</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-bold">Lưu Bài Học & Hoàn Tất</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. SETTINGS MODAL -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-lg p-6 shadow-2xl animate-sheet border border-white/20 light:border-black/10">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] light:border-black/[0.06]">
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          </svg>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+            Cấu Hình Hệ Thống & Gemini AI REST API
+          </h3>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveSettings(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">AI Provider</label>
+          <select id="settingsProvider" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none">
+            <option value="gemini">Google Gemini REST API (Khuyên dùng)</option>
+            <option value="groq">Groq REST API</option>
+            <option value="openrouter">OpenRouter API</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-300 light:text-zinc-700 mb-1">Model Name</label>
+          <input type="text" id="settingsModel" value="gemini-1.5-flash" class="w-full px-3 py-2 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none">
+          <span class="text-[10px] text-zinc-500 mt-1 block">Khuyên dùng: <code>gemini-1.5-flash</code> hoặc <code>gemini-2.0-flash</code></span>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block font-semibold text-zinc-300 light:text-zinc-700">Google Gemini API Key</label>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-400 hover:underline text-[10px]">Lấy API Key miễn phí →</a>
+          </div>
+          <div class="relative">
+            <input type="password" id="settingsApiKey" placeholder="AIzaSy..." class="w-full px-3 py-2 pr-16 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-white light:text-zinc-900 focus:outline-none font-mono">
+            <button type="button" onclick="toggleApiKeyMask()" class="absolute right-2 top-2 text-zinc-400 hover:text-white text-[10px] px-2 py-0.5 rounded bg-white/10">Hiện/Ẩn</button>
+          </div>
+          <p class="text-[10px] text-zinc-400 mt-1">Lưu an toàn trong LocalStorage máy cá nhân của bạn, không bao giờ gửi qua server trung gian.</p>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-indigo-300 block">Kiểm tra kết nối (Test Ping)</span>
+            <span class="text-[10px] text-zinc-400" id="testConnectionStatus">Chưa kiểm tra</span>
+          </div>
+          <button type="button" onclick="testGeminiConnection()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium active:scale-95 transition-all">
+            Test Connection
+          </button>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-3 border-t border-white/[0.08] light:border-black/[0.06]">
+          <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700">Đóng</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white font-medium">Lưu Cấu Hình</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ==================== LOGIC & SCRIPTS ==================== -->
+  <script>
+    /* =========================================================
+       CREATOR COMMAND CENTER (CCC) — STATE MACHINE & DATA STORE
+       ========================================================= */
+
+    // Default Seed Data (8 High-Quality Content Items)
+    const SEED_CARDS = [
+      {
+        id: crypto.randomUUID(),
+        title: "Vlog 24h chạy bộ chuẩn bị Marathon phong trào",
+        platform: "youtube",
+        column: "delete",
+        first_principle: "Người xem muốn kết quả kỹ thuật, không muốn xem nhật ký cá nhân nhàm chán.",
+        goal: "10k views",
+        metrics: { ctr: 1.2, views: 840, retention: 18.5 },
+        createdAt: Date.now() - 86400000 * 5,
+        updatedAt: Date.now() - 86400000 * 5
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Top 5 extension Chrome năm 2024",
+        platform: "x",
+        column: "delete",
+        first_principle: "Nội dung tổng hợp đại trà không có góc nhìn cá nhân không tạo được hiệu ứng viral.",
+        goal: "50k impressions",
+        metrics: { ctr: 1.8, views: 1200, retention: 22.0 },
+        createdAt: Date.now() - 86400000 * 4,
+        updatedAt: Date.now() - 86400000 * 4
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Tại sao pin xe điện Tesla sạc được 80% trong 15 phút?",
+        platform: "youtube",
+        column: "ideas",
+        first_principle: "Định luật Joule và phản ứng hóa học Ion Lithium ở thang đo nhiệt động lực học.",
+        goal: "150k views, 2k subs",
+        metrics: { ctr: 0, views: 0, retention: 0 },
+        createdAt: Date.now() - 86400000 * 3,
+        updatedAt: Date.now() - 86400000 * 3
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Bóc trần thuật toán đề xuất của TikTok năm 2026",
+        platform: "tiktok",
+        column: "ideas",
+        first_principle: "Thuật toán chỉ tối ưu hóa Watch Time và Loop Rate theo từng giây cụ thể.",
+        goal: "500k views",
+        metrics: { ctr: 0, views: 0, retention: 0 },
+        createdAt: Date.now() - 86400000 * 2,
+        updatedAt: Date.now() - 86400000 * 2
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Xây dựng AI Agent tự động hóa sản xuất kịch bản từ A-Z",
+        platform: "youtube",
+        column: "single",
+        first_principle: "Chuyển giao toàn bộ quy trình lặp lại cho máy tính để con người tập trung vào tư duy nguyên lý gốc.",
+        goal: "100k views, 300 leads",
+        metrics: { ctr: 6.4, views: 24500, retention: 48.2 },
+        createdAt: Date.now() - 86400000 * 1,
+        updatedAt: Date.now()
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Review so sánh Chip Apple M4 Max vs RTX 4090",
+        platform: "youtube",
+        column: "deep",
+        first_principle: "Hiệu suất trên mỗi Watt điện năng tiêu thụ quyết định trải nghiệm làm việc di động.",
+        goal: "80k views",
+        metrics: { ctr: 5.2, views: 12000, retention: 41.0 },
+        createdAt: Date.now() - 86400000 * 2,
+        updatedAt: Date.now()
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Case study: Kênh đạt 1 triệu Sub với 0 đồng quảng cáo",
+        platform: "facebook",
+        column: "deep",
+        first_principle: "Phân phối tự nhiên (Organic Distribution) thắng mọi chiến dịch paid media nếu Retain > 60%.",
+        goal: "50k shares",
+        metrics: { ctr: 4.1, views: 98000, retention: 39.5 },
+        createdAt: Date.now() - 86400000 * 3,
+        updatedAt: Date.now()
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Phỏng vấn độc quyền Chuyên gia AI Google DeepMind",
+        platform: "youtube",
+        column: "blocked",
+        first_principle: "Giá trị thông tin đến từ nguồn sơ cấp (Primary Source) chưa từng được công bố.",
+        goal: "200k views",
+        metrics: { ctr: 0, views: 0, retention: 0 },
+        owner: "Hà Assistant",
+        eta: "2026-11-05 17:00",
+        createdAt: Date.now() - 86400000 * 4,
+        updatedAt: Date.now()
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Giải mã đế chế Content 100M USD của Alex Hormozi",
+        platform: "youtube",
+        column: "done",
+        first_principle: "Đơn giản hóa lời chào hàng đến mức khách hàng cảm thấy ngu ngốc nếu từ chối (Grand Slam Offer).",
+        goal: "300k views",
+        metrics: { ctr: 7.8, views: 320000, retention: 54.0 },
+        learned: "Format video giải mã mô hình kinh doanh kết hợp animation tư duy mang lại CTR tăng 40% so với video nói chuyện thông thường.",
+        createdAt: Date.now() - 86400000 * 10,
+        updatedAt: Date.now() - 86400000 * 2
+      }
+    ];
+
+    // Default 6 Ultradian 90m Blocks
+    const DEFAULT_TIME_BLOCKS = [
+      { id: 'tb-1', title: 'Plan & Hook', startTime: '08:00', endTime: '09:30', durationMinutes: 90, type: 'deep_work', isCompleted: false },
+      { id: 'tb-2', title: 'Script Writing', startTime: '09:30', endTime: '11:00', durationMinutes: 90, type: 'deep_work', isCompleted: false },
+      { id: 'tb-3', title: 'Thumbnail & Title', startTime: '11:00', endTime: '12:30', durationMinutes: 90, type: 'review', isCompleted: false },
+      { id: 'tb-4', title: 'B-Roll & Assets', startTime: '13:30', endTime: '15:00', durationMinutes: 90, type: 'deep_work', isCompleted: false },
+      { id: 'tb-5', title: 'Film & Recording', startTime: '15:00', endTime: '16:30', durationMinutes: 90, type: 'deep_work', isCompleted: false },
+      { id: 'tb-6', title: 'Review & Repurpose', startTime: '16:30', endTime: '18:00', durationMinutes: 90, type: 'shallow', isCompleted: false },
+    ];
+
+    // App State Object
+    let state = {
+      cards: [],
+      timeBlocks: [],
+      stats: {
+        date: new Date().toISOString().split('T')[0],
+        deepWorkMinutes: 180, // initial 3.0h
+        tasksDeletedCount: 2,
+        activeCardId: null
+      },
+      settings: {
+        aiProvider: 'gemini',
+        apiKey: '',
+        modelName: 'gemini-1.5-flash'
+      },
+      currentPlatformFilter: 'all',
+      theme: 'dark',
+      chatHistory: [],
+      timer: {
+        isRunning: false,
+        activeBlockId: 'tb-1',
+        elapsedSeconds: 0,
+        intervalId: null
+      },
+      pendingMove: null // For intercepted column drops (blocked / done)
+    };
+
+    /* =========================================================
+       INITIALIZATION & STORAGE SYNC
+       ========================================================= */
+    function initApp() {
+      // Load Theme
+      const savedTheme = localStorage.getItem('ccc_theme_v2') || 'dark';
+      setTheme(savedTheme);
+
+      // Load Cards
+      const savedCards = localStorage.getItem('ccc_cards_v2');
+      if (savedCards) {
+        try {
+          state.cards = JSON.parse(savedCards);
+        } catch (e) {
+          state.cards = [...SEED_CARDS];
+        }
+      } else {
+        state.cards = [...SEED_CARDS];
+        saveCards();
+      }
+
+      // Load Time Blocks
+      const savedBlocks = localStorage.getItem('ccc_timeblocks_v2');
+      if (savedBlocks) {
+        try {
+          state.timeBlocks = JSON.parse(savedBlocks);
+        } catch (e) {
+          state.timeBlocks = [...DEFAULT_TIME_BLOCKS];
+        }
+      } else {
+        state.timeBlocks = [...DEFAULT_TIME_BLOCKS];
+        saveTimeBlocks();
+      }
+
+      // Load Daily Stats
+      const savedStats = localStorage.getItem('ccc_stats_v2');
+      if (savedStats) {
+        try {
+          state.stats = { ...state.stats, ...JSON.parse(savedStats) };
+        } catch (e) {}
+      }
+
+      // Load Settings
+      const savedSettings = localStorage.getItem('ccc_settings_v2');
+      if (savedSettings) {
+        try {
+          state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
+        } catch (e) {}
+      }
+
+      // Load Chat History
+      const savedChat = localStorage.getItem('ccc_chat_v2');
+      if (savedChat) {
+        try {
+          state.chatHistory = JSON.parse(savedChat);
+          renderChatHistory();
+        } catch (e) {}
+      }
+
+      // Update UI
+      updateMetricsHeader();
+      renderTimeline();
+      renderKanbanBoard();
+      initSortableJS();
+      updateAIProviderStatus();
+    }
+
+    function saveCards() {
+      localStorage.setItem('ccc_cards_v2', JSON.stringify(state.cards));
+    }
+
+    function saveTimeBlocks() {
+      localStorage.setItem('ccc_timeblocks_v2', JSON.stringify(state.timeBlocks));
+    }
+
+    function saveStats() {
+      localStorage.setItem('ccc_stats_v2', JSON.stringify(state.stats));
+      updateMetricsHeader();
+    }
+
+    function saveSettings() {
+      localStorage.setItem('ccc_settings_v2', JSON.stringify(state.settings));
+      updateAIProviderStatus();
+    }
+
+    /* =========================================================
+       THEME SWITCHER (DARK / LIGHT APPLE HIG)
+       ========================================================= */
+    function setTheme(theme) {
+      state.theme = theme;
+      localStorage.setItem('ccc_theme_v2', theme);
+      const htmlEl = document.documentElement;
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+
+      if (theme === 'light') {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        document.body.classList.remove('bg-[#090A0F]', 'text-slate-100');
+        document.body.classList.add('bg-[#F5F5F7]', 'text-[#1D1D1F]');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        document.body.classList.remove('bg-[#F5F5F7]', 'text-[#1D1D1F]');
+        document.body.classList.add('bg-[#090A0F]', 'text-slate-100');
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+      }
+    }
+
+    function toggleTheme() {
+      setTheme(state.theme === 'dark' ? 'light' : 'dark');
+      showToast(`Đã chuyển sang chế độ ${state.theme === 'dark' ? 'Tối (Dark Mode)' : 'Sáng (Light Mode)'}`);
+    }
+
+    /* =========================================================
+       HEADER METRICS UPDATE
+       ========================================================= */
+    function updateMetricsHeader() {
+      const hours = (state.stats.deepWorkMinutes / 60).toFixed(1);
+      document.getElementById('headerDeepWork').innerText = `⚡ Deep Work: ${hours}h`;
+      document.getElementById('headerTasksDeleted').innerText = `🗑 Tasks Deleted: ${state.stats.tasksDeletedCount}`;
+    }
+
+    /* =========================================================
+       TẦNG 1: TIME-BLOCKING TIMELINE & DEEP WORK TIMER
+       ========================================================= */
+    function renderTimeline() {
+      const container = document.getElementById('timelineGrid');
+      container.innerHTML = '';
+
+      state.timeBlocks.forEach(block => {
+        const isCurrent = state.timer.activeBlockId === block.id;
+        const card = document.createElement('div');
+        
+        // Dynamic styling for Ultradian block
+        let typeBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        let typeLabel = 'Deep Work';
+        if (block.type === 'review') {
+          typeBadgeClass = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+          typeLabel = 'Review';
+        } else if (block.type === 'shallow') {
+          typeBadgeClass = 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+          typeLabel = 'Shallow';
+        }
+
+        card.className = `p-3 rounded-2xl border transition-all cursor-pointer relative ${
+          isCurrent 
+            ? 'glass-card border-amber-500/50 ring-1 ring-amber-500/40 bg-amber-500/[0.04]' 
+            : 'glass-card border-white/[0.06] hover:border-white/20'
+        } ${block.isCompleted ? 'opacity-60 bg-emerald-500/[0.03]' : ''}`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-mono text-[11px] font-bold text-amber-400 light:text-amber-600">
+              ${escapeHTML(block.startTime)} - ${escapeHTML(block.endTime)}
+            </span>
+            <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="Đánh dấu hoàn tất" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+          <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5">
+            ${escapeHTML(block.title)}
+          </h4>
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full border ${typeBadgeClass}">
+              ${typeLabel} (90m)
+            </span>
+            ${isCurrent ? '<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>Active</span></span>' : ''}
+          </div>
+        `;
+
+        card.addEventListener('click', (e) => {
+          const toggleBtn = e.target.closest('[data-action="toggle-complete"]');
+          if (toggleBtn) {
+            e.stopPropagation();
+            toggleBlockCompletion(e, block.id);
+            return;
+          }
+          selectBlockForTimer(block.id);
+        });
+
+        container.appendChild(card);
+      });
+
+      // Update timer block label
+      const activeBlock = state.timeBlocks.find(b => b.id === state.timer.activeBlockId);
+      if (activeBlock) {
+        document.getElementById('currentTimerBlockName').innerText = `Block: ${activeBlock.title}`;
+      }
+    }
+
+    function selectBlockForTimer(blockId) {
+      state.timer.activeBlockId = blockId;
+      renderTimeline();
+    }
+
+    function toggleBlockCompletion(e, blockId) {
+      e.stopPropagation();
+      const block = state.timeBlocks.find(b => b.id === blockId);
+      if (block) {
+        block.isCompleted = !block.isCompleted;
+        saveTimeBlocks();
+        renderTimeline();
+        showToast(`Đã ${block.isCompleted ? 'hoàn tất' : 'mở lại'} block: ${block.title}`);
+      }
+    }
+
+    function toggleTimer() {
+      if (state.timer.isRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      state.timer.isRunning = true;
+      document.getElementById('timerPlayIcon').classList.add('hidden');
+      document.getElementById('timerPauseIcon').classList.remove('hidden');
+      document.getElementById('timerPulse').classList.remove('hidden');
+
+      state.timer.intervalId = setInterval(() => {
+        state.timer.elapsedSeconds++;
+        
+        // Accumulate minutes every second to daily stats
+        state.stats.deepWorkMinutes += (1 / 60);
+        
+        // Update Displays
+        renderTimerDisplay();
+        updateMetricsHeader();
+
+        // Save periodic every 15s
+        if (state.timer.elapsedSeconds % 15 === 0) {
+          saveStats();
+        }
+      }, 1000);
+
+      renderTimeline();
+      showToast("▶ Bắt đầu phiên Deep Work Timer!");
+    }
+
+    function pauseTimer() {
+      state.timer.isRunning = false;
+      clearInterval(state.timer.intervalId);
+      document.getElementById('timerPlayIcon').classList.remove('hidden');
+      document.getElementById('timerPauseIcon').classList.add('hidden');
+      document.getElementById('timerPulse').classList.add('hidden');
+      saveStats();
+      renderTimeline();
+      showToast("⏸ Đã tạm dừng Timer");
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      state.timer.elapsedSeconds = 0;
+      renderTimerDisplay();
+      showToast("↺ Đã reset đồng hồ thời gian của block");
+    }
+
+    function renderTimerDisplay() {
+      const totalSec = state.timer.elapsedSeconds;
+      const hrs = Math.floor(totalSec / 3600).toString().padStart(2, '0');
+      const mins = Math.floor((totalSec % 3600) / 60).toString().padStart(2, '0');
+      const secs = (totalSec % 60).toString().padStart(2, '0');
+      document.getElementById('timerDisplay').innerText = `${hrs}:${mins}:${secs}`;
+    }
+
+    /* =========================================================
+       TẦNG 2: KANBAN BOARD & ENFORCEMENT RULES
+       ========================================================= */
+    const COLUMNS = ['delete', 'ideas', 'single', 'deep', 'blocked', 'done'];
+
+    function renderKanbanBoard() {
+      // Clear all columns
+      COLUMNS.forEach(col => {
+        const el = document.getElementById(`col-${col}`);
+        if (el) el.innerHTML = '';
+      });
+
+      // Filter cards by platform
+      let filtered = state.cards;
+      if (state.currentPlatformFilter !== 'all') {
+        filtered = filtered.filter(c => c.platform === state.currentPlatformFilter);
+      }
+
+      // Group by column
+      const counts = { delete: 0, ideas: 0, single: 0, deep: 0, blocked: 0, done: 0 };
+
+      filtered.forEach(card => {
+        counts[card.column] = (counts[card.column] || 0) + 1;
+        const colEl = document.getElementById(`col-${card.column}`);
+        if (colEl) {
+          colEl.appendChild(createCardElement(card));
+        }
+      });
+
+      // Update Column Counts & WIP Badges
+      COLUMNS.forEach(col => {
+        const countEl = document.getElementById(`count-${col}`);
+        if (countEl) countEl.innerText = counts[col] || 0;
+      });
+
+      // Check WIP limit warning highlights
+      const singleColContainer = document.querySelector('[data-col="single"]');
+      if (singleColContainer) {
+        if (counts.single >= 1) {
+          singleColContainer.classList.add('ring-1', 'ring-amber-500/50');
+        } else {
+          singleColContainer.classList.remove('ring-1', 'ring-amber-500/50');
+        }
+      }
+
+      const deepColContainer = document.querySelector('[data-col="deep"]');
+      const deepBadge = document.getElementById('badge-deep');
+      if (deepColContainer && deepBadge) {
+        if (counts.deep >= 3) {
+          deepColContainer.classList.add('border-t-amber-500', 'bg-amber-500/[0.02]');
+          deepBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        } else {
+          deepColContainer.classList.remove('border-t-amber-500', 'bg-amber-500/[0.02]');
+          deepBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20';
+        }
+      }
+    }
+
+    function createCardElement(card) {
+      const el = document.createElement('div');
+      el.dataset.id = card.id;
+      el.className = 'glass-card p-3.5 rounded-2xl shadow-apple-card hover:shadow-apple-glass hover:border-white/20 light:hover:border-black/20 transition-all cursor-grab active:cursor-grabbing group relative select-none';
+
+      // Platform badge style
+      let platformBadge = '';
+      if (card.platform === 'youtube') {
+        platformBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">YouTube</span>';
+      } else if (card.platform === 'facebook') {
+        platformBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Facebook</span>';
+      } else if (card.platform === 'tiktok') {
+        platformBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-teal-500/10 text-teal-400 border border-teal-500/20">TikTok</span>';
+      } else {
+        platformBadge = '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-zinc-500/10 text-zinc-300 light:text-zinc-600 border border-zinc-500/20">X</span>';
+      }
+
+      // Low CTR warning badge (< 2.0%)
+      let lowCTRBadge = '';
+      if (card.metrics && card.metrics.ctr !== undefined && card.metrics.ctr > 0 && card.metrics.ctr < 2.0) {
+        lowCTRBadge = `
+          <div class="mt-2 flex items-center justify-between p-1.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-[10px]">
+            <span class="font-bold flex items-center space-x-1">
+              <span>⚠️ CTR LOW: ${card.metrics.ctr}%</span>
+            </span>
+            <button type="button" data-action="cull" data-card-id="${escapeHTML(card.id)}" class="text-[9px] font-bold underline hover:text-white">Gợi ý Cull →</button>
+          </div>
+        `;
+      }
+
+      // Blocked info tag
+      let blockedInfo = '';
+      if (card.column === 'blocked' && (card.owner || card.eta)) {
+        blockedInfo = `
+          <div class="mt-2 p-1.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-300 text-[10px]">
+            <div class="font-semibold">⚠️ Chặn bởi: <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.owner || 'Chưa rõ')}</span></div>
+            <div class="font-semibold">⏳ ETA: <span class="font-normal text-white light:text-zinc-900">${escapeHTML(card.eta || 'Chưa rõ')}</span></div>
+          </div>
+        `;
+      }
+
+      // Learned info tag
+      let learnedInfo = '';
+      if (card.column === 'done' && card.learned) {
+        learnedInfo = `
+          <div class="mt-2 p-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px]">
+            <span class="font-bold block">💡 Bài học:</span>
+            <span class="italic text-zinc-300 light:text-zinc-700 line-clamp-2">${escapeHTML(card.learned)}</span>
+          </div>
+        `;
+      }
+
+      // Metrics display row
+      const metricsRow = `
+        <div class="flex items-center space-x-2 text-[10px] text-zinc-400 font-mono mt-2 pt-2 border-t border-white/[0.04]">
+          ${card.metrics?.ctr ? `<span>CTR: <b class="${card.metrics.ctr < 2 ? 'text-rose-400' : 'text-emerald-400'}">${card.metrics.ctr}%</b></span>` : ''}
+          ${card.metrics?.views ? `<span>Views: <b class="text-zinc-200 light:text-zinc-700">${card.metrics.views.toLocaleString()}</b></span>` : ''}
+          ${card.metrics?.retention ? `<span>Ret: <b class="text-indigo-400">${card.metrics.retention}%</b></span>` : ''}
+        </div>
+      `;
+
+      el.innerHTML = `
+        <div class="flex items-center justify-between mb-1.5">
+          ${platformBadge}
+          <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button type="button" data-action="edit" data-card-id="${escapeHTML(card.id)}" title="Sửa card" class="p-1 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white light:hover:text-zinc-900">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+              </svg>
+            </button>
+            <button type="button" data-action="delete" data-card-id="${escapeHTML(card.id)}" title="Xóa card" class="p-1 hover:bg-rose-500/20 rounded-lg text-zinc-400 hover:text-rose-400">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <h4 class="text-xs font-bold text-white light:text-zinc-900 leading-snug mb-1.5">
+          ${escapeHTML(card.title)}
+        </h4>
+
+        <div class="p-2 rounded-xl bg-white/[0.02] light:bg-black/[0.02] border border-white/[0.04] text-[10px] text-zinc-400 light:text-zinc-600 mb-1">
+          <span class="text-amber-400/90 font-semibold block text-[9px] uppercase tracking-wide">First Principle:</span>
+          <span class="italic line-clamp-2">${escapeHTML(card.first_principle || 'Chưa thiết lập')}</span>
+        </div>
+
+        ${lowCTRBadge}
+        ${blockedInfo}
+        ${learnedInfo}
+        ${metricsRow}
+      `;
+
+      // Safe Event Delegation for card actions
+      el.addEventListener('click', function(e) {
+        const cullBtn = e.target.closest('[data-action="cull"]');
+        if (cullBtn) {
+          e.stopPropagation();
+          suggestDeleteOrRepurpose(card.id);
+          return;
+        }
+
+        const editBtn = e.target.closest('[data-action="edit"]');
+        if (editBtn) {
+          e.stopPropagation();
+          editCard(card.id);
+          return;
+        }
+
+        const deleteBtn = e.target.closest('[data-action="delete"]');
+        if (deleteBtn) {
+          e.stopPropagation();
+          deleteCard(card.id);
+          return;
+        }
+      });
+
+      return el;
+    }
+
+    /* =========================================================
+       SORTABLEJS DRAG & DROP RULES ENFORCEMENT
+       ========================================================= */
+    let sortableInstances = [];
+
+    function initSortableJS() {
+      // Clean up previous instances
+      sortableInstances.forEach(inst => inst.destroy());
+      sortableInstances = [];
+
+      COLUMNS.forEach(col => {
+        const el = document.getElementById(`col-${col}`);
+        if (!el) return;
+
+        const sortable = new Sortable(el, {
+          group: 'kanban',
+          animation: 200,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          
+          // Rule Enforcement on Drag Move
+          onMove: function (evt) {
+            const targetCol = evt.to.id.replace('col-', '');
+            const sourceCol = evt.from.id.replace('col-', '');
+
+            // Rule 1: SINGLE FOCUS WIP LIMIT = 1
+            if (targetCol === 'single' && sourceCol !== 'single') {
+              const currentCount = evt.to.children.length;
+              if (currentCount >= 1) {
+                showToast("⚠️ Luật Single Focus: Chỉ duy nhất 1 card được active tại một thời điểm!", "warning");
+                return false; // Reject drop
+              }
+            }
+
+            // Rule 2: DEEP WORK WIP LIMIT = 3
+            if (targetCol === 'deep' && sourceCol !== 'deep') {
+              const currentCount = evt.to.children.length;
+              if (currentCount >= 3) {
+                showToast("⚠️ Luật Deep Work: Tối đa 3 cards đồng thời để tránh phân tán nguồn lực!", "warning");
+                return false; // Reject drop
+              }
+            }
+
+            return true;
+          },
+
+          // Drop Completed Handler
+          onEnd: function (evt) {
+            const cardId = evt.item.dataset.id;
+            const targetCol = evt.to.id.replace('col-', '');
+            const sourceCol = evt.from.id.replace('col-', '');
+
+            if (sourceCol === targetCol) return; // Same column position change
+
+            const card = state.cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            // Intercept Rule 3: BLOCKED column requires Owner & ETA
+            if (targetCol === 'blocked') {
+              state.pendingMove = {
+                cardId: card.id,
+                targetCol: 'blocked',
+                sourceCol: sourceCol,
+                itemEl: evt.item
+              };
+              openBlockedModal(card);
+              return;
+            }
+
+            // Intercept Rule 4: DONE column requires Learned insight
+            if (targetCol === 'done') {
+              state.pendingMove = {
+                cardId: card.id,
+                targetCol: 'done',
+                sourceCol: sourceCol,
+                itemEl: evt.item
+              };
+              openDoneModal(card);
+              return;
+            }
+
+            // Intercept Rule 5: DELETE column auto-increments tasksDeletedCount
+            if (targetCol === 'delete') {
+              state.stats.tasksDeletedCount++;
+              saveStats();
+              showToast("🗑 Card đã được đưa vào DELETE / REPURPOSE (+1 Tasks Deleted)");
+            }
+
+            // Normal move
+            card.column = targetCol;
+            card.updatedAt = Date.now();
+            saveCards();
+            renderKanbanBoard();
+          }
+        });
+
+        sortableInstances.push(sortable);
+      });
+    }
+
+    /* =========================================================
+       MODAL HANDLERS (CARD, BLOCKED, DONE, SETTINGS)
+       ========================================================= */
+
+    // Card Add / Edit Modal
+    function openCardModal(cardId = null) {
+      const modal = document.getElementById('cardModal');
+      const form = document.getElementById('cardForm');
+      form.reset();
+
+      document.getElementById('cardFormBlockedFields').classList.add('hidden');
+      document.getElementById('cardFormDoneFields').classList.add('hidden');
+
+      if (cardId) {
+        const card = state.cards.find(c => c.id === cardId);
+        if (card) {
+          document.getElementById('cardModalTitle').innerText = "Chỉnh Sửa First Principles Card";
+          document.getElementById('cardFormId').value = card.id;
+          document.getElementById('cardFormTitle').value = card.title;
+          document.getElementById('cardFormPlatform').value = card.platform;
+          document.getElementById('cardFormColumn').value = card.column;
+          document.getElementById('cardFormFirstPrinciple').value = card.first_principle || '';
+          document.getElementById('cardFormGoal').value = card.goal || '';
+          document.getElementById('cardFormCTR').value = card.metrics?.ctr || '';
+          document.getElementById('cardFormViews').value = card.metrics?.views || '';
+          document.getElementById('cardFormRetention').value = card.metrics?.retention || '';
+          document.getElementById('cardFormOwner').value = card.owner || '';
+          document.getElementById('cardFormETA').value = card.eta || '';
+          document.getElementById('cardFormLearned').value = card.learned || '';
+
+          if (card.column === 'blocked') document.getElementById('cardFormBlockedFields').classList.remove('hidden');
+          if (card.column === 'done') document.getElementById('cardFormDoneFields').classList.remove('hidden');
+        }
+      } else {
+        document.getElementById('cardModalTitle').innerText = "Thêm Nội Dung Mới (First Principles Card)";
+        document.getElementById('cardFormId').value = '';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeCardModal() {
+      document.getElementById('cardModal').classList.add('hidden');
+    }
+
+    function handleSaveCard(e) {
+      e.preventDefault();
+      const id = document.getElementById('cardFormId').value;
+      const title = document.getElementById('cardFormTitle').value.trim();
+      const platform = document.getElementById('cardFormPlatform').value;
+      const column = document.getElementById('cardFormColumn').value;
+      const firstPrinciple = document.getElementById('cardFormFirstPrinciple').value.trim();
+      const goal = document.getElementById('cardFormGoal').value.trim();
+      const ctr = parseFloat(document.getElementById('cardFormCTR').value) || 0;
+      const views = parseInt(document.getElementById('cardFormViews').value) || 0;
+      const retention = parseFloat(document.getElementById('cardFormRetention').value) || 0;
+      const owner = document.getElementById('cardFormOwner').value.trim();
+      const eta = document.getElementById('cardFormETA').value.trim();
+      const learned = document.getElementById('cardFormLearned').value.trim();
+
+      // Rule Enforcement: First Principle is Mandatory!
+      if (!firstPrinciple) {
+        showToast("⚠️ Bắt buộc nhập First Principle (Nguyên lý gốc)!", "error");
+        return;
+      }
+
+      // Rule Enforcement: WIP Limit Check when setting to Single Focus
+      if (column === 'single') {
+        const existingSingle = state.cards.filter(c => c.column === 'single' && c.id !== id);
+        if (existingSingle.length >= 1) {
+          showToast("⚠️ Cột Single Focus đã có 1 card. Vui lòng hoàn tất hoặc di chuyển card cũ trước!", "warning");
+          return;
+        }
+      }
+
+      // Rule Enforcement: WIP Limit Check when setting to Deep Work
+      if (column === 'deep') {
+        const existingDeep = state.cards.filter(c => c.column === 'deep' && c.id !== id);
+        if (existingDeep.length >= 3) {
+          showToast("⚠️ Cột Deep Work đã đạt giới hạn 3 cards!", "warning");
+          return;
+        }
+      }
+
+      if (id) {
+        // Edit existing card
+        const card = state.cards.find(c => c.id === id);
+        if (card) {
+          card.title = title;
+          card.platform = platform;
+          card.column = column;
+          card.first_principle = firstPrinciple;
+          card.goal = goal;
+          card.metrics = { ctr, views, retention };
+          card.owner = owner;
+          card.eta = eta;
+          card.learned = learned;
+          card.updatedAt = Date.now();
+        }
+      } else {
+        // Create new card
+        const newCard = {
+          id: crypto.randomUUID(),
+          title,
+          platform,
+          column,
+          first_principle: firstPrinciple,
+          goal,
+          metrics: { ctr, views, retention },
+          owner,
+          eta,
+          learned,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        state.cards.unshift(newCard);
+      }
+
+      saveCards();
+      renderKanbanBoard();
+      closeCardModal();
+      showToast("✓ Đã lưu card thành công!");
+    }
+
+    function editCard(id) {
+      openCardModal(id);
+    }
+
+    function deleteCard(id) {
+      if (confirm("Bạn có chắc chắn muốn xóa vĩnh viễn card này không?")) {
+        state.cards = state.cards.filter(c => c.id !== id);
+        state.stats.tasksDeletedCount++;
+        saveCards();
+        saveStats();
+        renderKanbanBoard();
+        showToast("🗑 Đã xóa card thành công (+1 Tasks Deleted)");
+      }
+    }
+
+    function suggestDeleteOrRepurpose(cardId) {
+      const card = state.cards.find(c => c.id === cardId);
+      if (!card) return;
+
+      const prompt = `Phân tích video có CTR thấp: "${card.title}" (CTR: ${card.metrics.ctr}%, Views: ${card.metrics.views}). Hãy áp dụng thuật toán Elon Musk để tư vấn: nên xóa bỏ dứt khoát hay tái chế (Repurpose) sang định dạng khác?`;
+      document.getElementById('aiPromptInput').value = prompt;
+      triggerQuickAction('delete_advisor');
+    }
+
+    // Blocked Intercept Modal
+    function openBlockedModal(card) {
+      document.getElementById('blockedModalOwner').value = card.owner || '';
+      document.getElementById('blockedModalETA').value = card.eta || '';
+      document.getElementById('blockedModal').classList.remove('hidden');
+    }
+
+    function cancelBlockedModal() {
+      document.getElementById('blockedModal').classList.add('hidden');
+      state.pendingMove = null;
+      renderKanbanBoard(); // Revert card to original column in UI
+      showToast("Đã hủy di chuyển vào Blocked");
+    }
+
+    function handleSaveBlockedModal(e) {
+      e.preventDefault();
+      const owner = document.getElementById('blockedModalOwner').value.trim();
+      const eta = document.getElementById('blockedModalETA').value.trim();
+
+      if (!owner || !eta) {
+        showToast("⚠️ Bắt buộc nhập đầy đủ Owner và ETA!", "error");
+        return;
+      }
+
+      if (state.pendingMove) {
+        const card = state.cards.find(c => c.id === state.pendingMove.cardId);
+        if (card) {
+          card.column = 'blocked';
+          card.owner = owner;
+          card.eta = eta;
+          card.updatedAt = Date.now();
+          saveCards();
+        }
+      }
+
+      state.pendingMove = null;
+      document.getElementById('blockedModal').classList.add('hidden');
+      renderKanbanBoard();
+      showToast("✓ Đã chuyển sang BLOCKED với đầy đủ thông tin!");
+    }
+
+    // Done Intercept Modal
+    function openDoneModal(card) {
+      document.getElementById('doneModalLearned').value = card.learned || '';
+      document.getElementById('doneModal').classList.remove('hidden');
+    }
+
+    function cancelDoneModal() {
+      document.getElementById('doneModal').classList.add('hidden');
+      state.pendingMove = null;
+      renderKanbanBoard(); // Revert card
+      showToast("Đã hủy di chuyển vào Done");
+    }
+
+    function handleSaveDoneModal(e) {
+      e.preventDefault();
+      const learned = document.getElementById('doneModalLearned').value.trim();
+
+      if (!learned) {
+        showToast("⚠️ Bắt buộc đúc kết bài học để lưu trữ kinh nghiệm!", "error");
+        return;
+      }
+
+      if (state.pendingMove) {
+        const card = state.cards.find(c => c.id === state.pendingMove.cardId);
+        if (card) {
+          card.column = 'done';
+          card.learned = learned;
+          card.updatedAt = Date.now();
+          saveCards();
+        }
+      }
+
+      state.pendingMove = null;
+      document.getElementById('doneModal').classList.add('hidden');
+      renderKanbanBoard();
+      showToast("🎉 Xuất sắc! Đã hoàn tất và lưu trữ bài học thực chứng.");
+    }
+
+    // Settings Modal
+    function openSettingsModal() {
+      document.getElementById('settingsProvider').value = state.settings.aiProvider || 'gemini';
+      document.getElementById('settingsModel').value = state.settings.modelName || 'gemini-1.5-flash';
+      document.getElementById('settingsApiKey').value = state.settings.apiKey || '';
+      document.getElementById('testConnectionStatus').innerText = state.settings.apiKey ? "Đã lưu API Key" : "Chưa có API Key";
+      document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    // Global Escape (Esc) Key Listener for Modals
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' || event.key === 'Esc') {
+        const blockedModal = document.getElementById('blockedModal');
+        const doneModal = document.getElementById('doneModal');
+        const cardModal = document.getElementById('cardModal');
+        const settingsModal = document.getElementById('settingsModal');
+
+        if (blockedModal && !blockedModal.classList.contains('hidden')) {
+          cancelBlockedModal();
+        } else if (doneModal && !doneModal.classList.contains('hidden')) {
+          cancelDoneModal();
+        } else if (cardModal && !cardModal.classList.contains('hidden')) {
+          closeCardModal();
+        } else if (settingsModal && !settingsModal.classList.contains('hidden')) {
+          closeSettingsModal();
+        }
+      }
+    });
+
+    function toggleApiKeyMask() {
+      const input = document.getElementById('settingsApiKey');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function handleSaveSettings(e) {
+      e.preventDefault();
+      state.settings.aiProvider = document.getElementById('settingsProvider').value;
+      state.settings.modelName = document.getElementById('settingsModel').value.trim() || 'gemini-1.5-flash';
+      state.settings.apiKey = document.getElementById('settingsApiKey').value.trim();
+      saveSettings();
+      closeSettingsModal();
+      showToast("✓ Đã lưu cấu hình AI thành công!");
+    }
+
+    function updateAIProviderStatus() {
+      const statusEl = document.getElementById('aiProviderStatus');
+      if (state.settings.apiKey) {
+        statusEl.innerText = `● Gemini API Connected (${state.settings.modelName})`;
+        statusEl.className = 'text-[10px] text-emerald-400 font-semibold';
+      } else {
+        statusEl.innerText = '○ First Principles Heuristic Active (No API Key)';
+        statusEl.className = 'text-[10px] text-zinc-400 font-medium';
+      }
+    }
+
+    async function testGeminiConnection() {
+      const apiKey = document.getElementById('settingsApiKey').value.trim();
+      const model = document.getElementById('settingsModel').value.trim() || 'gemini-1.5-flash';
+      const statusEl = document.getElementById('testConnectionStatus');
+
+      if (!apiKey) {
+        statusEl.innerText = "❌ Vui lòng nhập API Key trước khi test!";
+        statusEl.className = "text-[10px] text-rose-400 font-bold";
+        return;
+      }
+
+      statusEl.innerText = "⏳ Đang kết nối tới Google Gemini API...";
+      statusEl.className = "text-[10px] text-amber-400 font-bold";
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: "Ping test. Trả lời đúng 1 từ 'PONG'." }] }]
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'OK';
+          statusEl.innerText = `✅ Kết nối thành công! Phản hồi: ${reply.trim()}`;
+          statusEl.className = "text-[10px] text-emerald-400 font-bold";
+        } else {
+          const errData = await response.json();
+          statusEl.innerText = `❌ Lỗi ${response.status}: ${errData.error?.message || 'Không kết nối được'}`;
+          statusEl.className = "text-[10px] text-rose-400 font-bold";
+        }
+      } catch (err) {
+        statusEl.innerText = `❌ Lỗi mạng: ${err.message}`;
+        statusEl.className = "text-[10px] text-rose-400 font-bold";
+      }
+    }
+
+    /* =========================================================
+       TẦNG 3: AI ASSISTANT (COPILOT & REST API)
+       ========================================================= */
+    const FIRST_PRINCIPLES_PROMPTS = {
+      hook: `[Hook Generator] Bạn là First Principles Content Strategist theo phong cách Elon Musk. Nhiệm vụ: Tạo 3 Hook mở đầu video (3 giây đầu) có khả năng phá vỡ khuôn mẫu (Pattern Interrupt) dựa trên nguyên lý tâm lý học, kích thích tò mò tột độ và loại bỏ mọi câu chào hỏi sáo rỗng. Hãy xuất bản theo cấu trúc: Hook 1 (Phản trực giác), Hook 2 (Nguyên lý gốc gây sốc), Hook 3 (Thách thức niềm tin số đông).`,
+      breakdown: `[Script Breakdown] Bạn là biên tập viên khắc nghiệt theo thuật toán Elon Musk. Nhiệm vụ: Nhận một kịch bản/nội dung thô, thẳng tay cắt tỉa 30-50% số từ thừa thãi, sáo rỗng, vòng vo để tối đa hóa Mật độ Giá trị (Value Density). Chỉ giữ lại các mệnh đề mang tính nguyên lý và sự thật thực chứng.`,
+      delete_advisor: `[Deletion Advisor] Bạn là Cố vấn Tối ưu hóa First Principles. Dựa trên số liệu video (CTR < 2%, retention thấp), hãy đưa ra phán quyết lạnh lùng: Tại sao nên XÓA BỎ ngay lập tức để tiết kiệm tài nguyên? Hoặc nếu cốt lõi còn giá trị, đề xuất cách TÁI CHẾ (Repurpose) sang Shorts/Reels/Thread mà không tốn công quay lại.`,
+      repurpose: `[Repurpose Engine] Bạn là Động cơ Tái chế Nội dung (Repurpose Engine). Hãy chuyển đổi 1 ý tưởng video dài thành: 1 Cấu trúc Infographic Carousel (5 slides), 3 Kịch bản Shorts/TikTok (dưới 45s với hook gắt), và 1 Chuỗi Thread X gồm 5 tweets mang tính nguyên lý sâu sắc.`,
+      tester: `[Thumbnail & Title Tester] Bạn là chuyên gia Thẩm định Tiêu đề & Thumbnail theo First Principles. Hãy chấm điểm 3 phương án tiêu đề trên thang điểm 1-10 về: Mức độ kích thích tò mò (Curiosity Gap), Tỷ lệ CTR dự đoán, và chỉ ra 1 lỗi sáo rỗng cần loại bỏ ngay.`
+    };
+
+    function triggerQuickAction(actionKey) {
+      const promptPrefix = FIRST_PRINCIPLES_PROMPTS[actionKey];
+      let userQuery = document.getElementById('aiPromptInput').value.trim();
+      
+      if (!userQuery) {
+        // Pick active card in Single Focus if available
+        const singleCard = state.cards.find(c => c.column === 'single');
+        if (singleCard) {
+          userQuery = `Áp dụng cho nội dung đang chạy: "${singleCard.title}" (Nền tảng: ${singleCard.platform}, First Principle: ${singleCard.first_principle})`;
+        } else {
+          userQuery = "Ví dụ phân tích: 'Làm thế nào để tạo ra nội dung lan truyền tự nhiên mà không tốn tiền quảng cáo?'";
+        }
+      }
+
+      sendAIMessage(promptPrefix, userQuery);
+      document.getElementById('aiPromptInput').value = '';
+    }
+
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('aiPromptInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      sendAIMessage("Bạn là First Principles Copilot theo triết lý Elon Musk. Trả lời ngắn gọn, thẳng thắn, giải quyết tận gốc vấn đề.", text);
+      input.value = '';
+    }
+
+    async function sendAIMessage(systemPrompt, userText) {
+      // Append user bubble to UI
+      appendChatMessage('user', userText);
+
+      // Append assistant placeholder
+      const loadingMsgId = appendChatMessage('assistant', '⏳ Đang mổ xẻ theo nguyên lý gốc...');
+
+      // Check if Gemini API is configured
+      if (state.settings.apiKey) {
+        try {
+          const model = state.settings.modelName || 'gemini-1.5-flash';
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.settings.apiKey}`;
+          
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: 'user',
+                  parts: [{ text: `${systemPrompt}\n\nYêu cầu từ Creator: ${userText}` }]
+                }
+              ]
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không nhận được câu trả lời từ Gemini.';
+            updateChatMessage(loadingMsgId, reply);
+          } else {
+            const err = await response.json();
+            updateChatMessage(loadingMsgId, `⚠️ Lỗi Gemini API (${response.status}): ${err.error?.message || 'Không thể xử lý'}. Tự động chuyển sang Bộ quy tắc First Principles nội tại.`);
+            runLocalHeuristicReply(loadingMsgId, userText, systemPrompt);
+          }
+        } catch (err) {
+          updateChatMessage(loadingMsgId, `⚠️ Lỗi kết nối mạng: ${err.message}. Tự động phản hồi bằng Bộ quy tắc First Principles nội tại.`);
+          runLocalHeuristicReply(loadingMsgId, userText, systemPrompt);
+        }
+      } else {
+        // Run Local First Principles Heuristic Engine
+        setTimeout(() => {
+          runLocalHeuristicReply(loadingMsgId, userText, systemPrompt);
+        }, 500);
+      }
+    }
+
+    function runLocalHeuristicReply(loadingId, userText, systemPrompt = "") {
+      let reply = "";
+      const sys = (systemPrompt || "").toLowerCase();
+      const lower = (userText || "").toLowerCase();
+
+      // 1. Ưu tiên kiểm tra System Prompt để nhận diện chính xác 5 Quick Engines
+      if (sys.includes("hook generator")) {
+        reply = `**✦ 3 HOOKS PHÁ VỠ KHUÔN MẪU (FIRST PRINCIPLES):**\n\n` +
+          `1. **Hook Phản trực giác:** "90% người sáng tạo nội dung đang tự sát kênh bằng cách cố gắng đăng mỗi ngày, thay vì hiểu một công thức toán học này..."\n` +
+          `2. **Hook Bản chất gốc:** "Nếu video của bạn không giữ chân được 45% người xem ở giây thứ 15, thuật toán sẽ vứt nó vào sọt rác ngay lập tức."\n` +
+          `3. **Hook Thách thức:** "Tôi đã xóa sạch 50 video cũ để đạt được 1 triệu lượt xem đầu tiên. Đây là lý do tại sao..."`;
+      } else if (sys.includes("deletion advisor")) {
+        reply = `**🗑 PHÁN QUYẾT XÓA BỎ (ELON MUSK ALGORITHM):**\n\n` +
+          `• **Đánh giá:** CTR < 2% là một chỉ báo rõ ràng rằng Bao bì (Thumbnail/Title) hoặc Ý tưởng cốt lõi đã thất bại.\n` +
+          `• **Hành động 1:** Đừng lãng phí thời gian sửa đổi nếu bản chất ý tưởng không có tính kích hoạt tò mò cao. Xóa hoặc giấu video ngay.\n` +
+          `• **Hành động 2 (Tái chế):** Trích xuất đúng 1 luận điểm đắt giá nhất để biến thành 1 ảnh Infographic trên Facebook hoặc 1 Thread trên X. Đừng quay lại toàn bộ.`;
+      } else if (sys.includes("repurpose engine")) {
+        reply = `**🔄 MA TRẬN TÁI CHẾ NỘI DUNG (1 LONG → 5 ASSETS):**\n\n` +
+          `1. **Asset 1 (X Thread):** Tóm tắt 5 bước First Principles thành 1 chuỗi 5 bài viết ngắn sắc nét.\n` +
+          `2. **Asset 2, 3, 4 (Shorts/Reels):** Cắt 3 đoạn đối thoại gay cấn nhất dưới 45 giây, chèn phụ đề động màu vàng.\n` +
+          `3. **Asset 5 (Carousel):** Tạo slide so sánh "Cách người thường làm vs Cách First Principles vận hành".`;
+      } else if (sys.includes("thumbnail & title tester")) {
+        reply = `**🎯 THUMBNAIL & TITLE TESTER (FIRST PRINCIPLES CTR AUDIT):**\n\n` +
+          `• **Tiêu đề phân tích:** "${escapeHTML(userText)}"\n` +
+          `• **Bảng điểm tò mò (Curiosity Gap Score):** 8.5/10 (Gây tò mò cao bằng khoảng trống thông tin).\n` +
+          `• **Dự đoán CTR:** 4.8% - 6.2% (Đạt chuẩn Elon Musk Algorithm > 3%).\n` +
+          `• **Đề xuất tối ưu Thumbnail:** Tinh giản tối đa (1 chủ thể nổi bật + biểu cảm cực đoan + text dưới 3 từ font to tương phản cao). Cắt bỏ mọi chi tiết vụn vặt gây nhiễu thị giác.`;
+      } else if (sys.includes("script breakdown")) {
+        reply = `**✂️ SCRIPT BREAKDOWN (VALUE DENSITY OPTIMIZATION):**\n\n` +
+          `• **Cắt tỉa 40% câu chữ:** Loại bỏ toàn bộ các câu: "Chào mừng các bạn đã quay trở lại kênh...", "Hãy nhớ bấm like và subscribe...", "Trong video hôm nay tôi sẽ chia sẻ..."\n` +
+          `• **Quy tắc 3 giây:** Vào thẳng cao trào hoặc dữ liệu gây sốc ở mili-giây thứ 0.\n` +
+          `• **Bảo toàn First Principle:** Mỗi câu nói phải trả lời cho câu hỏi: "Người xem nhận được sự thật nào mà họ chưa từng biết?"`;
+      }
+      // 2. Fallback kiểm tra từ khóa trong userText (áp dụng cho chat tự do)
+      else if (lower.includes("hook") || lower.includes("mở đầu")) {
+        reply = `**✦ 3 HOOKS PHÁ VỠ KHUÔN MẪU (FIRST PRINCIPLES):**\n\n` +
+          `1. **Hook Phản trực giác:** "90% người sáng tạo nội dung đang tự sát kênh bằng cách cố gắng đăng mỗi ngày, thay vì hiểu một công thức toán học này..."\n` +
+          `2. **Hook Bản chất gốc:** "Nếu video của bạn không giữ chân được 45% người xem ở giây thứ 15, thuật toán sẽ vứt nó vào sọt rác ngay lập tức."\n` +
+          `3. **Hook Thách thức:** "Tôi đã xóa sạch 50 video cũ để đạt được 1 triệu lượt xem đầu tiên. Đây là lý do tại sao..."`;
+      } else if (lower.includes("delete") || lower.includes("xóa") || lower.includes("cull") || lower.includes("ctr low")) {
+        reply = `**🗑 PHÁN QUYẾT XÓA BỎ (ELON MUSK ALGORITHM):**\n\n` +
+          `• **Đánh giá:** CTR < 2% là một chỉ báo rõ ràng rằng Bao bì (Thumbnail/Title) hoặc Ý tưởng cốt lõi đã thất bại.\n` +
+          `• **Hành động 1:** Đừng lãng phí thời gian sửa đổi nếu bản chất ý tưởng không có tính kích hoạt tò mò cao. Xóa hoặc giấu video ngay.\n` +
+          `• **Hành động 2 (Tái chế):** Trích xuất đúng 1 luận điểm đắt giá nhất để biến thành 1 ảnh Infographic trên Facebook hoặc 1 Thread trên X. Đừng quay lại toàn bộ.`;
+      } else if (lower.includes("repurpose") || lower.includes("tái chế") || lower.includes("chuyển đổi")) {
+        reply = `**🔄 MA TRẬN TÁI CHẾ NỘI DUNG (1 LONG → 5 ASSETS):**\n\n` +
+          `1. **Asset 1 (X Thread):** Tóm tắt 5 bước First Principles thành 1 chuỗi 5 bài viết ngắn sắc nét.\n` +
+          `2. **Asset 2, 3, 4 (Shorts/Reels):** Cắt 3 đoạn đối thoại gay cấn nhất dưới 45 giây, chèn phụ đề động màu vàng.\n` +
+          `3. **Asset 5 (Carousel):** Tạo slide so sánh "Cách người thường làm vs Cách First Principles vận hành".`;
+      } else if (lower.includes("tester") || lower.includes("thumbnail") || lower.includes("tiêu đề")) {
+        reply = `**🎯 THUMBNAIL & TITLE TESTER (FIRST PRINCIPLES CTR AUDIT):**\n\n` +
+          `• **Tiêu đề phân tích:** "${escapeHTML(userText)}"\n` +
+          `• **Bảng điểm tò mò (Curiosity Gap Score):** 8.5/10 (Gây tò mò cao bằng khoảng trống thông tin).\n` +
+          `• **Dự đoán CTR:** 4.8% - 6.2% (Đạt chuẩn Elon Musk Algorithm > 3%).\n` +
+          `• **Đề xuất tối ưu Thumbnail:** Tinh giản tối đa (1 chủ thể nổi bật + biểu cảm cực đoan + text dưới 3 từ font to tương phản cao). Cắt bỏ mọi chi tiết vụn vặt gây nhiễu thị giác.`;
+      } else if (lower.includes("breakdown") || lower.includes("gọt") || lower.includes("kịch bản")) {
+        reply = `**✂️ SCRIPT BREAKDOWN (VALUE DENSITY OPTIMIZATION):**\n\n` +
+          `• **Cắt tỉa 40% câu chữ:** Loại bỏ toàn bộ các câu: "Chào mừng các bạn đã quay trở lại kênh...", "Hãy nhớ bấm like và subscribe...", "Trong video hôm nay tôi sẽ chia sẻ..."\n` +
+          `• **Quy tắc 3 giây:** Vào thẳng cao trào hoặc dữ liệu gây sốc ở mili-giây thứ 0.\n` +
+          `• **Bảo toàn First Principle:** Mỗi câu nói phải trả lời cho câu hỏi: "Người xem nhận được sự thật nào mà họ chưa từng biết?"`;
+      } else {
+        reply = `**✦ FIRST PRINCIPLES ANALYSIS:**\n\n` +
+          `Vấn đề của bạn: *"${escapeHTML(userText)}"*.\n\n` +
+          `Theo thuật toán 5 bước của Elon Musk:\n` +
+          `1. **Đặt câu hỏi:** Yêu cầu này có thực sự cần thiết không? Hay chỉ là thói quen cũ?\n` +
+          `2. **Xóa bỏ:** Nếu không làm phần này, sản lượng có giảm không? Nếu không, xóa ngay.\n` +
+          `3. **Đơn giản hóa:** Chỉ chọn 1 mục tiêu duy nhất (Single Focus).\n` +
+          `4. **Tăng tốc chu kỳ:** Thực thi trong 1 block 90 phút.\n` +
+          `5. **Tự động hóa:** Chỉ tự động hóa những gì đã được tinh gọn tối đa.`;
+      }
+
+      updateChatMessage(loadingId, reply);
+    }
+
+    function appendChatMessage(role, text) {
+      const msgId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+      state.chatHistory.push({ id: msgId, role, text, timestamp: Date.now() });
+      saveChatHistory();
+      renderChatHistory();
+      return msgId;
+    }
+
+    function updateChatMessage(msgId, newText) {
+      const msg = state.chatHistory.find(m => m.id === msgId);
+      if (msg) {
+        msg.text = newText;
+        saveChatHistory();
+        renderChatHistory();
+      }
+    }
+
+    function saveChatHistory() {
+      // Keep last 30 messages
+      if (state.chatHistory.length > 30) {
+        state.chatHistory = state.chatHistory.slice(-30);
+      }
+      localStorage.setItem('ccc_chat_v2', JSON.stringify(state.chatHistory));
+    }
+
+    function renderChatHistory() {
+      const stream = document.getElementById('aiChatStream');
+      if (!stream) return;
+
+      // Keep welcome note
+      let html = `
+        <div class="p-3 rounded-2xl bg-white/[0.03] light:bg-black/[0.03] border border-white/[0.06] light:border-black/[0.05] text-zinc-300 light:text-zinc-700">
+          <div class="flex items-center space-x-1.5 text-indigo-400 font-semibold mb-1">
+            <span>✦ First Principles Copilot</span>
+          </div>
+          <p class="leading-relaxed">
+            Chào bạn! Tôi vận hành trên thuật toán 5 bước của Elon Musk. Tôi sẵn sàng mổ xẻ kịch bản, gọt giũa 40% câu chữ thừa, tạo Hook 3s hoặc phân tích lý do nên xóa bỏ các video kém hiệu quả.
+          </p>
+        </div>
+      `;
+
+      state.chatHistory.forEach(item => {
+        const isUser = item.role === 'user';
+        html += `
+          <div class="p-3 rounded-2xl ${
+            isUser 
+              ? 'bg-apple-blue/15 border border-apple-blue/30 text-white light:text-zinc-900 ml-4' 
+              : 'bg-white/[0.04] light:bg-black/[0.03] border border-white/[0.08] light:border-black/[0.05] text-zinc-200 light:text-zinc-800 mr-4'
+          }">
+            <div class="text-[10px] font-bold uppercase tracking-wider mb-1 ${isUser ? 'text-apple-blue' : 'text-indigo-400'}">
+              ${isUser ? 'Bạn' : '✦ Copilot'}
+            </div>
+            <div class="whitespace-pre-wrap leading-relaxed">${formatMarkdownText(item.text)}</div>
+          </div>
+        `;
+      });
+
+      stream.innerHTML = html;
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function clearChatHistory() {
+      state.chatHistory = [];
+      saveChatHistory();
+      renderChatHistory();
+      showToast("Đã xóa lịch sử chat của Copilot");
+    }
+
+    function formatMarkdownText(text) {
+      if (!text) return '';
+      // Escape HTML first
+      let safe = escapeHTML(text);
+      // Format bold: **text**
+      safe = safe.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+      // Format italics: *text*
+      safe = safe.replace(/\*(.*?)\*/g, '<i>$1</i>');
+      // Format code: `code`
+      safe = safe.replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-black/40 font-mono text-[11px]">$1</code>');
+      return safe;
+    }
+
+    /* =========================================================
+       BACKUP & RESTORE: EXPORT & IMPORT JSON
+       ========================================================= */
+    function exportDataJSON() {
+      const dataToExport = {
+        version: "2.0",
+        exportedAt: new Date().toISOString(),
+        cards: state.cards,
+        timeBlocks: state.timeBlocks,
+        stats: state.stats,
+        settings: {
+          aiProvider: state.settings.aiProvider,
+          modelName: state.settings.modelName
+          // Do not export apiKey for security reasons unless needed
+        }
+      };
+
+      const jsonStr = JSON.stringify(dataToExport, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Creator_Command_Center_Backup_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast("⤓ Đã xuất file backup JSON thành công!");
+    }
+
+    const VALID_KANBAN_COLUMNS = ['delete', 'ideas', 'single', 'deep', 'blocked', 'done'];
+
+    function validateCardSchema(card, index) {
+      if (!card || typeof card !== 'object') {
+        return `Card tại vị trí #${index + 1} không phải là đối tượng hợp lệ.`;
+      }
+      if (!card.id || (typeof card.id !== 'string' && typeof card.id !== 'number') || String(card.id).trim() === '') {
+        return `Card tại vị trí #${index + 1} thiếu trường 'id' hoặc id rỗng.`;
+      }
+      if (!card.title || typeof card.title !== 'string' || card.title.trim() === '') {
+        return `Card [id: ${card.id}] thiếu trường 'title' hoặc tiêu đề rỗng.`;
+      }
+      if (!card.column || !VALID_KANBAN_COLUMNS.includes(card.column)) {
+        return `Card "${card.title}" có cột '${card.column}' không hợp lệ (Phải thuộc: ${VALID_KANBAN_COLUMNS.join(', ')}).`;
+      }
+      if (card.metrics !== undefined && card.metrics !== null) {
+        if (typeof card.metrics !== 'object') {
+          return `Card "${card.title}" có trường 'metrics' không phải là object.`;
+        }
+        const numericMetrics = ['ctr', 'views', 'retention'];
+        for (const metric of numericMetrics) {
+          if (card.metrics[metric] !== undefined && card.metrics[metric] !== null && card.metrics[metric] !== '') {
+            const num = Number(card.metrics[metric]);
+            if (isNaN(num) || num < 0) {
+              return `Card "${card.title}" có trường metrics.${metric} = '${card.metrics[metric]}' không phải số hợp lệ (phải >= 0).`;
+            }
+          }
+        }
+      }
+      return null;
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported || typeof imported !== 'object') {
+            showToast("❌ File JSON không hợp lệ: Định dạng tệp sai!", "error");
+            return;
+          }
+          if (!imported.cards || !Array.isArray(imported.cards) || imported.cards.length === 0) {
+            showToast("❌ File JSON không hợp lệ hoặc thiếu dữ liệu cards!", "error");
+            return;
+          }
+
+          // Strict Schema Validation for each card
+          for (let i = 0; i < imported.cards.length; i++) {
+            const cardError = validateCardSchema(imported.cards[i], i);
+            if (cardError) {
+              showToast(`❌ Từ chối Import: ${cardError}`, "error");
+              console.error("Card schema validation error:", cardError, imported.cards[i]);
+              return; // Reject import completely
+            }
+          }
+
+          // Sanitize & populate state
+          state.cards = imported.cards.map(c => ({
+            id: String(c.id),
+            title: String(c.title).trim(),
+            platform: ['youtube', 'facebook', 'tiktok', 'x'].includes(c.platform) ? c.platform : 'youtube',
+            column: c.column,
+            first_principle: c.first_principle ? String(c.first_principle) : '',
+            goal: c.goal ? String(c.goal) : '',
+            metrics: {
+              ctr: c.metrics?.ctr !== undefined && c.metrics?.ctr !== '' ? Number(c.metrics.ctr) : 0,
+              views: c.metrics?.views !== undefined && c.metrics?.views !== '' ? Number(c.metrics.views) : 0,
+              retention: c.metrics?.retention !== undefined && c.metrics?.retention !== '' ? Number(c.metrics.retention) : 0
+            },
+            owner: c.owner ? String(c.owner) : '',
+            eta: c.eta ? String(c.eta) : '',
+            learned: c.learned ? String(c.learned) : '',
+            createdAt: c.createdAt ? Number(c.createdAt) : Date.now(),
+            updatedAt: c.updatedAt ? Number(c.updatedAt) : Date.now()
+          }));
+
+          if (imported.timeBlocks && Array.isArray(imported.timeBlocks)) {
+            state.timeBlocks = imported.timeBlocks;
+          }
+          if (imported.stats && typeof imported.stats === 'object') {
+            state.stats = {
+              deepWorkMinutes: Number(imported.stats.deepWorkMinutes) || 0,
+              tasksDeletedCount: Number(imported.stats.tasksDeletedCount) || 0
+            };
+          }
+
+          saveCards();
+          saveTimeBlocks();
+          saveStats();
+
+          updateMetricsHeader();
+          renderTimeline();
+          renderKanbanBoard();
+          initSortableJS();
+
+          showToast("⤒ Khôi phục dữ liệu từ JSON thành công 100%!");
+        } catch (err) {
+          showToast(`❌ Lỗi khi đọc file: ${err.message}`, "error");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = ''; // Reset input
+    }
+
+    /* =========================================================
+       FILTER & UTILITY FUNCTIONS
+       ========================================================= */
+    function setPlatformFilter(platform) {
+      state.currentPlatformFilter = platform;
+      document.querySelectorAll('.platform-filter-btn').forEach(btn => {
+        if (btn.dataset.platform === platform) {
+          btn.className = 'platform-filter-btn px-3 py-1 rounded-full text-white light:text-zinc-900 bg-white/10 light:bg-white shadow-sm font-medium transition-all';
+        } else {
+          btn.className = 'platform-filter-btn px-3 py-1 rounded-full text-zinc-400 hover:text-white light:hover:text-zinc-900 font-medium transition-all';
+        }
+      });
+      renderKanbanBoard();
+      initSortableJS();
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let bg = 'bg-zinc-900/95 border-white/20 text-white';
+      if (type === 'warning') bg = 'bg-amber-950/90 border-amber-500/50 text-amber-200';
+      if (type === 'error') bg = 'bg-rose-950/90 border-rose-500/50 text-rose-200';
+
+      toast.className = `px-4 py-2.5 rounded-2xl border shadow-apple-glass backdrop-blur-xl text-xs font-medium animate-sheet flex items-center space-x-2 ${bg}`;
+      toast.innerHTML = `<span>${escapeHTML(message)}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function escapeHTML(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Initialize application on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp();
+    });
+  </script>
+</body>
+</html>
