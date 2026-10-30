@@ -19,7 +19,8 @@ Hệ thống được thiết kế dựa trên thuật toán 5 bước của Elo
 ### 1.2. Ngôn ngữ Thiết kế Chuẩn Apple (Apple-Inspired Design Language — macOS/iOS HIG)
 Giao diện ứng dụng được trau chuốt theo tinh thần tối giản sang trọng của Apple (Human Interface Guidelines):
 * **Typography & Text Rendering:**
-  * System Font Stack ưu tiên macOS/iOS: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif`.
+  * System Font Stack ưu tiên macOS/iOS kết hợp Google Fonts hiện đại: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Segoe UI", Roboto, sans-serif`.
+  * **Dynamic Google Fonts Typography (AC-15)**: Tích hợp font Google Fonts tối ưu theo ngôn ngữ hiển thị — Tiếng Việt sử dụng font `Be Vietnam Pro` (chuẩn dấu tiếng Việt sắc nét, chuẩn Apple HIG), Tiếng Anh sử dụng font `Inter` (typography hiện đại, tối giản), tự động chuyển đổi linh hoạt qua CSS variable `--font-primary` theo thiết lập ngôn ngữ mà không cần reload trang.
   * Khử răng cưa tối đa (`-webkit-font-smoothing: antialiased`).
   * Tiêu đề lớn áp dụng negative letter-spacing (`tracking-tight`), phân cấp thị giác rành mạch (Primary 95%, Secondary 60%, Tertiary 40% opacity).
 * **Vật liệu & Chiều sâu (Materials & Frosted Glass):**
@@ -186,6 +187,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-12`** | Tính năng **Import JSON** cho phép chọn file từ máy tính và khôi phục 100% dữ liệu mà không làm lỗi ứng dụng. | Chờ kiểm thử |
 | **`AC-13`** | **Apple-Inspired HIG Design**: Giao diện đạt chuẩn tối giản Apple (SF Pro system font stack, hiệu ứng kính mờ `backdrop-blur`, viền hairline `border-white/[0.08]`, bo góc squircle mềm mại, Segmented Controls và micro-interaction mượt mà). | Chờ kiểm thử |
 | **`AC-14`** | **Bilingual Support (Tiếng Việt & English)**: Hỗ trợ song ngữ Tiếng Việt & Tiếng Anh, chuyển đổi ngôn ngữ trong Settings Modal, cập nhật toàn bộ UI tức thì (Header, Timeline, 6 cột Kanban, Card labels, Modals, AI Quick Actions, Toasts) không cần reload trang và lưu bền vững vào `localStorage`. | Chờ kiểm thử |
+| **`AC-15`** | **Dynamic Google Fonts Typography**: Tích hợp Google Fonts (`Be Vietnam Pro` cho Tiếng Việt và `Inter` cho Tiếng Anh), tự động chuyển đổi font typography theo cài đặt ngôn ngữ tức thì không cần reload trang, duy trì tính thẩm mỹ và độ sắc nét chuẩn Apple HIG. | Chờ kiểm thử |
 
 ---
 

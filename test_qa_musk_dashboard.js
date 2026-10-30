@@ -678,6 +678,92 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
+    // AC-15: Dynamic Google Fonts Typography (Be Vietnam Pro for VI, Inter for EN)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-15: Dynamic Google Fonts Typography ---');
+
+    // 1. Verify Google Fonts preconnect and stylesheet links exist in <head>
+    const fontLinks = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('link')).map(l => ({
+        rel: l.getAttribute('rel'),
+        href: l.getAttribute('href') || '',
+        crossorigin: l.getAttribute('crossorigin')
+      }));
+      const hasPreconnectGoogle = links.some(l => l.rel === 'preconnect' && l.href.includes('fonts.googleapis.com'));
+      const hasPreconnectGstatic = links.some(l => l.rel === 'preconnect' && l.href.includes('fonts.gstatic.com'));
+      const hasFontStylesheet = links.some(l => l.rel === 'stylesheet' && l.href.includes('Be+Vietnam+Pro') && l.href.includes('Inter'));
+      const tailwindHasFontVar = tailwind.config.theme.extend.fontFamily.sans.includes('var(--font-primary)');
+      return {
+        hasPreconnectGoogle,
+        hasPreconnectGstatic,
+        hasFontStylesheet,
+        tailwindHasFontVar
+      };
+    });
+
+    // 2. Open Settings Modal and verify font switching dynamically
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+
+    // Switch to Vietnamese
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+
+    const viFontState = await page.evaluate(() => {
+      const rootVar = document.documentElement.style.getPropertyValue('--font-primary');
+      const bodyFont = window.getComputedStyle(document.body).fontFamily;
+      return { rootVar, bodyFont };
+    });
+
+    const isViFontValid = viFontState.rootVar.includes('Be Vietnam Pro') &&
+      viFontState.bodyFont.includes('Be Vietnam Pro');
+
+    // Switch to English
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+
+    const enFontState = await page.evaluate(() => {
+      const rootVar = document.documentElement.style.getPropertyValue('--font-primary');
+      const bodyFont = window.getComputedStyle(document.body).fontFamily;
+      return { rootVar, bodyFont };
+    });
+
+    const isEnFontValid = enFontState.rootVar.includes('Inter') &&
+      enFontState.bodyFont.includes('Inter');
+
+    // Switch back to Vietnamese
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+
+    const viRevertState = await page.evaluate(() => {
+      const rootVar = document.documentElement.style.getPropertyValue('--font-primary');
+      const bodyFont = window.getComputedStyle(document.body).fontFamily;
+      return { rootVar, bodyFont };
+    });
+
+    const isViRevertValid = viRevertState.rootVar.includes('Be Vietnam Pro') &&
+      viRevertState.bodyFont.includes('Be Vietnam Pro');
+
+    // Close Settings Modal
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const ac15Passed = fontLinks.hasPreconnectGoogle &&
+      fontLinks.hasPreconnectGstatic &&
+      fontLinks.hasFontStylesheet &&
+      fontLinks.tailwindHasFontVar &&
+      isViFontValid &&
+      isEnFontValid &&
+      isViRevertValid;
+
+    recordResult(
+      'AC-15',
+      'Dynamic Google Fonts Typography (Be Vietnam Pro for VI, Inter for EN, Realtime Switch without Reload)',
+      ac15Passed,
+      `Head Links: Google=${fontLinks.hasPreconnectGoogle}, Gstatic=${fontLinks.hasPreconnectGstatic}, CSS=${fontLinks.hasFontStylesheet}; VI Font: "${viFontState.bodyFont.slice(0, 35)}...", EN Font: "${enFontState.bodyFont.slice(0, 35)}..."`
+    );
+
+    // -------------------------------------------------------------
     // OVERALL SUMMARY
     // -------------------------------------------------------------
     console.log('\n================================================================');
