@@ -976,47 +976,62 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
-    // AC-19: Contextual Card Hints & How-It-Works Guidance (VI & EN)
+    // AC-19: Column Header Contextual Guidance (Centralized in 6 Column Headers, Minimal Task Items)
     // -------------------------------------------------------------
-    console.log('\n--- Testing AC-19: Contextual Card Hints & How-It-Works Guidance ---');
+    console.log('\n--- Testing AC-19: Column Header Contextual Guidance (Bilingual VI/EN) ---');
 
-    // Step 1: Verify presence of Hint buttons and hint containers across all rendered cards in Level 2
+    // Step 1: Verify task cards are clean - NO hint buttons or boxes inside individual cards
     const totalCards = await page.locator('#kanbanContainer [data-id], .kanban-dropzone > [data-id]').count();
-    const hintButtonsCount = await page.locator('.card-hint-btn').count();
-    const hintBoxesCount = await page.locator('.card-hint-box').count();
+    const taskHintButtonsCount = await page.locator('.card-hint-btn, .kanban-dropzone [data-action="toggle-hint"]').count();
+    const taskHintBoxesCount = await page.locator('.card-hint-box, .kanban-dropzone .card-hint-box').count();
+    const isTaskItemsClean = totalCards > 0 && taskHintButtonsCount === 0 && taskHintBoxesCount === 0;
 
-    const hasHintsOnAllCards = totalCards > 0 && hintButtonsCount === totalCards && hintBoxesCount === totalCards;
+    // Step 2: Verify presence of exactly 6 column hint buttons and 6 column hint boxes at column headers
+    const colHintButtonsCount = await page.locator('.col-hint-btn, [data-action="toggle-col-hint"]').count();
+    const colHintBoxesCount = await page.locator('.col-hint-box').count();
+    const has6ColHints = colHintButtonsCount === 6 && colHintBoxesCount === 6;
 
-    // Step 2: Test clicking toggle hint button on the first card
-    const firstCard = page.locator('.kanban-dropzone > [data-id]').first();
-    const firstHintBtn = firstCard.locator('.card-hint-btn');
-    const firstHintBox = firstCard.locator('.card-hint-box');
+    // All 6 hint boxes should be initially hidden
+    const allInitiallyHidden = await page.evaluate(() => {
+      const boxes = document.querySelectorAll('.col-hint-box');
+      return boxes.length === 6 && Array.from(boxes).every(b => b.classList.contains('hidden'));
+    });
 
-    const initialHidden = await firstHintBox.evaluate(el => el.classList.contains('hidden'));
-    
-    // Click to open hint
-    await firstHintBtn.click();
+    // Step 3: Test opening column hint on DELETE column
+    const deleteHintBtn = page.locator('#col-hint-btn-delete');
+    const deleteHintBox = page.locator('#col-hint-delete');
+
+    await deleteHintBtn.click();
     await page.waitForTimeout(200);
-    const openedVisible = await firstHintBox.evaluate(el => !el.classList.contains('hidden'));
+    const openedVisible = await deleteHintBox.evaluate(el => !el.classList.contains('hidden'));
 
-    // Step 3: Verify content of Hint in Vietnamese (current language)
-    const viPurposeText = await firstCard.locator('.card-hint-purpose').innerText();
-    const viHowText = await firstCard.locator('.card-hint-how').innerText();
-    const viHeaderTitle = await firstCard.locator('.card-hint-header-text').innerText();
+    // Verify content of Column Hint in Vietnamese
+    const viPurposeText = await deleteHintBox.locator('.col-hint-purpose').innerText();
+    const viHowText = await deleteHintBox.locator('.col-hint-how').innerText();
+    const viHeaderTitle = await deleteHintBox.locator('.col-hint-header-text').innerText();
 
-    const isViContentValid = viPurposeText.includes('Tác dụng:') &&
-      viHowText.includes('Cách hoạt động:') &&
+    const isViContentValid = viPurposeText.includes('Tác dụng') &&
+      viHowText.includes('Cách hoạt động') &&
       viHeaderTitle.includes('Gợi ý');
 
-    // Step 4: Test close button inside the hint box
-    const closeBtn = firstCard.locator('[data-action="close-hint"]');
+    // Step 4: Test close button inside the column hint box
+    const closeBtn = deleteHintBox.locator('[data-action="close-col-hint"]');
     if (await closeBtn.count() > 0) {
       await closeBtn.click();
       await page.waitForTimeout(200);
     }
-    const closedAfterClick = await firstHintBox.evaluate(el => el.classList.contains('hidden'));
+    const closedAfterCloseBtn = await deleteHintBox.evaluate(el => el.classList.contains('hidden'));
 
-    // Step 5: Switch to English and verify bilingual hint translation
+    // Step 5: Test Click-Outside to close column hint
+    await deleteHintBtn.click();
+    await page.waitForTimeout(200);
+    const reopened = await deleteHintBox.evaluate(el => !el.classList.contains('hidden'));
+    // Click outside (e.g. on kanban title)
+    await page.locator('#kanbanTitle').click();
+    await page.waitForTimeout(200);
+    const closedAfterClickOutside = await deleteHintBox.evaluate(el => el.classList.contains('hidden'));
+
+    // Step 6: Switch to English and verify bilingual column hint translation
     await page.locator('#btnSettings').click();
     await page.waitForTimeout(300);
     await page.locator('#langBtnEn').click();
@@ -1024,21 +1039,21 @@ async function runQATestSuite() {
     await page.locator('#settingsCloseBtn').click();
     await page.waitForTimeout(300);
 
-    // Open first card hint again in English
-    const enFirstCard = page.locator('.kanban-dropzone > [data-id]').first();
-    const enHintBtn = enFirstCard.locator('.card-hint-btn');
-    const enHintBox = enFirstCard.locator('.card-hint-box');
-
-    await enHintBtn.click();
+    // Open first column hint again in English
+    await deleteHintBtn.click();
     await page.waitForTimeout(200);
 
-    const enPurposeText = await enFirstCard.locator('.card-hint-purpose').innerText();
-    const enHowText = await enFirstCard.locator('.card-hint-how').innerText();
-    const enHeaderTitle = await enFirstCard.locator('.card-hint-header-text').innerText();
+    const enPurposeText = await deleteHintBox.locator('.col-hint-purpose').innerText();
+    const enHowText = await deleteHintBox.locator('.col-hint-how').innerText();
+    const enHeaderTitle = await deleteHintBox.locator('.col-hint-header-text').innerText();
 
-    const isEnContentValid = enPurposeText.includes('Purpose:') &&
-      enHowText.includes('How it works:') &&
-      enHeaderTitle.includes('Guidance & Mechanics');
+    const isEnContentValid = enPurposeText.includes('Purpose') &&
+      enHowText.includes('How it works') &&
+      enHeaderTitle.includes('Guidance');
+
+    // Close hint before switching back
+    await page.locator('#kanbanTitle').click();
+    await page.waitForTimeout(200);
 
     // Switch back to Vietnamese
     await page.locator('#btnSettings').click();
@@ -1048,18 +1063,21 @@ async function runQATestSuite() {
     await page.locator('#settingsCloseBtn').click();
     await page.waitForTimeout(300);
 
-    const ac19Passed = hasHintsOnAllCards &&
-      initialHidden &&
+    const ac19Passed = isTaskItemsClean &&
+      has6ColHints &&
+      allInitiallyHidden &&
       openedVisible &&
-      closedAfterClick &&
+      closedAfterCloseBtn &&
+      reopened &&
+      closedAfterClickOutside &&
       isViContentValid &&
       isEnContentValid;
 
     recordResult(
       'AC-19',
-      'Contextual Card Hints & How-It-Works Guidance (Apple-Style Toggle, Column Purpose & How-It-Works, Bilingual VI/EN)',
+      'Column Header Contextual Guidance (Centralized 6 Column Hints, Clean Task Items, Bilingual VI/EN, Toggle & Click-Outside)',
       ac19Passed,
-      `Cards: ${totalCards}, HintBtns: ${hintButtonsCount}, Opened: ${openedVisible}, Closed: ${closedAfterClick}, VI Valid: ${isViContentValid}, EN Valid: ${isEnContentValid}`
+      `TaskItemsClean: ${isTaskItemsClean} (TaskHintBtns: ${taskHintButtonsCount}), 6ColHints: ${has6ColHints}, Opened: ${openedVisible}, ClosedBtn: ${closedAfterCloseBtn}, ClickOutside: ${closedAfterClickOutside}, VI Valid: ${isViContentValid}, EN Valid: ${isEnContentValid}`
     );
 
     // -------------------------------------------------------------

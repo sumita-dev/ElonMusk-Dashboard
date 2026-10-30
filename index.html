@@ -380,84 +380,258 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-3.5 items-start">
 
           <!-- 1. DELETE / REPURPOSE -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-rose-500" data-col="delete">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-rose-500 relative" data-col="delete">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                 <span id="col-delete-title" data-i18n="col_delete_title" class="text-xs font-bold uppercase tracking-wider text-rose-400">DELETE / REPURPOSE</span>
               </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400" id="count-delete">0</span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="delete" id="col-hint-btn-delete" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400" id="count-delete">0</span>
+              </div>
             </div>
             <p id="col-delete-desc" data-i18n="col_delete_desc" class="text-[10px] text-zinc-500 mb-2">CTR &lt; 2.0% • Xóa hoặc Tái chế</p>
+            
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-delete" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">DELETE</span>
+                  <button type="button" data-action="close-col-hint" data-col="delete" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_delete">Rà soát & loại bỏ tàn nhẫn nội dung kém hiệu quả (CTR &lt; 2.0%) theo Bước 2 Musk ('Delete Any Part You Can') hoặc tái chế thành định dạng ngắn.</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_delete">Bấm 'Gợi ý Cull' để AI cố vấn phân tích; bấm thùng rác để xóa hẳn (+1 Tasks Deleted); hoặc tối ưu kịch bản rồi kéo sang IDEAS/DEEP WORK.</span>
+              </div>
+            </div>
+
             <div id="col-delete" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
           <!-- 2. IDEAS -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-purple-500" data-col="ideas">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-purple-500 relative" data-col="ideas">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-purple-500"></span>
                 <span id="col-ideas-title" data-i18n="col_ideas_title" class="text-xs font-bold uppercase tracking-wider text-purple-400">IDEAS</span>
               </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400" id="count-ideas">0</span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="ideas" id="col-hint-btn-ideas" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400" id="count-ideas">0</span>
+              </div>
             </div>
             <p id="col-ideas-desc" data-i18n="col_ideas_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc First Principle</p>
+
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-ideas" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">IDEAS</span>
+                  <button type="button" data-action="close-col-hint" data-col="ideas" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_ideas">Vườn ươm ý tưởng bóc tách từ Nguyên lý gốc (Bước 1 Musk: Question Every Requirement), ngăn chặn sao chép thụ động và phỏng đoán cảm tính.</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_ideas">Bắt buộc điền First Principle khi tạo card. Chọn ý tưởng tiềm năng nhất kéo sang SINGLE FOCUS (nếu trống) hoặc DEEP WORK để sản xuất.</span>
+              </div>
+            </div>
+
             <div id="col-ideas" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
           <!-- 3. SINGLE FOCUS (WIP = 1) -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-amber-500 bg-amber-500/[0.03] light:bg-amber-500/[0.05]" data-col="single">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-amber-500 bg-amber-500/[0.03] light:bg-amber-500/[0.05] relative" data-col="single">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-amber-500 pulse-glow"></span>
                 <span id="col-single-title" data-i18n="col_single_title" class="text-xs font-bold uppercase tracking-wider text-amber-400">SINGLE FOCUS</span>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" id="badge-single">
-                <span id="count-single">0</span>/1 MAX
-              </span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="single" id="col-hint-btn-single" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" id="badge-single">
+                  <span id="count-single">0</span>/1 MAX
+                </span>
+              </div>
             </div>
             <p id="col-single-desc" data-i18n="col_single_desc" class="text-[10px] text-amber-400/80 mb-2 font-medium">Chỉ 1 card duy nhất active!</p>
+
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-single" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">SINGLE FOCUS</span>
+                  <button type="button" data-action="close-col-hint" data-col="single" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_single">Tiêu điểm hành động tối thượng với luật cưỡng chế WIP = 1 (Bước 3 Musk). Triệt tiêu đa nhiệm, dồn 100% năng lượng hoàn thành 1 video duy nhất.</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_single">Chỉ chứa duy nhất 1 card. Kéo card vào đây để kích hoạt phiên tập trung; chạy timer Tầng 1; hoàn thành kéo sang DONE hoặc BLOCKED nếu gặp sự cố.</span>
+              </div>
+            </div>
+
             <div id="col-single" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
           <!-- 4. DEEP WORK (WIP = 3) -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-blue" data-col="deep">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-blue relative" data-col="deep">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-apple-blue"></span>
                 <span id="col-deep-title" data-i18n="col_deep_title" class="text-xs font-bold uppercase tracking-wider text-apple-blue">DEEP WORK</span>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20" id="badge-deep">
-                <span id="count-deep">0</span>/3 MAX
-              </span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="deep" id="col-hint-btn-deep" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20" id="badge-deep">
+                  <span id="count-deep">0</span>/3 MAX
+                </span>
+              </div>
             </div>
             <p id="col-deep-desc" data-i18n="col_deep_desc" class="text-[10px] text-zinc-500 mb-2">Đang chế tác • Tối đa 3 cards</p>
+
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-deep" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">DEEP WORK</span>
+                  <button type="button" data-action="close-col-hint" data-col="deep" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_deep">Phân xưởng chế tác nội dung chuyên sâu giới hạn WIP = 3. Duy trì nhịp độ sản xuất (kịch bản, dựng, quay) ổn định mà không bị quá tải não bộ.</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_deep">Giới hạn tối đa 3 cards đồng thời (chặn nhận thêm nếu đầy). Bấm để sửa/cập nhật tiến độ; khi Single Focus trống, kéo 1 card từ đây sang thực thi.</span>
+              </div>
+            </div>
+
             <div id="col-deep" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
           <!-- 5. BLOCKED -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-orange-500" data-col="blocked">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-orange-500 relative" data-col="blocked">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-orange-500"></span>
                 <span id="col-blocked-title" data-i18n="col_blocked_title" class="text-xs font-bold uppercase tracking-wider text-orange-400">BLOCKED</span>
               </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400" id="count-blocked">0</span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="blocked" id="col-hint-btn-blocked" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400" id="count-blocked">0</span>
+              </div>
             </div>
             <p id="col-blocked-desc" data-i18n="col_blocked_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc Owner + ETA giải phóng</p>
+
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-blocked" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">BLOCKED</span>
+                  <button type="button" data-action="close-col-hint" data-col="blocked" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_blocked">Khu vực cô lập và minh bạch hóa các điểm nghẽn (thiếu tư liệu, chờ duyệt, lỗi kỹ thuật) nhằm giải phóng rào cản theo Bước 4 Musk (Accelerate Cycle Time).</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_blocked">Khi kéo vào, bắt buộc nhập Owner (người chịu trách nhiệm) và ETA (hạn gỡ bỏ). Sau khi điểm nghẽn giải quyết, kéo trở lại DEEP WORK hoặc SINGLE FOCUS.</span>
+              </div>
+            </div>
+
             <div id="col-blocked" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
           <!-- 6. DONE + LEARNED -->
-          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-green" data-col="done">
+          <div class="glass-column rounded-2xl p-3 flex flex-col min-h-[480px] border-t-2 border-t-apple-green relative" data-col="done">
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] light:border-black/[0.06]">
               <div class="flex items-center space-x-1.5">
                 <span class="w-2 h-2 rounded-full bg-apple-green"></span>
                 <span id="col-done-title" data-i18n="col_done_title" class="text-xs font-bold uppercase tracking-wider text-apple-green">DONE + LEARNED</span>
               </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green" id="count-done">0</span>
+              <div class="flex items-center space-x-1.5">
+                <button type="button" data-action="toggle-col-hint" data-col="done" id="col-hint-btn-done" class="col-hint-btn flex items-center space-x-1 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="Xem giải thích tác dụng và cách hoạt động của cột này" data-i18n-title="tooltip_col_hint">
+                  <span>💡</span>
+                  <span class="col-hint-btn-text" data-i18n="col_hint_btn">Hint</span>
+                </button>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-apple-green/10 text-apple-green" id="count-done">0</span>
+              </div>
             </div>
             <p id="col-done-desc" data-i18n="col_done_desc" class="text-[10px] text-zinc-500 mb-2">Bắt buộc đúc kết bài học</p>
+
+            <!-- Column Contextual Hint Box (AC-19) -->
+            <div id="col-hint-done" class="col-hint-box hidden mb-2.5 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all shadow-apple-card">
+              <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
+                <span class="flex items-center space-x-1">
+                  <span>💡</span>
+                  <span class="col-hint-header-text" data-i18n="col_hint_header">Gợi ý & Cơ chế Cột</span>
+                </span>
+                <div class="flex items-center space-x-1.5">
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">DONE</span>
+                  <button type="button" data-action="close-col-hint" data-col="done" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded cursor-pointer" title="Đóng hint">✕</button>
+                </div>
+              </div>
+              <div class="col-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_purpose_label">Tác dụng:</b>
+                <span class="col-hint-purpose-text" data-i18n="col_hint_purpose_done">Kho lưu trữ thành phẩm và tri thức thực chứng. Mọi nội dung xuất bản phải để lại bài học dữ liệu để tích lũy lợi thế kép (Compounding Knowledge).</span>
+              </div>
+              <div class="col-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
+                <b class="text-white light:text-zinc-900" data-i18n="col_hint_how_label">Cách hoạt động:</b>
+                <span class="col-hint-how-text" data-i18n="col_hint_how_done">Khi kéo vào, bắt buộc đúc kết Bài học (Learned Insight). Card sẽ hiển thị huy hiệu xanh lưu trữ bài học. Dùng Export JSON để sao lưu định kỳ.</span>
+              </div>
+            </div>
+
             <div id="col-done" class="kanban-dropzone flex-1 space-y-2.5 min-h-[400px]"></div>
           </div>
 
@@ -1110,6 +1284,25 @@
         card_hint_purpose_done: "Kho lưu trữ thành phẩm và tri thức thực chứng. Mọi nội dung xuất bản phải để lại bài học dữ liệu để tích lũy lợi thế kép (Compounding Knowledge).",
         card_hint_how_done: "Khi kéo vào, bắt buộc đúc kết Bài học (Learned Insight). Card sẽ hiển thị huy hiệu xanh lưu trữ bài học. Dùng Export JSON để sao lưu định kỳ.",
 
+        // Column Contextual Hints (AC-19)
+        col_hint_btn: "Hint",
+        col_hint_header: "Gợi ý & Cơ chế Cột",
+        col_hint_purpose_label: "Tác dụng:",
+        col_hint_how_label: "Cách hoạt động:",
+        tooltip_col_hint: "Xem giải thích tác dụng và cách hoạt động của cột này",
+        col_hint_purpose_delete: "Rà soát & loại bỏ tàn nhẫn nội dung kém hiệu quả (CTR < 2.0%) theo Bước 2 Musk ('Delete Any Part You Can') hoặc tái chế thành định dạng ngắn.",
+        col_hint_how_delete: "Bấm 'Gợi ý Cull' để AI cố vấn phân tích; bấm thùng rác để xóa hẳn (+1 Tasks Deleted); hoặc tối ưu kịch bản rồi kéo sang IDEAS/DEEP WORK.",
+        col_hint_purpose_ideas: "Vườn ươm ý tưởng bóc tách từ Nguyên lý gốc (Bước 1 Musk: Question Every Requirement), ngăn chặn sao chép thụ động và phỏng đoán cảm tính.",
+        col_hint_how_ideas: "Bắt buộc điền First Principle khi tạo card. Chọn ý tưởng tiềm năng nhất kéo sang SINGLE FOCUS (nếu trống) hoặc DEEP WORK để sản xuất.",
+        col_hint_purpose_single: "Tiêu điểm hành động tối thượng với luật cưỡng chế WIP = 1 (Bước 3 Musk). Triệt tiêu đa nhiệm, dồn 100% năng lượng hoàn thành 1 video duy nhất.",
+        col_hint_how_single: "Chỉ chứa duy nhất 1 card. Kéo card vào đây để kích hoạt phiên tập trung; chạy timer Tầng 1; hoàn thành kéo sang DONE hoặc BLOCKED nếu gặp sự cố.",
+        col_hint_purpose_deep: "Phân xưởng chế tác nội dung chuyên sâu giới hạn WIP = 3. Duy trì nhịp độ sản xuất (kịch bản, dựng, quay) ổn định mà không bị quá tải não bộ.",
+        col_hint_how_deep: "Giới hạn tối đa 3 cards đồng thời (chặn nhận thêm nếu đầy). Bấm để sửa/cập nhật tiến độ; khi Single Focus trống, kéo 1 card từ đây sang thực thi.",
+        col_hint_purpose_blocked: "Khu vực cô lập và minh bạch hóa các điểm nghẽn (thiếu tư liệu, chờ duyệt, lỗi kỹ thuật) nhằm giải phóng rào cản theo Bước 4 Musk (Accelerate Cycle Time).",
+        col_hint_how_blocked: "Khi kéo vào, bắt buộc nhập Owner (người chịu trách nhiệm) và ETA (hạn gỡ bỏ). Sau khi điểm nghẽn giải quyết, kéo trở lại DEEP WORK hoặc SINGLE FOCUS.",
+        col_hint_purpose_done: "Kho lưu trữ thành phẩm và tri thức thực chứng. Mọi nội dung xuất bản phải để lại bài học dữ liệu để tích lũy lợi thế kép (Compounding Knowledge).",
+        col_hint_how_done: "Khi kéo vào, bắt buộc đúc kết Bài học (Learned Insight). Card sẽ hiển thị huy hiệu xanh lưu trữ bài học. Dùng Export JSON để sao lưu định kỳ.",
+
         // Tầng 3 AI Copilot
         ai_copilot_title: "Tầng 3: Musk AI Copilot",
         ai_status_no_key: "First Principles Heuristic Active (Chưa có API Key)",
@@ -1338,6 +1531,25 @@
         card_hint_how_blocked: "When moving here, Owner and ETA deadline are required. Once the bottleneck is cleared, drag card back to DEEP WORK or SINGLE FOCUS.",
         card_hint_purpose_done: "Archive of completed productions and empirical insights. Every published video must yield data-backed learnings for compounding channel growth.",
         card_hint_how_done: "Mandatory Learned Insight required upon moving here. Displays green badge with key takeaway. Use Export JSON for persistent archival.",
+
+        // Column Contextual Hints (AC-19)
+        col_hint_btn: "Hint",
+        col_hint_header: "Column Guidance & Mechanics",
+        col_hint_purpose_label: "Purpose:",
+        col_hint_how_label: "How it works:",
+        tooltip_col_hint: "View column purpose and operational mechanics",
+        col_hint_purpose_delete: "Ruthlessly identify and cull ineffective content (CTR < 2.0%) per Step 2 of Musk's algorithm ('Delete Any Part You Can') or repurpose into short assets.",
+        col_hint_how_delete: "Click 'Suggest Cull' for AI advice; click trash icon to delete permanently (+1 Tasks Deleted); or optimize and drag to IDEAS/DEEP WORK.",
+        col_hint_purpose_ideas: "Content incubation nursery grounded in First Principles (Step 1 Musk: Question Every Requirement), preventing passive copycatting and guesswork.",
+        col_hint_how_ideas: "Mandatory First Principle field when creating card. Drag highest-leverage idea to SINGLE FOCUS (if empty) or DEEP WORK to start production.",
+        col_hint_purpose_single: "Supreme execution focus enforcing strict WIP = 1 limit (Step 3 Musk). Eliminates multitasking, channeling 100% energy into completing a single video.",
+        col_hint_how_single: "Strictly accepts at most 1 card. Drag card here to activate prime focus; run Level 1 timer; once finished drag to DONE or BLOCKED if impeded.",
+        col_hint_purpose_deep: "Intensive fabrication workshop capped at WIP = 3 limit. Keeps the production pipeline (scripting, filming, B-roll) flowing without cognitive overload.",
+        col_hint_how_deep: "Strict maximum of 3 concurrent cards (blocks extras). Click to edit/update metrics; when Single Focus clears, pull 1 card from here to execute.",
+        col_hint_purpose_blocked: "Isolation zone making blockers transparent (missing assets, pending signoff, tech issues) to accelerate cycle time per Step 4 of Musk's algorithm.",
+        col_hint_how_blocked: "When moving here, Owner and ETA deadline are required. Once the bottleneck is cleared, drag card back to DEEP WORK or SINGLE FOCUS.",
+        col_hint_purpose_done: "Archive of completed productions and empirical insights. Every published video must yield data-backed learnings for compounding channel growth.",
+        col_hint_how_done: "Mandatory Learned Insight required upon moving here. Displays green badge with key takeaway. Use Export JSON for persistent archival.",
 
         // Tầng 3 AI Copilot
         ai_copilot_title: "Level 3: Musk AI Copilot",
@@ -2249,41 +2461,10 @@
         </div>
       `;
 
-      // Contextual Card Hint (AC-19)
-      const colKey = card.column || 'ideas';
-      const purposeText = t('card_hint_purpose_' + colKey);
-      const howText = t('card_hint_how_' + colKey);
-      const hintBoxHTML = `
-        <div id="card-hint-${escapeHTML(card.id)}" class="card-hint-box hidden mt-2 p-2.5 rounded-xl bg-apple-blue/[0.07] light:bg-apple-blue/[0.08] border border-apple-blue/20 text-[10px] space-y-1.5 transition-all">
-          <div class="flex items-center justify-between pb-1 border-b border-apple-blue/15 text-apple-blue font-semibold">
-            <span class="flex items-center space-x-1">
-              <span>ℹ️</span>
-              <span class="card-hint-header-text">${t('card_hint_header')}</span>
-            </span>
-            <div class="flex items-center space-x-1.5">
-              <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-apple-blue/15 text-apple-blue font-mono uppercase font-bold">${escapeHTML(card.column)}</span>
-              <button type="button" data-action="close-hint" class="text-zinc-400 hover:text-white light:hover:text-zinc-900 text-xs px-1 hover:bg-white/10 rounded" title="Đóng hint">✕</button>
-            </div>
-          </div>
-          <div class="card-hint-purpose leading-relaxed text-zinc-300 light:text-zinc-700">
-            <b class="text-white light:text-zinc-900">${t('card_hint_purpose_label')}:</b>
-            <span class="card-hint-purpose-text">${escapeHTML(purposeText)}</span>
-          </div>
-          <div class="card-hint-how leading-relaxed text-zinc-300 light:text-zinc-700">
-            <b class="text-white light:text-zinc-900">${t('card_hint_how_label')}:</b>
-            <span class="card-hint-how-text">${escapeHTML(howText)}</span>
-          </div>
-        </div>
-      `;
-
       el.innerHTML = `
         <div class="flex items-center justify-between mb-1.5">
           <div class="flex items-center space-x-1.5">
             ${platformBadge}
-            <button type="button" data-action="toggle-hint" data-card-id="${escapeHTML(card.id)}" class="card-hint-btn flex items-center space-x-1 px-2 py-0.5 rounded-full text-[9px] font-medium bg-white/[0.06] hover:bg-white/[0.12] light:bg-black/[0.05] light:hover:bg-black/[0.1] border border-white/[0.08] light:border-black/[0.08] text-zinc-300 light:text-zinc-600 transition-all cursor-pointer select-none" title="${t('tooltip_card_hint')}">
-              <span>ℹ️</span>
-              <span class="card-hint-btn-text">${t('card_hint_btn')}</span>
-            </button>
           </div>
           <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button type="button" data-action="edit" data-card-id="${escapeHTML(card.id)}" title="${t('tooltip_edit_card')}" class="p-1 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white light:hover:text-zinc-900">
@@ -2308,7 +2489,6 @@
           <span class="italic line-clamp-2">${escapeHTML(card.first_principle || t('first_principle_unset'))}</span>
         </div>
 
-        ${hintBoxHTML}
         ${lowCTRBadge}
         ${blockedInfo}
         ${learnedInfo}
@@ -2317,38 +2497,6 @@
 
       // Safe Event Delegation for card actions
       el.addEventListener('click', function(e) {
-        const hintBtn = e.target.closest('[data-action="toggle-hint"]');
-        if (hintBtn) {
-          e.stopPropagation();
-          const hintBox = el.querySelector('.card-hint-box');
-          if (hintBox) {
-            const isHidden = hintBox.classList.contains('hidden');
-            if (isHidden) {
-              hintBox.classList.remove('hidden');
-              hintBtn.classList.add('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
-            } else {
-              hintBox.classList.add('hidden');
-              hintBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
-            }
-          }
-          return;
-        }
-
-        const closeHintBtn = e.target.closest('[data-action="close-hint"]');
-        if (closeHintBtn) {
-          e.stopPropagation();
-          const hintBox = el.querySelector('.card-hint-box');
-          const hintBtn = el.querySelector('[data-action="toggle-hint"]');
-          if (hintBox) hintBox.classList.add('hidden');
-          if (hintBtn) hintBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
-          return;
-        }
-
-        const hintBoxClick = e.target.closest('.card-hint-box');
-        if (hintBoxClick) {
-          e.stopPropagation();
-          return;
-        }
         const cullBtn = e.target.closest('[data-action="cull"]');
         if (cullBtn) {
           e.stopPropagation();
@@ -2852,7 +3000,7 @@
       document.getElementById('settingsModal').classList.add('hidden');
     }
 
-    // Global Escape (Esc) Key Listener for Modals
+    // Global Escape (Esc) Key Listener for Modals & Column Hints
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Escape' || event.key === 'Esc') {
         const blockedModal = document.getElementById('blockedModal');
@@ -2860,8 +3008,12 @@
         const cardModal = document.getElementById('cardModal');
         const settingsModal = document.getElementById('settingsModal');
         const alertBanner = document.getElementById('blockAlertBanner');
+        const openColHints = document.querySelectorAll('.col-hint-box:not(.hidden)');
 
-        if (alertBanner && !alertBanner.classList.contains('hidden')) {
+        if (openColHints.length > 0) {
+          openColHints.forEach(box => box.classList.add('hidden'));
+          document.querySelectorAll('.col-hint-btn').forEach(btn => btn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30'));
+        } else if (alertBanner && !alertBanner.classList.contains('hidden')) {
           closeBlockAlert();
         } else if (blockedModal && !blockedModal.classList.contains('hidden')) {
           cancelBlockedModal();
@@ -2873,6 +3025,55 @@
           closeSettingsModal();
         }
       }
+    });
+
+    // Column Contextual Hints (AC-19) - Event Delegation for Toggle, Close & Click-Outside
+    document.addEventListener('click', function(e) {
+      const toggleBtn = e.target.closest('[data-action="toggle-col-hint"]');
+      if (toggleBtn) {
+        e.stopPropagation();
+        const col = toggleBtn.getAttribute('data-col');
+        const hintBox = document.getElementById(`col-hint-${col}`);
+        if (hintBox) {
+          const isHidden = hintBox.classList.contains('hidden');
+          // Close other open column hint boxes for clean focused UX
+          document.querySelectorAll('.col-hint-box').forEach(b => {
+            if (b !== hintBox) b.classList.add('hidden');
+          });
+          document.querySelectorAll('.col-hint-btn').forEach(btn => {
+            if (btn !== toggleBtn) btn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+          });
+
+          if (isHidden) {
+            hintBox.classList.remove('hidden');
+            toggleBtn.classList.add('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+          } else {
+            hintBox.classList.add('hidden');
+            toggleBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+          }
+        }
+        return;
+      }
+
+      const closeBtn = e.target.closest('[data-action="close-col-hint"]');
+      if (closeBtn) {
+        e.stopPropagation();
+        const col = closeBtn.getAttribute('data-col');
+        const hintBox = document.getElementById(`col-hint-${col}`);
+        const hintBtn = document.getElementById(`col-hint-btn-${col}`);
+        if (hintBox) hintBox.classList.add('hidden');
+        if (hintBtn) hintBtn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30');
+        return;
+      }
+
+      // Click inside hint box should not close it
+      if (e.target.closest('.col-hint-box')) {
+        return;
+      }
+
+      // Click outside closes all column hint boxes
+      document.querySelectorAll('.col-hint-box').forEach(b => b.classList.add('hidden'));
+      document.querySelectorAll('.col-hint-btn').forEach(btn => btn.classList.remove('bg-apple-blue/20', 'text-apple-blue', 'border-apple-blue/30'));
     });
 
     function toggleApiKeyMask() {

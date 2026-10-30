@@ -171,12 +171,13 @@ Gồm 6 cột với các quy tắc kiểm tra nghiêm ngặt:
    * Khi kéo card vào cột này, một Modal bắt buộc sẽ bật lên yêu cầu điền: **`Owner`** (Ai đang chặn?) và **`ETA`** (Khi nào gỡ bỏ?). Không thể đóng modal nếu chưa nhập.
 6. **`DONE + LEARNED`:**
    * Khi kéo card vào cột này, Modal bắt buộc bật lên yêu cầu nhập: **`Learned`** (Bài học thực chứng rút ra là gì?). Card chỉ được tính là hoàn thành khi đã có bài học.
-7. **Gợi Ý Ngữ Cảnh & Hướng Dẫn Hoạt Động (Contextual Card Hints & How-It-Works Guidance — AC-19):**
-   * Mỗi thẻ Kanban tại Tầng 2 tích hợp nút gợi ý Apple-style (capsule pill `ℹ️ Hint`).
-   * Khi xem/bấm mở Hint, hiển thị trực quan 2 phần thông tin cốt lõi:
-     - **Tác dụng (Purpose / Function):** Định vị vai trò của thẻ trong cột hiện tại (Vườn ươm nguyên lý gốc, WIP=1 chống đa nhiệm, rà soát cắt tỉa, cô lập rào cản, lưu trữ bài học).
-     - **Cách hoạt động (How it works):** Hướng dẫn hành động cụ thể cho Creator theo thuật toán 5 bước của Elon Musk.
-   * Hỗ trợ song ngữ Tiếng Việt & Tiếng Anh (`I18N`) và thiết kế kính mờ chuẩn Apple HIG.
+7. **Hướng Dẫn Ngữ Cảnh Header Cột Kanban (Column Header Contextual Guidance — AC-19):**
+   * Header của mỗi Cột Kanban trong số 6 cột tại Tầng 2 tích hợp 1 nút gợi ý Apple-style duy nhất (capsule pill `💡 Hint` / `ℹ️`).
+   * Loại bỏ hoàn toàn nút Hint trên từng task item bên trong cột nhằm giữ cho các task card luôn tinh gọn, thanh lịch, tối giản chuẩn Apple HIG, không bị lặp nút gây rối mắt.
+   * Khi xem/bấm mở Hint tại Header cột, hiển thị trực quan khung hướng dẫn kính mờ với 2 phần thông tin cốt lõi:
+     - **Tác dụng (Purpose / Function):** Định vị ý nghĩa sống còn của cột trong pipeline (Vườn ươm nguyên lý gốc, WIP=1 chống đa nhiệm, rà soát cắt tỉa CTR < 2%, cô lập rào cản Owner+ETA, lưu trữ bài học).
+     - **Cách hoạt động (How it works):** Hướng dẫn hành động và quy tắc cưỡng chế cho Creator theo thuật toán 5 bước của Elon Musk.
+   * Hỗ trợ đóng mở mượt mà (toggle, nút đóng `✕`, click outside để đóng), hỗ trợ song ngữ Tiếng Việt & Tiếng Anh (`I18N`) và hiệu ứng kính mờ translucent frosted glass chuẩn Apple HIG.
 
 ---
 
@@ -214,7 +215,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-16`** | **Timeline Lịch Làm Việc Thực Tế & Cảnh Báo Block 60m**: Khung giờ làm việc chuẩn 08:30 - 12:20 (sáng) và 13:30 - 16:30 (chiều). Các block 60m kèm khoảng nghỉ 5 phút giữa các ca hiển thị badge tinh tế (Break 5m). Khi đồng hồ Deep Work chạm mốc 60 phút hoặc hoàn tất block 60m, tự động phát âm thanh chuông nhẹ (Web Audio API Synthesizer) và hiển thị Banner/Modal cảnh báo Apple style. | Chờ kiểm thử |
 | **`AC-17`** | **Musk First Principles Handbook (Cẩm Nang 5 Bước Thuật Toán Musk)**: Tích hợp module hướng dẫn sử dụng hệ thống chuẩn Elon Musk trong Settings Modal với 5 bước trực quan (Question, Delete, Simplify & Single Focus, Accelerate, Automate) kèm mẹo thực chiến cho Creator, hỗ trợ song ngữ Tiếng Việt và Tiếng Anh. | Chờ kiểm thử |
 | **`AC-18`** | **Meta Fanpage Integration (Đặt Sân Nhanh)**: Tự động nạp thông tin Fanpage "Đặt Sân Nhanh" (Page ID: `1234257116429910`, Token mã hóa / che hiển thị an toàn `EAALZAoxk...CS3wt`), có nút bật/tắt hiển thị token, huy hiệu xanh kết nối và nút kiểm tra kết nối Meta Graph API hiển thị phản hồi tức thì. | Chờ kiểm thử |
-| **`AC-19`** | **Contextual Card Hints & How-It-Works Guidance**: Mỗi thẻ Kanban ở Tầng 2 đều có phần gợi ý (Hint / Info) giải thích chi tiết tác dụng (Purpose) và cơ chế hoạt động (How it works) tương ứng với từng giai đoạn/cột mà thẻ đang đứng (DELETE, IDEAS, SINGLE FOCUS, DEEP WORK, BLOCKED, DONE). Hỗ trợ cả 2 ngôn ngữ (VI/EN) và thiết kế chuẩn Apple HIG (nút icon ℹ️ / hint pill tinh tế, có thể toggle hoặc hiển thị popover/tooltip rõ nét). | Chờ kiểm thử |
+| **`AC-19`** | **Column Header Contextual Guidance (Tập trung Hint tại Header 6 Cột Kanban, Tối giản Task Item)**: Chuyển vị trí nút Hint từ từng task item sang đặt tập trung 1 nút duy nhất tại Header của 6 Cột Kanban (DELETE / REPURPOSE, IDEAS, SINGLE FOCUS, DEEP WORK, BLOCKED, DONE); loại bỏ hoàn toàn nút `.card-hint-btn` trên từng task item giúp giao diện thoáng đãng chuẩn Apple HIG. Khi bấm nút Hint tại Header cột, hiển thị popover/khung hướng dẫn kính mờ giải thích chi tiết Tác dụng (Purpose) và Cách hoạt động (How it works). Hỗ trợ toggle, nút đóng `✕`, click outside để đóng, và hỗ trợ song ngữ đầy đủ (VI/EN). | Chờ kiểm thử |
 
 ---
 
