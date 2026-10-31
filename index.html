@@ -307,30 +307,39 @@
           </div>
         </div>
 
-        <!-- Integrated Deep Work Timer Box -->
-        <div class="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-black/40 light:bg-white/80 border border-white/10 light:border-black/10 shadow-inner">
-          <div class="text-right">
-            <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block" id="currentTimerBlockName">
-              Block: Plan & Pattern Interrupt
-            </span>
-            <span class="font-mono text-lg font-bold tracking-tight text-amber-400 light:text-amber-600" id="timerDisplay">
-              00:00:00
-            </span>
-          </div>
-          <div class="flex items-center space-x-1.5 pl-2 border-l border-white/10 light:border-black/10">
-            <button id="timerToggleBtn" onclick="toggleTimer()" class="p-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-bold active:scale-95 transition-all shadow-md shadow-amber-500/20">
-              <svg id="timerPlayIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
-              </svg>
-              <svg id="timerPauseIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-              </svg>
-            </button>
-            <button id="btnResetTimer" onclick="resetTimer()" title="Reset đồng hồ" data-i18n-title="tooltip_reset_timer" class="p-2 rounded-xl glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-600 active:scale-95 transition-all">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-            </button>
+        <!-- Floor 1 Actions: Edit Schedule & Deep Work Timer Box -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Button Edit Timeline Schedule (AC-20) -->
+          <button id="btnEditTimelineSchedule" onclick="openScheduleModal()" title="Tùy chỉnh lịch trình làm việc" data-i18n-title="tooltip_edit_schedule" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-2xl glass-card hover:bg-white/10 light:hover:bg-black/5 border border-white/10 light:border-black/10 text-xs font-semibold text-amber-300 light:text-amber-700 active:scale-95 transition-all shadow-sm">
+            <span>⚙️</span>
+            <span id="btnEditTimelineScheduleText" data-i18n="btn_edit_schedule">Tùy Chỉnh Lịch</span>
+          </button>
+
+          <!-- Integrated Deep Work Timer Box -->
+          <div class="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-black/40 light:bg-white/80 border border-white/10 light:border-black/10 shadow-inner">
+            <div class="text-right">
+              <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block" id="currentTimerBlockName">
+                Block: Plan & Pattern Interrupt
+              </span>
+              <span class="font-mono text-lg font-bold tracking-tight text-amber-400 light:text-amber-600" id="timerDisplay">
+                00:00:00
+              </span>
+            </div>
+            <div class="flex items-center space-x-1.5 pl-2 border-l border-white/10 light:border-black/10">
+              <button id="timerToggleBtn" onclick="toggleTimer()" class="p-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-bold active:scale-95 transition-all shadow-md shadow-amber-500/20">
+                <svg id="timerPlayIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                </svg>
+                <svg id="timerPauseIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <button id="btnResetTimer" onclick="resetTimer()" title="Reset đồng hồ" data-i18n-title="tooltip_reset_timer" class="p-2 rounded-xl glass-card hover:bg-white/10 light:hover:bg-black/5 text-zinc-300 light:text-zinc-600 active:scale-95 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -338,8 +347,6 @@
 
       <!-- 7 Executive Blocks Grid (08:30 - 12:20 & 13:30 - 16:30) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="timelineGrid">
-        <!-- Rendered dynamically via JS -->
-      </div>
         <!-- Rendered dynamically via JS -->
       </div>
     </section>
@@ -1189,6 +1196,55 @@
     </div>
   </div>
 
+  <!-- 6. TIMELINE SCHEDULE EDITOR MODAL (AC-20) -->
+  <div id="scheduleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card backdrop-blur-xl border border-white/20 light:border-black/10 rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col p-6 shadow-2xl animate-sheet">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.08] light:border-black/[0.06] flex-shrink-0">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-amber-400 text-lg">⚙️</span>
+            <h3 id="scheduleModalTitle" data-i18n="schedule_modal_title" class="text-sm font-bold uppercase tracking-wider text-white light:text-zinc-900">
+              Quản Lý & Chỉnh Sửa Lịch Trình Tầng 1
+            </h3>
+          </div>
+          <p id="scheduleModalSubtitle" data-i18n="schedule_modal_subtitle" class="text-xs text-zinc-400 light:text-zinc-500 mt-0.5">
+            Tùy biến khung giờ, thời lượng và loại công việc theo chu kỳ làm việc thực tế
+          </p>
+        </div>
+        <button type="button" onclick="closeScheduleModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Scrollable Block List -->
+      <div id="scheduleBlocksList" class="flex-1 overflow-y-auto space-y-3 pr-1 py-1">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- Add New Block Button -->
+      <div class="pt-3 pb-2 flex-shrink-0">
+        <button type="button" id="btnAddScheduleBlock" onclick="addNewScheduleBlock()" class="w-full py-2.5 rounded-xl border border-dashed border-white/20 hover:border-amber-400/50 hover:bg-amber-500/10 text-amber-300 light:text-amber-700 font-semibold text-xs flex items-center justify-center space-x-1.5 active:scale-[0.99] transition-all">
+          <span>➕</span>
+          <span data-i18n="btn_add_schedule_block">+ Thêm Block Mới</span>
+        </button>
+      </div>
+
+      <!-- Footer Action Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.08] light:border-black/[0.06] flex-shrink-0">
+        <button type="button" id="btnResetScheduleDefault" onclick="resetScheduleToDefault()" class="px-3.5 py-2 rounded-xl border border-rose-500/30 hover:bg-rose-500/10 text-rose-400 text-xs font-medium transition-all flex items-center space-x-1.5 active:scale-95">
+          <span>↺</span>
+          <span data-i18n="btn_reset_schedule_default">Khôi phục lịch chuẩn của Sếp</span>
+        </button>
+        <div class="flex items-center space-x-2">
+          <button type="button" id="btnCancelSchedule" onclick="closeScheduleModal()" data-i18n="btn_cancel" class="px-4 py-2 rounded-xl glass-card text-zinc-300 light:text-zinc-700 hover:bg-white/10 text-xs active:scale-95 transition-all">Hủy</button>
+          <button type="button" id="btnSaveSchedule" onclick="handleSaveSchedule(event)" data-i18n="btn_save_schedule" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-semibold shadow-md active:scale-95 transition-all text-xs">Lưu Lịch Trình</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 5. TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
@@ -1216,6 +1272,20 @@
         // Tầng 1 Timeline
         timeline_title: "Tầng 1: Time-Blocking Timeline (08:30 — 16:30)",
         timeline_subtitle: "Lịch làm việc thực tế: 08:30 - 12:20 & 13:30 - 16:30 • Blocks 60m + Nghỉ ngắn 5m",
+        btn_edit_schedule: "Tùy Chỉnh Lịch",
+        tooltip_edit_schedule: "Tùy chỉnh lịch trình làm việc Tầng 1",
+        schedule_modal_title: "Quản Lý & Chỉnh Sửa Lịch Trình Tầng 1",
+        schedule_modal_subtitle: "Tùy biến khung giờ, thời lượng và loại công việc theo chu kỳ làm việc thực tế",
+        btn_add_schedule_block: "+ Thêm Block Mới",
+        btn_reset_schedule_default: "Khôi phục lịch chuẩn của Sếp",
+        btn_save_schedule: "Lưu Lịch Trình",
+        schedule_label_title: "Tên công việc",
+        schedule_label_start: "Giờ bắt đầu",
+        schedule_label_duration: "Thời lượng",
+        schedule_label_type: "Loại block",
+        schedule_minutes_unit: "phút",
+        schedule_delete_block_tooltip: "Xóa block này",
+        schedule_new_block_default_title: "Deep Focus & Sản xuất nội dung",
         block_active: "Active",
         block_prefix: "Block: {name}",
         tooltip_reset_timer: "Reset đồng hồ",
@@ -1448,7 +1518,11 @@
         toast_single_limit_reached: "⚠️ Cột Single Focus đã có 1 card. Vui lòng hoàn tất hoặc di chuyển card cũ trước!",
         toast_deep_limit_reached: "⚠️ Cột Deep Work đã đạt giới hạn 3 cards!",
         toast_owner_eta_required: "⚠️ Bắt buộc nhập đầy đủ Owner và ETA!",
-        toast_learned_required: "⚠️ Bắt buộc đúc kết bài học để lưu trữ kinh nghiệm!"
+        toast_learned_required: "⚠️ Bắt buộc đúc kết bài học để lưu trữ kinh nghiệm!",
+        toast_schedule_saved: "✓ Đã cập nhật và lưu lịch trình Tầng 1 thành công!",
+        toast_schedule_reset_preview: "↺ Đã khôi phục về lịch chuẩn 7 blocks của Sếp (08:30 - 16:30)!",
+        toast_schedule_validation_error: "⚠️ Vui lòng điền đầy đủ tên và giờ bắt đầu hợp lệ cho mọi block!",
+        toast_schedule_min_blocks: "⚠️ Lịch trình cần có ít nhất 1 block công việc!"
       },
       en: {
         // Header
@@ -1464,6 +1538,20 @@
         // Tầng 1 Timeline
         timeline_title: "Level 1: Time-Blocking Timeline (08:30 — 16:30)",
         timeline_subtitle: "Executive Schedule: 08:30 - 12:20 & 13:30 - 16:30 • 60m Blocks + 5m Short Breaks",
+        btn_edit_schedule: "Edit Schedule",
+        tooltip_edit_schedule: "Customize Level 1 working schedule",
+        schedule_modal_title: "Level 1 Timeline Schedule Editor",
+        schedule_modal_subtitle: "Customize time blocks, duration, and block types according to your actual workflow",
+        btn_add_schedule_block: "+ Add New Block",
+        btn_reset_schedule_default: "Reset to Boss's Default Schedule",
+        btn_save_schedule: "Save Schedule",
+        schedule_label_title: "Task Title",
+        schedule_label_start: "Start Time",
+        schedule_label_duration: "Duration",
+        schedule_label_type: "Block Type",
+        schedule_minutes_unit: "min",
+        schedule_delete_block_tooltip: "Delete this block",
+        schedule_new_block_default_title: "Deep Focus & Content Production",
         block_active: "Active",
         block_prefix: "Block: {name}",
         tooltip_reset_timer: "Reset timer",
@@ -1696,7 +1784,11 @@
         toast_single_limit_reached: "⚠️ Single Focus already has 1 card. Please finish or move old card first!",
         toast_deep_limit_reached: "⚠️ Deep Work column has reached 3 cards limit!",
         toast_owner_eta_required: "⚠️ Both Owner and ETA are required!",
-        toast_learned_required: "⚠️ Learned insight is required to preserve institutional knowledge!"
+        toast_learned_required: "⚠️ Learned insight is required to preserve institutional knowledge!",
+        toast_schedule_saved: "✓ Level 1 timeline schedule updated and saved successfully!",
+        toast_schedule_reset_preview: "↺ Restored Boss's 7 default blocks (08:30 - 16:30)!",
+        toast_schedule_validation_error: "⚠️ Please enter a title and valid start time for all blocks!",
+        toast_schedule_min_blocks: "⚠️ The schedule must contain at least 1 time block!"
       }
     };
 
@@ -1781,6 +1873,12 @@
       renderChatHistory();
       updateAIProviderStatus();
       if (typeof updateFanpageControls === 'function') updateFanpageControls();
+      if (typeof renderScheduleModalBlocks === 'function') {
+        const scheduleModal = document.getElementById('scheduleModal');
+        if (scheduleModal && !scheduleModal.classList.contains('hidden')) {
+          renderScheduleModalBlocks();
+        }
+      }
     }
 
     // Default Seed Data (8 High-Quality Content Items)
@@ -1967,7 +2065,7 @@
       if (savedBlocks) {
         try {
           const parsed = JSON.parse(savedBlocks);
-          if (Array.isArray(parsed) && parsed.length === 7 && parsed[0].startTime === '08:30') {
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].startTime) {
             state.timeBlocks = parsed;
           } else {
             state.timeBlocks = JSON.parse(JSON.stringify(DEFAULT_TIME_BLOCKS));
@@ -2085,6 +2183,16 @@
     /* =========================================================
        TẦNG 1: TIME-BLOCKING TIMELINE & DEEP WORK TIMER
        ========================================================= */
+    function calculateEndTime(startTimeStr, durationMinutes) {
+      if (!startTimeStr) return '09:00';
+      const parts = startTimeStr.split(':').map(Number);
+      if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return '09:00';
+      const totalMins = parts[0] * 60 + parts[1] + (parseInt(durationMinutes, 10) || 60);
+      const endH = Math.floor(totalMins / 60) % 24;
+      const endM = totalMins % 60;
+      return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+    }
+
     function renderTimeline() {
       const container = document.getElementById('timelineGrid');
       container.innerHTML = '';
@@ -2105,9 +2213,12 @@
         }
 
         let displayTitle = block.title;
-        if (block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
+        const defaultBlock = DEFAULT_TIME_BLOCKS.find(d => d.id === block.id);
+        if (defaultBlock && defaultBlock.title === block.title && block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
           displayTitle = t(`block_${block.id.replace('-', '_')}`);
         }
+
+        const blockEndTime = block.endTime || calculateEndTime(block.startTime, block.durationMinutes);
 
         // Break badge styling
         const bMinutes = block.breakMinutes !== undefined ? block.breakMinutes : (block.id === 'tb-4' ? 70 : (block.id === 'tb-7' ? 0 : 5));
@@ -2153,7 +2264,7 @@
         card.innerHTML = `
           <div class="flex items-center justify-between mb-1.5">
             <span class="font-mono text-[11px] font-bold text-amber-400 light:text-amber-600">
-              ${escapeHTML(block.startTime)} - ${escapeHTML(block.endTime)}
+              ${escapeHTML(block.startTime)} - ${escapeHTML(blockEndTime)}
             </span>
             <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="${t('tooltip_toggle_block')}" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -2190,7 +2301,8 @@
       const activeBlock = state.timeBlocks.find(b => b.id === state.timer.activeBlockId);
       if (activeBlock) {
         let activeTitle = activeBlock.title;
-        if (activeBlock.id && I18N[state.settings.language || 'vi'][`block_${activeBlock.id.replace('-', '_')}`]) {
+        const defaultBlock = DEFAULT_TIME_BLOCKS.find(d => d.id === activeBlock.id);
+        if (defaultBlock && defaultBlock.title === activeBlock.title && activeBlock.id && I18N[state.settings.language || 'vi'][`block_${activeBlock.id.replace('-', '_')}`]) {
           activeTitle = t(`block_${activeBlock.id.replace('-', '_')}`);
         }
         document.getElementById('currentTimerBlockName').innerText = t('block_prefix', { name: activeTitle });
@@ -2981,6 +3093,183 @@
       }
     }
 
+    /* =========================================================
+       TIMELINE SCHEDULE EDITOR MODAL (AC-20)
+       ========================================================= */
+    let editingScheduleBlocks = [];
+
+    function openScheduleModal() {
+      editingScheduleBlocks = JSON.parse(JSON.stringify(state.timeBlocks || DEFAULT_TIME_BLOCKS));
+      renderScheduleModalBlocks();
+      const modal = document.getElementById('scheduleModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeScheduleModal() {
+      const modal = document.getElementById('scheduleModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function syncScheduleInputsFromDOM() {
+      const container = document.getElementById('scheduleBlocksList');
+      if (!container) return;
+      const rows = container.querySelectorAll('[data-schedule-block-index]');
+      rows.forEach(row => {
+        const idx = parseInt(row.getAttribute('data-schedule-block-index'), 10);
+        if (editingScheduleBlocks[idx]) {
+          const titleInput = row.querySelector('.schedule-input-title');
+          const startInput = row.querySelector('.schedule-input-start');
+          const durationSelect = row.querySelector('.schedule-select-duration');
+          const typeSelect = row.querySelector('.schedule-select-type');
+
+          if (titleInput) editingScheduleBlocks[idx].title = titleInput.value.trim();
+          if (startInput) editingScheduleBlocks[idx].startTime = startInput.value.trim();
+          if (durationSelect) editingScheduleBlocks[idx].durationMinutes = parseInt(durationSelect.value, 10) || 60;
+          if (typeSelect) editingScheduleBlocks[idx].type = typeSelect.value;
+          editingScheduleBlocks[idx].endTime = calculateEndTime(editingScheduleBlocks[idx].startTime, editingScheduleBlocks[idx].durationMinutes);
+        }
+      });
+    }
+
+    function renderScheduleModalBlocks() {
+      const container = document.getElementById('scheduleBlocksList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const durations = [15, 25, 30, 35, 45, 50, 60, 75, 90, 120];
+
+      editingScheduleBlocks.forEach((block, index) => {
+        const row = document.createElement('div');
+        row.className = 'p-3.5 rounded-2xl glass-card border border-white/10 light:border-black/10 bg-white/[0.03] light:bg-black/[0.02] flex flex-col md:flex-row md:items-center justify-between gap-3 transition-all hover:border-amber-400/30';
+        row.setAttribute('data-schedule-block-index', index);
+
+        const durationOptions = durations.map(d => 
+          `<option value="${d}" ${Number(block.durationMinutes) === d ? 'selected' : ''}>${d} ${t('schedule_minutes_unit') || 'phút'}</option>`
+        ).join('');
+
+        let blockTitleValue = block.title || '';
+        const defaultBlock = DEFAULT_TIME_BLOCKS.find(d => d.id === block.id);
+        if (defaultBlock && defaultBlock.title === block.title && block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
+          blockTitleValue = t(`block_${block.id.replace('-', '_')}`);
+        }
+
+        row.innerHTML = `
+          <div class="flex items-center space-x-2.5 flex-1 min-w-[220px]">
+            <span class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 font-bold text-xs flex items-center justify-center flex-shrink-0">
+              #${index + 1}
+            </span>
+            <div class="flex-1">
+              <label class="block text-[10px] font-semibold text-zinc-400 light:text-zinc-600 mb-0.5">${t('schedule_label_title') || 'Tên công việc'}</label>
+              <input type="text" data-field="title" value="${escapeHTML(blockTitleValue)}" placeholder="${t('schedule_label_title') || 'Tên công việc'}" class="schedule-input-title w-full px-3 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-xs text-white light:text-zinc-900 focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 flex-shrink-0">
+            <div>
+              <label class="block text-[10px] font-semibold text-zinc-400 light:text-zinc-600 mb-0.5">${t('schedule_label_start') || 'Giờ bắt đầu'}</label>
+              <input type="time" data-field="startTime" value="${escapeHTML(block.startTime || '08:30')}" class="schedule-input-start w-full px-2.5 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-xs text-white light:text-zinc-900 font-mono focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-semibold text-zinc-400 light:text-zinc-600 mb-0.5">${t('schedule_label_duration') || 'Thời lượng'}</label>
+              <select data-field="durationMinutes" class="schedule-select-duration w-full px-2 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-xs text-white light:text-zinc-900 focus:outline-none focus:border-amber-400">
+                ${durationOptions}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-semibold text-zinc-400 light:text-zinc-600 mb-0.5">${t('schedule_label_type') || 'Loại block'}</label>
+              <select data-field="type" class="schedule-select-type w-full px-2 py-1.5 rounded-xl bg-white/[0.05] light:bg-black/[0.04] border border-white/10 light:border-black/10 text-xs text-white light:text-zinc-900 focus:outline-none focus:border-amber-400">
+                <option value="deep_work" ${block.type === 'deep_work' ? 'selected' : ''}>Deep Work</option>
+                <option value="review" ${block.type === 'review' ? 'selected' : ''}>Review</option>
+                <option value="shallow" ${block.type === 'shallow' ? 'selected' : ''}>Shallow</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end md:justify-center flex-shrink-0">
+            <button type="button" onclick="removeScheduleBlock(${index})" title="${t('schedule_delete_block_tooltip') || 'Xóa block này'}" class="btn-delete-schedule-block p-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 active:scale-95 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+        `;
+
+        container.appendChild(row);
+      });
+    }
+
+    function addNewScheduleBlock() {
+      syncScheduleInputsFromDOM();
+      let nextStart = '08:30';
+      if (editingScheduleBlocks.length > 0) {
+        const last = editingScheduleBlocks[editingScheduleBlocks.length - 1];
+        nextStart = last.endTime || calculateEndTime(last.startTime, last.durationMinutes);
+      }
+      const newBlock = {
+        id: 'tb-' + Date.now(),
+        title: t('schedule_new_block_default_title') || 'Deep Focus & Sản xuất nội dung',
+        startTime: nextStart,
+        endTime: calculateEndTime(nextStart, 60),
+        durationMinutes: 60,
+        type: 'deep_work',
+        isCompleted: false,
+        breakMinutes: 5
+      };
+      editingScheduleBlocks.push(newBlock);
+      renderScheduleModalBlocks();
+      const container = document.getElementById('scheduleBlocksList');
+      if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    function removeScheduleBlock(index) {
+      syncScheduleInputsFromDOM();
+      if (editingScheduleBlocks.length <= 1) {
+        showToast(t('toast_schedule_min_blocks'));
+        return;
+      }
+      editingScheduleBlocks.splice(index, 1);
+      renderScheduleModalBlocks();
+    }
+
+    function resetScheduleToDefault() {
+      editingScheduleBlocks = JSON.parse(JSON.stringify(DEFAULT_TIME_BLOCKS));
+      renderScheduleModalBlocks();
+      showToast(t('toast_schedule_reset_preview'));
+    }
+
+    function handleSaveSchedule(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      syncScheduleInputsFromDOM();
+
+      if (editingScheduleBlocks.length === 0) {
+        showToast(t('toast_schedule_min_blocks'));
+        return;
+      }
+
+      for (let i = 0; i < editingScheduleBlocks.length; i++) {
+        const b = editingScheduleBlocks[i];
+        if (!b.title || !b.startTime) {
+          showToast(t('toast_schedule_validation_error'));
+          return;
+        }
+        b.durationMinutes = parseInt(b.durationMinutes, 10) || 60;
+        b.endTime = calculateEndTime(b.startTime, b.durationMinutes);
+        if (!b.id) b.id = 'tb-' + Date.now() + '-' + i;
+      }
+
+      state.timeBlocks = JSON.parse(JSON.stringify(editingScheduleBlocks));
+      if (!state.timeBlocks.some(b => b.id === state.timer.activeBlockId)) {
+        state.timer.activeBlockId = state.timeBlocks[0].id;
+      }
+
+      saveTimeBlocks();
+      renderTimeline();
+      closeScheduleModal();
+      showToast(t('toast_schedule_saved'));
+    }
+
     // Settings Modal
     function openSettingsModal() {
       document.getElementById('settingsProvider').value = state.settings.aiProvider || 'gemini';
@@ -3007,6 +3296,7 @@
         const doneModal = document.getElementById('doneModal');
         const cardModal = document.getElementById('cardModal');
         const settingsModal = document.getElementById('settingsModal');
+        const scheduleModal = document.getElementById('scheduleModal');
         const alertBanner = document.getElementById('blockAlertBanner');
         const openColHints = document.querySelectorAll('.col-hint-box:not(.hidden)');
 
@@ -3023,6 +3313,8 @@
           closeCardModal();
         } else if (settingsModal && !settingsModal.classList.contains('hidden')) {
           closeSettingsModal();
+        } else if (scheduleModal && !scheduleModal.classList.contains('hidden')) {
+          closeScheduleModal();
         }
       }
     });

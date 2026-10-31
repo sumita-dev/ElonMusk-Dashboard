@@ -1081,6 +1081,157 @@ async function runQATestSuite() {
     );
 
     // -------------------------------------------------------------
+    // AC-20: Timeline Schedule Editor Modal (Apple HIG, Add/Edit/Delete, Reset Defaults, Bilingual)
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-20: Timeline Schedule Editor Modal ---');
+
+    // Step 1: Open Schedule Modal via Button
+    const editScheduleBtn = page.locator('#btnEditTimelineSchedule');
+    const scheduleModal = page.locator('#scheduleModal');
+    const isEditBtnVisible = await editScheduleBtn.isVisible();
+
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+    const isModalOpened = await scheduleModal.evaluate(el => !el.classList.contains('hidden'));
+    const initialRowsCount = await page.locator('#scheduleBlocksList [data-schedule-block-index]').count();
+
+    // Step 2: Edit first block (Title and Duration) and Save
+    const firstTitleInput = page.locator('#scheduleBlocksList [data-schedule-block-index="0"] .schedule-input-title');
+    const firstDurationSelect = page.locator('#scheduleBlocksList [data-schedule-block-index="0"] .schedule-select-duration');
+
+    await firstTitleInput.fill('Kế hoạch Vũ Trụ SpaceX v2');
+    await firstDurationSelect.selectOption('90');
+    await page.locator('#btnSaveSchedule').click();
+    await page.waitForTimeout(400);
+
+    const isModalClosedAfterSave = await scheduleModal.evaluate(el => el.classList.contains('hidden'));
+    const renderedFirstTitle = await page.locator('#timelineGrid > div:first-child h4').innerText();
+    const renderedFirstDuration = await page.locator('#timelineGrid > div:first-child').innerText();
+    const storageBlocksStr = await page.evaluate(() => localStorage.getItem('ccc_timeblocks_v2'));
+    const isStorageUpdated = storageBlocksStr && storageBlocksStr.includes('Kế hoạch Vũ Trụ SpaceX v2');
+
+    const isEditSaved = renderedFirstTitle.includes('Kế hoạch Vũ Trụ SpaceX v2') &&
+      renderedFirstDuration.includes('90m') &&
+      isStorageUpdated;
+
+    // Step 3: Add a new block (+ Thêm Block Mới)
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+    await page.locator('#btnAddScheduleBlock').click();
+    await page.waitForTimeout(200);
+
+    const rowsCountAfterAdd = await page.locator('#scheduleBlocksList [data-schedule-block-index]').count();
+    const lastRowIndex = rowsCountAfterAdd - 1;
+    const lastTitleInput = page.locator(`#scheduleBlocksList [data-schedule-block-index="${lastRowIndex}"] .schedule-input-title`);
+    const lastDurationSelect = page.locator(`#scheduleBlocksList [data-schedule-block-index="${lastRowIndex}"] .schedule-select-duration`);
+    await lastTitleInput.fill('Block 8: Đêm Trăng Nghiên Cứu');
+    await lastDurationSelect.selectOption('45');
+
+    await page.locator('#btnSaveSchedule').click();
+    await page.waitForTimeout(400);
+
+    const timelineCardsCountAfterAdd = await page.locator('#timelineGrid > div').count();
+    const isAddBlockSaved = rowsCountAfterAdd === 8 && timelineCardsCountAfterAdd === 8;
+
+    // Step 4: Delete a block
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+    const deleteBtnLast = page.locator(`#scheduleBlocksList [data-schedule-block-index="${lastRowIndex}"] .btn-delete-schedule-block`);
+    await deleteBtnLast.click();
+    await page.waitForTimeout(200);
+
+    const rowsCountAfterDelete = await page.locator('#scheduleBlocksList [data-schedule-block-index]').count();
+    await page.locator('#btnSaveSchedule').click();
+    await page.waitForTimeout(400);
+
+    const timelineCardsCountAfterDelete = await page.locator('#timelineGrid > div').count();
+    const isDeleteBlockSaved = rowsCountAfterDelete === 7 && timelineCardsCountAfterDelete === 7;
+
+    // Step 5: Reset to Default Schedule (Khôi phục lịch chuẩn của Sếp)
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+    await page.locator('#btnResetScheduleDefault').click();
+    await page.waitForTimeout(200);
+    await page.locator('#btnSaveSchedule').click();
+    await page.waitForTimeout(400);
+
+    const resetTimelineData = await page.evaluate(() => {
+      return {
+        count: state.timeBlocks.length,
+        firstTitle: state.timeBlocks[0].title,
+        firstStart: state.timeBlocks[0].startTime,
+        lastEnd: state.timeBlocks[6].endTime
+      };
+    });
+
+    const isResetSuccess = resetTimelineData.count === 7 &&
+      resetTimelineData.firstStart === '08:30' &&
+      resetTimelineData.lastEnd === '16:30';
+
+    // Step 6: Escape key to close Schedule Modal
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+    const isClosedByEscape = await scheduleModal.evaluate(el => el.classList.contains('hidden'));
+
+    // Step 7: Bilingual Support (English Translation Verification)
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const enBtnText = await editScheduleBtn.innerText();
+    await editScheduleBtn.click();
+    await page.waitForTimeout(300);
+
+    const enModalTitle = await page.locator('#scheduleModalTitle').innerText();
+    const enSaveBtn = await page.locator('#btnSaveSchedule').innerText();
+    const enAddBtn = await page.locator('#btnAddScheduleBlock').innerText();
+    const enResetBtn = await page.locator('#btnResetScheduleDefault').innerText();
+
+    const isEnBilingualValid = enBtnText.includes('Edit Schedule') &&
+      enModalTitle.toLowerCase().includes('schedule editor') &&
+      enSaveBtn.includes('Save Schedule') &&
+      enAddBtn.includes('Add New Block') &&
+      enResetBtn.includes('Reset to Boss');
+
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+
+    // Switch back to Vietnamese
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const viBtnText = await editScheduleBtn.innerText();
+    const isViBilingualValid = viBtnText.includes('Tùy Chỉnh Lịch');
+
+    const ac20Passed = isEditBtnVisible &&
+      isModalOpened &&
+      initialRowsCount === 7 &&
+      isModalClosedAfterSave &&
+      isEditSaved &&
+      isAddBlockSaved &&
+      isDeleteBlockSaved &&
+      isResetSuccess &&
+      isClosedByEscape &&
+      isEnBilingualValid &&
+      isViBilingualValid;
+
+    recordResult(
+      'AC-20',
+      'Timeline Schedule Editor Modal (Apple HIG, Add/Edit/Delete, Reset Defaults, Bilingual VI/EN)',
+      ac20Passed,
+      `EditBtn: ${isEditBtnVisible}, ModalOpen: ${isModalOpened}, EditSaved: ${isEditSaved}, AddBlock: ${isAddBlockSaved}, DeleteBlock: ${isDeleteBlockSaved}, ResetDefault: ${isResetSuccess}, EscClose: ${isClosedByEscape}, EN: ${isEnBilingualValid}, VI: ${isViBilingualValid}`
+    );
+
+    // -------------------------------------------------------------
     // OVERALL SUMMARY
     // -------------------------------------------------------------
     console.log('\n================================================================');
