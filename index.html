@@ -290,7 +290,10 @@
   <main class="max-w-[1780px] mx-auto px-4 lg:px-6 py-5 space-y-6">
 
     <!-- ==================== TẦNG 1: TIME-BLOCKING TIMELINE ==================== -->
-    <section class="glass-card rounded-3xl p-5 shadow-apple-card transition-all">
+    <section class="glass-card rounded-3xl p-5 shadow-apple-card transition-all border border-amber-500/20 light:border-amber-500/30 bg-gradient-to-b from-amber-500/[0.02] via-transparent to-transparent relative overflow-hidden">
+      <!-- Top hairline accent bar -->
+      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-500/40 via-amber-400/20 to-transparent pointer-events-none"></div>
+      
       <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-3 border-b border-white/[0.06] light:border-black/[0.06]">
         
         <div class="flex items-center space-x-3">
@@ -345,9 +348,9 @@
 
       </div>
 
-      <!-- 7 Executive Blocks Grid (08:30 - 12:20 & 13:30 - 16:30) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="timelineGrid">
-        <!-- Rendered dynamically via JS -->
+      <!-- Executive Timeline Sessions Container (AC-21) -->
+      <div id="timelineGrid" class="space-y-4">
+        <!-- Rendered dynamically via renderTimeline() -->
       </div>
     </section>
 
@@ -355,7 +358,9 @@
     <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
 
       <!-- ==================== TẦNG 2: KANBAN BOARD (6 CỘT) ==================== -->
-      <section class="xl:col-span-8 2xl:col-span-9 space-y-4">
+      <section class="xl:col-span-8 2xl:col-span-9 space-y-4 p-4 rounded-3xl glass-card border border-blue-500/20 light:border-blue-500/25 bg-gradient-to-b from-blue-500/[0.02] via-transparent to-transparent shadow-apple-card relative overflow-hidden">
+        <!-- Top hairline accent bar -->
+        <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/40 via-cyan-400/20 to-transparent pointer-events-none"></div>
         
         <!-- Filter & Header Bar -->
         <div class="flex flex-wrap items-center justify-between gap-3 px-1">
@@ -646,7 +651,9 @@
       </section>
 
       <!-- ==================== TẦNG 3: AI ASSISTANT (FIRST PRINCIPLES COPILOT) ==================== -->
-      <section class="xl:col-span-4 2xl:col-span-3 glass-card rounded-3xl p-5 shadow-apple-card flex flex-col h-[740px] sticky top-20">
+      <section class="xl:col-span-4 2xl:col-span-3 glass-card rounded-3xl p-5 shadow-apple-card flex flex-col h-[740px] sticky top-20 border border-purple-500/30 light:border-purple-400/30 bg-gradient-to-b from-purple-500/[0.03] via-transparent to-transparent shadow-[0_0_25px_-5px_rgba(168,85,247,0.15)] relative overflow-hidden">
+        <!-- Top hairline accent bar -->
+        <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-500/50 via-indigo-400/30 to-transparent pointer-events-none"></div>
         
         <!-- Header -->
         <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.08] light:border-black/[0.06]">
@@ -1296,6 +1303,10 @@
         break_5m: "☕ Nghỉ 5p",
         break_lunch: "🍱 Nghỉ trưa (12:20 - 13:30)",
         break_wrap_up: "🏁 Kết thúc ngày (16:30)",
+        morning_session_title: "CA SÁNG / MORNING SESSION",
+        afternoon_session_title: "CA CHIỀU / AFTERNOON SESSION",
+        midday_break_text: "12:20 - 13:30 • Nghỉ Trưa & Tái Tạo Năng Lượng / Lunch & Mental Recharge",
+        midday_break_badge: "70m Tái Tạo Năng Lượng",
 
         // Block sample titles
         block_tb_1: "Kế hoạch & Pattern Interrupt",
@@ -1562,6 +1573,10 @@
         break_5m: "☕ 5m Break",
         break_lunch: "🍱 Lunch Break (12:20 - 13:30)",
         break_wrap_up: "🏁 Day Wrap Up (16:30)",
+        morning_session_title: "MORNING SESSION",
+        afternoon_session_title: "AFTERNOON SESSION",
+        midday_break_text: "12:20 - 13:30 • Lunch & Mental Recharge Break",
+        midday_break_badge: "70m Recharge",
 
         // Block sample titles
         block_tb_1: "Plan & Pattern Interrupt",
@@ -2193,109 +2208,220 @@
       return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
     }
 
+    function formatSessionDuration(blocks) {
+      if (!blocks.length) return '0 Blocks • 0h 00m';
+      const first = blocks[0];
+      const last = blocks[blocks.length - 1];
+      const lastEnd = last.endTime || calculateEndTime(last.startTime, last.durationMinutes);
+      const [h1, m1] = (first.startTime || '00:00').split(':').map(Number);
+      const [h2, m2] = (lastEnd || '00:00').split(':').map(Number);
+      const totalElapsed = (h2 * 60 + m2) - (h1 * 60 + m1);
+      const hours = Math.floor(Math.max(0, totalElapsed) / 60);
+      const mins = Math.max(0, totalElapsed) % 60;
+      return `${blocks.length} Blocks • ${hours}h ${String(mins).padStart(2, '0')}m`;
+    }
+
+    function createTimelineBlockCard(block, isMorning) {
+      const isCurrent = state.timer.activeBlockId === block.id;
+      const card = document.createElement('div');
+      
+      // Dynamic styling for Executive block
+      let typeBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      let typeLabel = t('type_deep_work');
+      if (block.type === 'review') {
+        typeBadgeClass = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+        typeLabel = t('type_review');
+      } else if (block.type === 'shallow') {
+        typeBadgeClass = 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+        typeLabel = t('type_shallow');
+      }
+
+      let displayTitle = block.title;
+      const defaultBlock = DEFAULT_TIME_BLOCKS.find(d => d.id === block.id);
+      if (defaultBlock && defaultBlock.title === block.title && block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
+        displayTitle = t(`block_${block.id.replace('-', '_')}`);
+      }
+
+      const blockEndTime = block.endTime || calculateEndTime(block.startTime, block.durationMinutes);
+
+      // Break badge styling
+      const bMinutes = block.breakMinutes !== undefined ? block.breakMinutes : (block.id === 'tb-4' ? 70 : (block.id === 'tb-7' ? 0 : 5));
+      const bRange = block.breakRange || (block.id === 'tb-1' ? '09:30 - 09:35' : (block.id === 'tb-2' ? '10:35 - 10:40' : (block.id === 'tb-3' ? '11:40 - 11:45' : (block.id === 'tb-5' ? '14:30 - 14:35' : (block.id === 'tb-6' ? '15:35 - 15:40' : '')))));
+      const isLunch = block.isLunchAfter !== undefined ? block.isLunchAfter : (block.id === 'tb-4');
+
+      let breakBadgeHtml = '';
+      if (bMinutes === 5) {
+        breakBadgeHtml = `
+          <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+            <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-semibold break-badge">
+              <span>☕</span>
+              <span>${t('break_5m')} (${bRange})</span>
+            </span>
+          </div>
+        `;
+      } else if (isLunch) {
+        breakBadgeHtml = `
+          <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+            <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-semibold break-badge">
+              <span>🍱</span>
+              <span>${t('break_lunch')}</span>
+            </span>
+          </div>
+        `;
+      } else if (block.id === 'tb-7') {
+        breakBadgeHtml = `
+          <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
+            <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[9px] font-semibold break-badge">
+              <span>🏁</span>
+              <span>${t('break_wrap_up')}</span>
+            </span>
+          </div>
+        `;
+      }
+
+      const sessionCardTint = isMorning 
+        ? 'border-blue-500/15 hover:border-blue-500/35 bg-white/[0.02] light:bg-white/80 light:border-blue-200' 
+        : 'border-purple-500/15 hover:border-purple-500/35 bg-white/[0.02] light:bg-white/80 light:border-purple-200';
+
+      card.className = `timeline-block-card p-3 rounded-2xl border transition-all cursor-pointer relative ${
+        isCurrent 
+          ? 'glass-card border-amber-500/50 ring-1 ring-amber-500/40 bg-amber-500/[0.04]' 
+          : `glass-card ${sessionCardTint}`
+      } ${block.isCompleted ? 'opacity-60 bg-emerald-500/[0.03]' : ''}`;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="font-mono text-[11px] font-bold text-amber-400 light:text-amber-600">
+            ${escapeHTML(block.startTime)} - ${escapeHTML(blockEndTime)}
+          </span>
+          <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="${t('tooltip_toggle_block')}" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+        <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5" title="${escapeHTML(displayTitle)}">
+          ${escapeHTML(displayTitle)}
+        </h4>
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full border ${typeBadgeClass}">
+            ${typeLabel} (${block.durationMinutes}m)
+          </span>
+          ${isCurrent ? `<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>${t('block_active')}</span></span>` : ''}
+        </div>
+        ${breakBadgeHtml}
+      `;
+
+      card.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('[data-action="toggle-complete"]');
+        if (toggleBtn) {
+          e.stopPropagation();
+          toggleBlockCompletion(e, block.id);
+          return;
+        }
+        selectBlockForTimer(block.id);
+      });
+
+      return card;
+    }
+
     function renderTimeline() {
       const container = document.getElementById('timelineGrid');
+      if (!container) return;
       container.innerHTML = '';
 
-      state.timeBlocks.forEach(block => {
-        const isCurrent = state.timer.activeBlockId === block.id;
-        const card = document.createElement('div');
-        
-        // Dynamic styling for Executive block
-        let typeBadgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-        let typeLabel = t('type_deep_work');
-        if (block.type === 'review') {
-          typeBadgeClass = 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-          typeLabel = t('type_review');
-        } else if (block.type === 'shallow') {
-          typeBadgeClass = 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-          typeLabel = t('type_shallow');
-        }
+      // Partition into Morning (before 13:00) and Afternoon (13:00 onwards)
+      const morningBlocks = state.timeBlocks.filter(b => (b.startTime || '00:00') < '13:00');
+      const afternoonBlocks = state.timeBlocks.filter(b => (b.startTime || '00:00') >= '13:00');
 
-        let displayTitle = block.title;
-        const defaultBlock = DEFAULT_TIME_BLOCKS.find(d => d.id === block.id);
-        if (defaultBlock && defaultBlock.title === block.title && block.id && I18N[state.settings.language || 'vi'][`block_${block.id.replace('-', '_')}`]) {
-          displayTitle = t(`block_${block.id.replace('-', '_')}`);
-        }
+      // 1. Morning Session Container (Apple Cupertino Blue Dawn Gradient)
+      if (morningBlocks.length > 0) {
+        const morningContainer = document.createElement('div');
+        morningContainer.id = 'morningSessionContainer';
+        morningContainer.className = 'morning-session-container bg-gradient-to-br from-blue-500/[0.06] via-cyan-500/[0.03] to-transparent border border-blue-500/25 light:bg-blue-50/60 light:border-blue-200 rounded-2xl p-4 transition-all shadow-sm';
 
-        const blockEndTime = block.endTime || calculateEndTime(block.startTime, block.durationMinutes);
+        const mFirst = morningBlocks[0];
+        const mLast = morningBlocks[morningBlocks.length - 1];
+        const mLastEnd = mLast.endTime || calculateEndTime(mLast.startTime, mLast.durationMinutes);
+        const morningRange = `${mFirst.startTime} - ${mLastEnd}`;
+        const morningBadge = formatSessionDuration(morningBlocks);
 
-        // Break badge styling
-        const bMinutes = block.breakMinutes !== undefined ? block.breakMinutes : (block.id === 'tb-4' ? 70 : (block.id === 'tb-7' ? 0 : 5));
-        const bRange = block.breakRange || (block.id === 'tb-1' ? '09:30 - 09:35' : (block.id === 'tb-2' ? '10:35 - 10:40' : (block.id === 'tb-3' ? '11:40 - 11:45' : (block.id === 'tb-5' ? '14:30 - 14:35' : (block.id === 'tb-6' ? '15:35 - 15:40' : '')))));
-        const isLunch = block.isLunchAfter !== undefined ? block.isLunchAfter : (block.id === 'tb-4');
-
-        let breakBadgeHtml = '';
-        if (bMinutes === 5) {
-          breakBadgeHtml = `
-            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
-              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-semibold break-badge">
-                <span>☕</span>
-                <span>${t('break_5m')} (${bRange})</span>
-              </span>
+        morningContainer.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-blue-500/20 light:border-blue-200">
+            <div class="flex items-center space-x-2">
+              <span class="text-base select-none">🌅</span>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 light:text-blue-700 morning-session-title">
+                ${t('morning_session_title')} (${morningRange})
+              </h3>
             </div>
-          `;
-        } else if (isLunch) {
-          breakBadgeHtml = `
-            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
-              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-semibold break-badge">
-                <span>🍱</span>
-                <span>${t('break_lunch')}</span>
-              </span>
-            </div>
-          `;
-        } else if (block.id === 'tb-7') {
-          breakBadgeHtml = `
-            <div class="mt-2 pt-1.5 border-t border-white/[0.06] light:border-black/[0.06] flex items-center justify-between">
-              <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[9px] font-semibold break-badge">
-                <span>🏁</span>
-                <span>${t('break_wrap_up')}</span>
-              </span>
-            </div>
-          `;
-        }
-
-        card.className = `p-3 rounded-2xl border transition-all cursor-pointer relative ${
-          isCurrent 
-            ? 'glass-card border-amber-500/50 ring-1 ring-amber-500/40 bg-amber-500/[0.04]' 
-            : 'glass-card border-white/[0.06] hover:border-white/20'
-        } ${block.isCompleted ? 'opacity-60 bg-emerald-500/[0.03]' : ''}`;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="font-mono text-[11px] font-bold text-amber-400 light:text-amber-600">
-              ${escapeHTML(block.startTime)} - ${escapeHTML(blockEndTime)}
+            <span id="morningSessionBadge" class="morning-session-badge text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 light:bg-blue-100 light:text-blue-800">
+              ${morningBadge}
             </span>
-            <button type="button" data-action="toggle-complete" data-block-id="${escapeHTML(block.id)}" title="${t('tooltip_toggle_block')}" class="p-1 rounded-full hover:bg-white/10 transition-all ${block.isCompleted ? 'text-emerald-400' : 'text-zinc-500'}">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-            </button>
           </div>
-          <h4 class="text-xs font-bold text-white light:text-zinc-900 truncate mb-1.5" title="${escapeHTML(displayTitle)}">
-            ${escapeHTML(displayTitle)}
-          </h4>
-          <div class="flex items-center justify-between">
-            <span class="text-[9px] font-semibold px-2 py-0.5 rounded-full border ${typeBadgeClass}">
-              ${typeLabel} (${block.durationMinutes}m)
-            </span>
-            ${isCurrent ? `<span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>${t('block_active')}</span></span>` : ''}
-          </div>
-          ${breakBadgeHtml}
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 morning-blocks-grid" id="morningBlocksGrid"></div>
         `;
 
-        card.addEventListener('click', (e) => {
-          const toggleBtn = e.target.closest('[data-action="toggle-complete"]');
-          if (toggleBtn) {
-            e.stopPropagation();
-            toggleBlockCompletion(e, block.id);
-            return;
-          }
-          selectBlockForTimer(block.id);
+        const mGrid = morningContainer.querySelector('#morningBlocksGrid');
+        morningBlocks.forEach(block => {
+          mGrid.appendChild(createTimelineBlockCard(block, true));
         });
 
-        container.appendChild(card);
-      });
+        container.appendChild(morningContainer);
+      }
+
+      // 2. Midday Break Frosted Glass Divider
+      const breakDivider = document.createElement('div');
+      breakDivider.id = 'middayBreakDivider';
+      breakDivider.className = 'midday-break-divider relative my-1 p-3 rounded-2xl bg-white/[0.03] light:bg-black/[0.03] border border-white/[0.08] light:border-black/[0.08] backdrop-blur-md shadow-sm flex flex-wrap items-center justify-between gap-3 overflow-hidden';
+      breakDivider.innerHTML = `
+        <div class="flex items-center space-x-2.5 text-xs font-medium text-emerald-400 light:text-emerald-700">
+          <span class="text-base select-none">🥗</span>
+          <span class="font-semibold tracking-wide midday-break-text">
+            ${t('midday_break_text')}
+          </span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 light:bg-emerald-100 light:text-emerald-800">
+            ${t('midday_break_badge')}
+          </span>
+        </div>
+      `;
+      container.appendChild(breakDivider);
+
+      // 3. Afternoon Session Container (Lavender Sunset Purple Gradient)
+      if (afternoonBlocks.length > 0) {
+        const afternoonContainer = document.createElement('div');
+        afternoonContainer.id = 'afternoonSessionContainer';
+        afternoonContainer.className = 'afternoon-session-container bg-gradient-to-br from-purple-500/[0.06] via-indigo-500/[0.03] to-transparent border border-purple-500/25 light:bg-purple-50/60 light:border-purple-200 rounded-2xl p-4 transition-all shadow-sm';
+
+        const aFirst = afternoonBlocks[0];
+        const aLast = afternoonBlocks[afternoonBlocks.length - 1];
+        const aLastEnd = aLast.endTime || calculateEndTime(aLast.startTime, aLast.durationMinutes);
+        const afternoonRange = `${aFirst.startTime} - ${aLastEnd}`;
+        const afternoonBadge = formatSessionDuration(afternoonBlocks);
+
+        afternoonContainer.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-purple-500/20 light:border-purple-200">
+            <div class="flex items-center space-x-2">
+              <span class="text-base select-none">🌇</span>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-purple-400 light:text-purple-700 afternoon-session-title">
+                ${t('afternoon_session_title')} (${afternoonRange})
+              </h3>
+            </div>
+            <span id="afternoonSessionBadge" class="afternoon-session-badge text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 light:bg-purple-100 light:text-purple-800">
+              ${afternoonBadge}
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 afternoon-blocks-grid" id="afternoonBlocksGrid"></div>
+        `;
+
+        const aGrid = afternoonContainer.querySelector('#afternoonBlocksGrid');
+        afternoonBlocks.forEach(block => {
+          aGrid.appendChild(createTimelineBlockCard(block, false));
+        });
+
+        container.appendChild(afternoonContainer);
+      }
 
       // Update timer block label
       const activeBlock = state.timeBlocks.find(b => b.id === state.timer.activeBlockId);

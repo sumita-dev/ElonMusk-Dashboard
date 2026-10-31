@@ -58,7 +58,7 @@ async function runQATestSuite() {
     // AC-02 & AC-03: Time-blocking 7 blocks (08:30 - 16:30); Timer Start/Pause/Reset
     // -------------------------------------------------------------
     console.log('\n--- Testing AC-02 & AC-03: Timeline & Deep Work Timer ---');
-    const timeBlocksCount = await page.locator('#timelineGrid > div').count();
+    const timeBlocksCount = await page.locator('.timeline-block-card').count();
     const timelineData = await page.evaluate(() => {
       return state.timeBlocks.map(b => ({
         id: b.id,
@@ -1105,8 +1105,8 @@ async function runQATestSuite() {
     await page.waitForTimeout(400);
 
     const isModalClosedAfterSave = await scheduleModal.evaluate(el => el.classList.contains('hidden'));
-    const renderedFirstTitle = await page.locator('#timelineGrid > div:first-child h4').innerText();
-    const renderedFirstDuration = await page.locator('#timelineGrid > div:first-child').innerText();
+    const renderedFirstTitle = await page.locator('.timeline-block-card h4').first().innerText();
+    const renderedFirstDuration = await page.locator('.timeline-block-card').first().innerText();
     const storageBlocksStr = await page.evaluate(() => localStorage.getItem('ccc_timeblocks_v2'));
     const isStorageUpdated = storageBlocksStr && storageBlocksStr.includes('Kế hoạch Vũ Trụ SpaceX v2');
 
@@ -1130,7 +1130,7 @@ async function runQATestSuite() {
     await page.locator('#btnSaveSchedule').click();
     await page.waitForTimeout(400);
 
-    const timelineCardsCountAfterAdd = await page.locator('#timelineGrid > div').count();
+    const timelineCardsCountAfterAdd = await page.locator('.timeline-block-card').count();
     const isAddBlockSaved = rowsCountAfterAdd === 8 && timelineCardsCountAfterAdd === 8;
 
     // Step 4: Delete a block
@@ -1144,7 +1144,7 @@ async function runQATestSuite() {
     await page.locator('#btnSaveSchedule').click();
     await page.waitForTimeout(400);
 
-    const timelineCardsCountAfterDelete = await page.locator('#timelineGrid > div').count();
+    const timelineCardsCountAfterDelete = await page.locator('.timeline-block-card').count();
     const isDeleteBlockSaved = rowsCountAfterDelete === 7 && timelineCardsCountAfterDelete === 7;
 
     // Step 5: Reset to Default Schedule (Khôi phục lịch chuẩn của Sếp)
@@ -1229,6 +1229,107 @@ async function runQATestSuite() {
       'Timeline Schedule Editor Modal (Apple HIG, Add/Edit/Delete, Reset Defaults, Bilingual VI/EN)',
       ac20Passed,
       `EditBtn: ${isEditBtnVisible}, ModalOpen: ${isModalOpened}, EditSaved: ${isEditSaved}, AddBlock: ${isAddBlockSaved}, DeleteBlock: ${isDeleteBlockSaved}, ResetDefault: ${isResetSuccess}, EscClose: ${isClosedByEscape}, EN: ${isEnBilingualValid}, VI: ${isViBilingualValid}`
+    );
+
+    // -------------------------------------------------------------
+    // AC-21: Visual Session Demarcation & Surface Hierarchy
+    // -------------------------------------------------------------
+    console.log('\n--- Testing AC-21: Visual Session Demarcation & Surface Hierarchy ---');
+    
+    // 1. Morning Session Container verification
+    const morningContainer = page.locator('#morningSessionContainer');
+    const isMorningContainerVisible = await morningContainer.isVisible();
+    const morningClass = await morningContainer.getAttribute('class') || '';
+    const hasMorningGradient = morningClass.includes('from-blue-500') && morningClass.includes('border-blue-500');
+    
+    const morningTitle = await page.locator('.morning-session-title').innerText();
+    const morningBadge = await page.locator('#morningSessionBadge').innerText();
+    const morningCardsCount = await page.locator('#morningBlocksGrid .timeline-block-card').count();
+    
+    const isMorningValid = isMorningContainerVisible &&
+      hasMorningGradient &&
+      morningTitle.includes('CA SÁNG') &&
+      morningBadge.includes('4 Blocks') &&
+      morningBadge.includes('3h 50m') &&
+      morningCardsCount === 4;
+
+    // 2. Midday Break Frosted Glass Divider verification
+    const middayDivider = page.locator('#middayBreakDivider');
+    const isMiddayDividerVisible = await middayDivider.isVisible();
+    const middayText = await page.locator('.midday-break-text').innerText();
+    const middayDividerClass = await middayDivider.getAttribute('class') || '';
+    const isMiddayValid = isMiddayDividerVisible &&
+      middayText.includes('12:20 - 13:30') &&
+      middayText.includes('Nghỉ Trưa') &&
+      middayDividerClass.includes('backdrop-blur');
+
+    // 3. Afternoon Session Container verification
+    const afternoonContainer = page.locator('#afternoonSessionContainer');
+    const isAfternoonContainerVisible = await afternoonContainer.isVisible();
+    const afternoonClass = await afternoonContainer.getAttribute('class') || '';
+    const hasAfternoonGradient = afternoonClass.includes('from-purple-500') && afternoonClass.includes('border-purple-500');
+    
+    const afternoonTitle = await page.locator('.afternoon-session-title').innerText();
+    const afternoonBadge = await page.locator('#afternoonSessionBadge').innerText();
+    const afternoonCardsCount = await page.locator('#afternoonBlocksGrid .timeline-block-card').count();
+    
+    const isAfternoonValid = isAfternoonContainerVisible &&
+      hasAfternoonGradient &&
+      afternoonTitle.includes('CA CHIỀU') &&
+      afternoonBadge.includes('3 Blocks') &&
+      afternoonBadge.includes('3h 00m') &&
+      afternoonCardsCount === 3;
+
+    // 4. Floor Surface Hierarchy & Hairline Accents verification
+    const floor1Section = page.locator('main > section:first-of-type');
+    const floor1Class = await floor1Section.getAttribute('class') || '';
+    const hasFloor1Accent = floor1Class.includes('border-amber-500');
+
+    const floor2Section = page.locator('main > div > section:first-of-type');
+    const floor2Class = await floor2Section.getAttribute('class') || '';
+    const hasFloor2Accent = floor2Class.includes('border-blue-500');
+
+    const floor3Section = page.locator('main > div > section:nth-of-type(2)');
+    const floor3Class = await floor3Section.getAttribute('class') || '';
+    const hasFloor3Accent = floor3Class.includes('border-purple-500') && floor3Class.includes('shadow-');
+
+    const isHierarchyValid = hasFloor1Accent && hasFloor2Accent && hasFloor3Accent;
+
+    // 5. Bilingual verification for Session Demarcation
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnEn').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const enMorningTitle = await page.locator('.morning-session-title').innerText();
+    const enAfternoonTitle = await page.locator('.afternoon-session-title').innerText();
+    const enMiddayText = await page.locator('.midday-break-text').innerText();
+
+    const isEnValid = enMorningTitle.includes('MORNING SESSION') &&
+      enAfternoonTitle.includes('AFTERNOON SESSION') &&
+      enMiddayText.includes('Lunch & Mental Recharge');
+
+    // Switch back to Vietnamese
+    await page.locator('#btnSettings').click();
+    await page.waitForTimeout(300);
+    await page.locator('#langBtnVi').click();
+    await page.waitForTimeout(300);
+    await page.locator('#settingsCloseBtn').click();
+    await page.waitForTimeout(300);
+
+    const ac21Passed = isMorningValid &&
+      isMiddayValid &&
+      isAfternoonValid &&
+      isHierarchyValid &&
+      isEnValid;
+
+    recordResult(
+      'AC-21',
+      'Visual Session Demarcation & Surface Hierarchy (Morning/Afternoon Sessions, Midday Divider, 3 Floors Hairline Accent, Bilingual VI/EN)',
+      ac21Passed,
+      `Morning: ${isMorningValid}, Midday: ${isMiddayValid}, Afternoon: ${isAfternoonValid}, SurfaceHierarchy: ${isHierarchyValid}, Bilingual: ${isEnValid}`
     );
 
     // -------------------------------------------------------------

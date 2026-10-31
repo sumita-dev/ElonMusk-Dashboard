@@ -122,33 +122,42 @@ interface AppSettings {
 ```
 
 ### Tầng 1: Time-Blocking Timeline & Deep Work Tracker (Lịch làm việc thực tế của Sếp)
-1. **Khung giờ làm việc:** 
-   - **Ca Sáng:** 08:30 đến 12:20.
-   - **Ca Chiều:** 13:30 đến 16:30.
-2. **Template các block 60 phút và khoảng nghỉ 5 phút giữa các ca:**
-   - **Ca Sáng (08:30 - 12:20):**
-     * `08:30 - 09:30`: Block 1 - Plan & Pattern Interrupt (60m, Deep Work)
-     * *[09:30 - 09:35: Nghỉ ngắn 5 phút (Break 5m)]*
-     * `09:35 - 10:35`: Block 2 - Deep Script Writing (60m, Deep Work)
-     * *[10:35 - 10:40: Nghỉ ngắn 5 phút (Break 5m)]*
-     * `10:40 - 11:40`: Block 3 - Thumbnail & Title A/B (60m, Review)
-     * *[11:40 - 11:45: Nghỉ ngắn 5 phút (Break 5m)]*
-     * `11:45 - 12:20`: Block 4 - Morning Review & Asset Prep (35m, Shallow)
-     * *[12:20 - 13:30: Nghỉ trưa & Tái tạo năng lượng (Lunch Break)]*
-   - **Ca Chiều (13:30 - 16:30):**
-     * `13:30 - 14:30`: Block 5 - B-Roll Assembly & Production (60m, Deep Work)
-     * *[14:30 - 14:35: Nghỉ ngắn 5 phút (Break 5m)]*
-     * `14:35 - 15:35`: Block 6 - Filming & Voiceover (60m, Deep Work)
-     * *[15:35 - 15:40: Nghỉ ngắn 5 phút (Break 5m)]*
-     * `15:40 - 16:30`: Block 7 - Daily Retrospective, Repurpose & Learnings (50m, Shallow)
-3. **Cảnh báo sau mỗi block 60 phút (Audio Chime & Apple Alert Banner):**
+1. **Khung giờ làm việc & Phân định Session (AC-16, AC-21):** 
+   - Thay vì dồn tất cả blocks vào một lưới phẳng đơn điệu, Tầng 1 được phân tách thành 2 vùng Session rõ ràng với màu sắc và điểm nhấn khác biệt:
+     * **Session 1: CA SÁNG / MORNING SESSION (08:30 - 12:20):**
+       - Màu sắc / Background: Ánh xanh dương rạng đông Apple Cupertino (`bg-gradient-to-br from-blue-500/[0.06] via-cyan-500/[0.03] to-transparent border border-blue-500/25 light:bg-blue-50/60 light:border-blue-200 rounded-2xl p-4`).
+       - Header Session: Icon `🌅`, Tiêu đề `CA SÁNG / MORNING SESSION (08:30 - 12:20)`, badge thời lượng tự động tính toán (`4 Blocks • 3h 50m`).
+       - Gồm 4 executive blocks:
+         * `08:30 - 09:30`: Block 1 - Plan & Pattern Interrupt (60m, Deep Work)
+         * *[09:30 - 09:35: Nghỉ ngắn 5 phút (Break 5m)]*
+         * `09:35 - 10:35`: Block 2 - Deep Script Writing (60m, Deep Work)
+         * *[10:35 - 10:40: Nghỉ ngắn 5 phút (Break 5m)]*
+         * `10:40 - 11:40`: Block 3 - Thumbnail & Title A/B (60m, Review)
+         * *[11:40 - 11:45: Nghỉ ngắn 5 phút (Break 5m)]*
+         * `11:45 - 12:20`: Block 4 - Morning Review & Asset Prep (35m, Shallow)
+     * **Dải Ngăn Cách Kính Mờ: NGHỈ TRƯA & TÁI TẠO NĂNG LƯỢNG (12:20 - 13:30):**
+       - Thiết kế thanh ngăn cách kính mờ tinh tế (`🥗 12:20 - 13:30 • Nghỉ Trưa & Tái Tạo Năng Lượng / Lunch & Mental Recharge`), có icon, badge `70m Tái Tạo Năng Lượng` và đường kẻ hairline sang trọng.
+     * **Session 2: CA CHIỀU / AFTERNOON SESSION (13:30 - 16:30):**
+       - Màu sắc / Background: Ánh tím hoàng hôn Lavender (`bg-gradient-to-br from-purple-500/[0.06] via-indigo-500/[0.03] to-transparent border border-purple-500/25 light:bg-purple-50/60 light:border-purple-200 rounded-2xl p-4`).
+       - Header Session: Icon `🌇`, Tiêu đề `CA CHIỀU / AFTERNOON SESSION (13:30 - 16:30)`, badge thời lượng tự động tính toán (`3 Blocks • 3h 00m`).
+       - Gồm 3 executive blocks:
+         * `13:30 - 14:30`: Block 5 - B-Roll Assembly & Production (60m, Deep Work)
+         * *[14:30 - 14:35: Nghỉ ngắn 5 phút (Break 5m)]*
+         * `14:35 - 15:35`: Block 6 - Filming & Voiceover (60m, Deep Work)
+         * *[15:35 - 15:40: Nghỉ ngắn 5 phút (Break 5m)]*
+         * `15:40 - 16:30`: Block 7 - Daily Retrospective, Repurpose & Learnings (50m, Shallow)
+2. **Cảnh báo sau mỗi block 60 phút (Audio Chime & Apple Alert Banner):**
    - Khi đồng hồ Deep Work Timer chạm mốc 60 phút (hoặc khi người dùng đánh dấu hoàn tất block 60m), hệ thống tự động phát âm thanh chuông nhẹ (Web Audio API Synthesizer Chime độc lập không cần file ngoài).
    - Hiển thị Banner/Modal cảnh báo phong cách Apple: *"🔔 Đã hoàn thành 60 phút Deep Work! Hãy đứng dậy vận động và nghỉ ngơi 5 phút."*
-4. **Đồng hồ bấm giờ Deep Work tích hợp (Timer):**
+3. **Đồng hồ bấm giờ Deep Work tích hợp (Timer):**
    - Cho phép bấm **Start / Pause** trên block hiện tại.
    - Khi timer chạy, số phút tự động cộng dồn vào chỉ số `Deep Work Hours` trên Header.
-5. **Bộ đếm Tasks Deleted:**
+4. **Bộ đếm Tasks Deleted:**
    - Tự động tăng +1 mỗi khi người dùng xóa 1 card hoặc kéo card vào cột `DELETE / REPURPOSE`.
+5. **Bố cục Phân Cấp Bề Mặt (Surface Hierarchy - AC-21):**
+   - Tầng 1 (Timeline): Vùng quản trị thời gian với viền hairline hổ phách (amber).
+   - Tầng 2 (Kanban Board): Vùng dây chuyền sản xuất nội dung với viền hairline xanh cyan (blue/cyan).
+   - Tầng 3 (AI Copilot): Vùng trợ lý thông minh với viền phát sáng tím nhẹ (purple glow).
 
 ---
 
@@ -217,6 +226,7 @@ Tích hợp giao diện chat có sẵn 5 nút tắt (Quick Engines) gọi trực
 | **`AC-18`** | **Meta Fanpage Integration (Đặt Sân Nhanh)**: Tự động nạp thông tin Fanpage "Đặt Sân Nhanh" (Page ID: `1234257116429910`, Token mã hóa / che hiển thị an toàn `EAALZAoxk...CS3wt`), có nút bật/tắt hiển thị token, huy hiệu xanh kết nối và nút kiểm tra kết nối Meta Graph API hiển thị phản hồi tức thì. | Chờ kiểm thử |
 | **`AC-19`** | **Column Header Contextual Guidance (Tập trung Hint tại Header 6 Cột Kanban, Tối giản Task Item)**: Chuyển vị trí nút Hint từ từng task item sang đặt tập trung 1 nút duy nhất tại Header của 6 Cột Kanban (DELETE / REPURPOSE, IDEAS, SINGLE FOCUS, DEEP WORK, BLOCKED, DONE); loại bỏ hoàn toàn nút `.card-hint-btn` trên từng task item giúp giao diện thoáng đãng chuẩn Apple HIG. Khi bấm nút Hint tại Header cột, hiển thị popover/khung hướng dẫn kính mờ giải thích chi tiết Tác dụng (Purpose) và Cách hoạt động (How it works). Hỗ trợ toggle, nút đóng `✕`, click outside để đóng, và hỗ trợ song ngữ đầy đủ (VI/EN). | Chờ kiểm thử |
 | **`AC-20`** | **Timeline Schedule Editor Modal (Bộ Quản Lý & Chỉnh Sửa Lịch Trình Tầng 1)**: Nút `⚙️ Tùy Chỉnh Lịch / Edit Schedule` (`#btnEditTimelineSchedule`) trên thanh tiêu đề Tầng 1 mở modal Apple Sheet (`#scheduleModal`) cho phép xem, sửa tên block, giờ bắt đầu (`startTime` HH:mm), thời lượng phút (`durationMinutes`), phân loại (`deep_work`, `review`, `shallow`), thêm block mới (`+ Thêm Block Mới` / `+ Add Block`), xóa block (Delete), và nút "Khôi phục lịch chuẩn của Sếp" (`Reset to Default` 08:30 - 16:30). Lưu trạng thái bền vững vào `localStorage` (`ccc_timeblocks_v2`), re-render Timeline tức thì mà không cần reload trang và hỗ trợ song ngữ VI/EN đầy đủ. | Chờ kiểm thử |
+| **`AC-21`** | **Visual Session Demarcation & Surface Hierarchy**: Tầng 1 (Timeline) phân định rõ rệt 2 vùng làm việc riêng biệt (Ca Sáng / Morning Session 08:30 - 12:20 với ánh xanh rạng đông Apple Cupertino, và Ca Chiều / Afternoon Session 13:30 - 16:30 với ánh tím hoàng hôn Lavender), ngăn cách bằng dải phân cách kính mờ Tái tạo năng lượng & Nghỉ trưa (12:20 - 13:30). Mỗi Session hiển thị header icon (`🌅` / `🌇`), tiêu đề và badge tổng thời lượng ca tự động tính toán (`4 Blocks • 3h 50m` / `3 Blocks • 3h 00m`). Bố cục 3 Tầng sở hữu đường phân tách hairline và màu nền bề mặt (surface accent) tinh tế (Tầng 1 Quản trị thời gian viền hổ phách amber, Tầng 2 Dây chuyền sản xuất nội dung viền xanh cyan, Tầng 3 AI Copilot viền phát sáng tím nhẹ). Hỗ trợ song ngữ VI/EN đầy đủ. | Chờ kiểm thử |
 
 ---
 
